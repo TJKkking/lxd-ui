@@ -16,6 +16,7 @@ import {
 } from "util/instances";
 import { getInstanceName } from "util/operations";
 import InstanceLink from "pages/instances/InstanceLink";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   name: string;
@@ -28,23 +29,24 @@ const InstanceDetailHeader: FC<Props> = ({ name, instance, project }) => {
   const navigate = useNavigate();
   const toastNotify = useToastNotification();
   const controllerState = useState<AbortController | null>(null);
+  const { t } = useTranslation();
 
   const RenameSchema = Yup.object().shape({
     name: Yup.string()
       .test(
         "deduplicate",
-        "An instance with this name already exists",
+        t("an-instance-with-this-name-already-exists"),
         (value) =>
           instance?.name === value ||
           checkDuplicateName(value, project, controllerState, "instances"),
       )
       .matches(/^[A-Za-z0-9-]+$/, {
-        message: "Only alphanumeric and hyphen characters are allowed",
+        message: t("only-alphanumeric-and-hyphen-characters-are-allowed"),
       })
       .matches(/^[A-Za-z].*$/, {
-        message: "Instance name must start with a letter",
+        message: t("instance-name-must-start-with-a-letter"),
       })
-      .required("Instance name is required"),
+      .required(t("instance-name-is-required")),
   });
 
   const formik = useFormik<RenameHeaderValues>({
@@ -71,16 +73,16 @@ const InstanceDetailHeader: FC<Props> = ({ name, instance, project }) => {
               navigate(`/ui/project/${project}/instance/${values.name}`);
               toastNotify.success(
                 <>
-                  Instance{" "}
-                  <strong>{getInstanceName(operation.metadata)}</strong> renamed
-                  to {instanceLink}.
+                  t('instance'){" "}
+                  <strong>{getInstanceName(operation.metadata)}</strong>{" "}
+                  {t("renamed-to")} {instanceLink}.
                 </>,
               );
               void formik.setFieldValue("isRenaming", false);
             },
             (msg) =>
               toastNotify.failure(
-                "Renaming instance failed.",
+                t("renaming-instance-failed"),
                 new Error(msg),
                 instanceLinkFromOperation({ operation, project }),
               ),
@@ -104,12 +106,12 @@ const InstanceDetailHeader: FC<Props> = ({ name, instance, project }) => {
       titleClassName="instance-detail-title"
       parentItems={[
         <Link to={`/ui/project/${project}/instances`} key={1}>
-          Instances
+          t('instances')
         </Link>,
       ]}
       renameDisabledReason={
-        instance?.status !== "Stopped"
-          ? "Stop the instance to rename"
+        instance?.status !== t("stopped")
+          ? t("stop-the-instance-to-rename")
           : undefined
       }
       centerControls={

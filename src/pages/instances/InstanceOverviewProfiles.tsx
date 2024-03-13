@@ -6,6 +6,7 @@ import Loader from "components/Loader";
 import { LxdInstance } from "types/instance";
 import { Link } from "react-router-dom";
 import { fetchProfiles } from "api/profiles";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   instance: LxdInstance;
@@ -22,14 +23,16 @@ const InstanceOverviewProfiles: FC<Props> = ({ instance, onFailure }) => {
     queryFn: () => fetchProfiles(instance.project),
   });
 
+  const { t } = useTranslation();
+
   if (error) {
-    onFailure("Loading profiles failed", error);
+    onFailure(t("loading-profiles-failed"), error);
   }
 
   const profileHeaders = [
-    { content: "Name", sortKey: "name", className: "p-muted-heading" },
+    { content: t("name"), sortKey: "name", className: "p-muted-heading" },
     {
-      content: "Description",
+      content: t("description"),
       sortKey: "description",
       className: "p-muted-heading",
     },
@@ -49,19 +52,19 @@ const InstanceOverviewProfiles: FC<Props> = ({ instance, onFailure }) => {
           content: (
             <Link
               to={`/ui/project/${instance.project}/profile/${profile}`}
-              title={`Profile ${profile}`}
+              title={t("profileName", { name: profile })}
             >
               {profile}
             </Link>
           ),
           role: "rowheader",
-          "aria-label": "Name",
+          "aria-label": t("name"),
         },
         {
           content: description,
           role: "rowheader",
-          title: `Description ${description}`,
-          "aria-label": "Description",
+          title: `${t("description")} ${description}`,
+          "aria-label": t("description"),
         },
       ],
       sortData: {
@@ -74,7 +77,7 @@ const InstanceOverviewProfiles: FC<Props> = ({ instance, onFailure }) => {
   return (
     <>
       {isLoading ? (
-        <Loader text="Loading profiles..." />
+        <Loader text={t("loading-profiles")} />
       ) : (
         <MainTable headers={profileHeaders} rows={profileRows} sortable />
       )}

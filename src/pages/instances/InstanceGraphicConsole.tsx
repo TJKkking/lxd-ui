@@ -8,6 +8,7 @@ import Loader from "components/Loader";
 import { updateMaxHeight } from "util/updateMaxHeight";
 import { LxdInstance } from "types/instance";
 import { useNotify } from "@canonical/react-components";
+import { useTranslation } from "react-i18next";
 
 declare global {
   // eslint-disable-next-line no-unused-vars
@@ -34,11 +35,12 @@ const InstanceGraphicConsole: FC<Props> = ({
   const notify = useNotify();
   const spiceRef = useRef<HTMLDivElement>(null);
   const [isVgaLoading, setVgaLoading] = useState<boolean>(false);
+  const { t } = useTranslation();
 
-  const isRunning = instance.status === "Running";
+  const isRunning = instance.status === t("running");
 
   const handleError = (e: object) => {
-    onFailure("Error", e);
+    onFailure(t("error"), e);
   };
 
   const handleResize = () => {
@@ -48,11 +50,11 @@ const InstanceGraphicConsole: FC<Props> = ({
 
   const openVgaConsole = async () => {
     if (!name) {
-      onFailure("Missing name", new Error());
+      onFailure(t("missing-name"), new Error());
       return;
     }
     if (!project) {
-      onFailure("Missing project", new Error());
+      onFailure(t("missing-project"), new Error());
       return;
     }
 
@@ -60,7 +62,7 @@ const InstanceGraphicConsole: FC<Props> = ({
     const result = await connectInstanceVga(name, project).catch((e) => {
       setVgaLoading(false);
       if (isRunning) {
-        onFailure("Connection failed", e);
+        onFailure(t("connection-failed"), e);
       }
     });
     if (!result) {
@@ -77,7 +79,7 @@ const InstanceGraphicConsole: FC<Props> = ({
 
     control.onclose = (event) => {
       if (1005 !== event.code) {
-        onFailure("Error", event.reason, getWsErrorMsg(event.code));
+        onFailure(t("error"), event.reason, getWsErrorMsg(event.code));
       }
     };
 
@@ -99,7 +101,7 @@ const InstanceGraphicConsole: FC<Props> = ({
       });
     } catch (e) {
       if (isRunning) {
-        onFailure("Connection failed", e);
+        onFailure(t("connection-failed"), e);
       }
     }
 
@@ -131,7 +133,7 @@ const InstanceGraphicConsole: FC<Props> = ({
       .requestFullscreen()
       .then(handleResize)
       .catch((e) => {
-        onFailure("Failed to enter full-screen mode", e);
+        onFailure(t("failed-to-enter-full-screen-mode"), e);
       });
   };
   onMount(handleFullScreen);
@@ -139,7 +141,7 @@ const InstanceGraphicConsole: FC<Props> = ({
   return (
     <>
       {isVgaLoading ? (
-        <Loader text="Loading VGA session..." />
+        <Loader text={t("loading-vga-session")} />
       ) : (
         <div id="spice-area" ref={spiceRef}>
           <div id="spice-screen" className="spice-screen" />

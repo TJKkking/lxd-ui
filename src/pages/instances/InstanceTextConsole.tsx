@@ -14,6 +14,7 @@ import { unstable_usePrompt as usePrompt } from "react-router-dom";
 import Xterm from "components/Xterm";
 import { Terminal } from "xterm";
 import { useNotify } from "@canonical/react-components";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   instance: LxdInstance;
@@ -38,32 +39,33 @@ const InstanceTextConsole: FC<Props> = ({
   const [userInteracted, setUserInteracted] = useState(false);
   const xtermRef = useRef<Terminal>(null);
   const notify = useNotify();
+  const { t } = useTranslation();
 
   usePrompt({
     when: userInteracted,
-    message: "Are you sure you want to leave this page?",
+    message: t("are-you-sure-you-want-to-leave-this-page"),
   });
 
   const handleCloseTab = (e: BeforeUnloadEvent) => {
     if (userInteracted) {
-      e.returnValue = "Are you sure you want to leave this page?";
+      e.returnValue = t("are-you-sure-you-want-to-leave-this-page");
     }
   };
   useEventListener("beforeunload", handleCloseTab);
 
-  const isRunning = instance.status === "Running";
+  const isRunning = instance.status === t("running");
 
   const handleError = (e: object) => {
-    onFailure("Error", e);
+    onFailure(t("error"), e);
   };
 
   const openWebsockets = async () => {
     if (!name) {
-      onFailure("Missing name", new Error());
+      onFailure(t("missing-name"), new Error());
       return;
     }
     if (!project) {
-      onFailure("Missing project", new Error());
+      onFailure(t("missing-project"), new Error());
       return;
     }
 
@@ -74,7 +76,7 @@ const InstanceTextConsole: FC<Props> = ({
     const result = await connectInstanceConsole(name, project).catch((e) => {
       setLoading(false);
       if (isRunning) {
-        onFailure("Connection failed", e);
+        onFailure(t("connection-failed"), e);
       } else {
         showNotRunningInfo();
       }
@@ -98,7 +100,7 @@ const InstanceTextConsole: FC<Props> = ({
 
     control.onclose = (event) => {
       if (1005 !== event.code) {
-        onFailure("Error", event.reason, getWsErrorMsg(event.code));
+        onFailure(t("error"), event.reason, getWsErrorMsg(event.code));
       }
     };
 
@@ -110,7 +112,7 @@ const InstanceTextConsole: FC<Props> = ({
 
     data.onclose = (event) => {
       if (1005 !== event.code) {
-        onFailure("Error", event.reason, getWsErrorMsg(event.code));
+        onFailure(t("error"), event.reason, getWsErrorMsg(event.code));
       }
       setDataWs(null);
       setUserInteracted(false);
@@ -168,7 +170,7 @@ const InstanceTextConsole: FC<Props> = ({
   return (
     <>
       {isLoading ? (
-        <Loader text="Loading text console..." />
+        <Loader text={t("loading-text-console")} />
       ) : (
         <Xterm
           ref={xtermRef}

@@ -6,6 +6,7 @@ import { fetchInstanceLogFile } from "api/instances";
 import { LxdInstance } from "types/instance";
 import DownloadButton from "pages/instances/DownloadButton";
 import { getUrlParam } from "util/helpers";
+import { useTranslation } from "react-i18next";
 
 interface FileRowProps {
   instance: LxdInstance;
@@ -16,6 +17,7 @@ const FileRow: FC<FileRowProps> = ({ instance, path }) => {
   const fileName = path.split("/").at(-1) ?? "";
   const fileUrl = `/ui/project/${instance.project}/instance/${instance.name}/logs/?file=${fileName}`;
   const [isOpen, setOpen] = useState(getUrlParam("file") === fileName);
+  const { t } = useTranslation();
 
   const {
     data: logContent,
@@ -45,7 +47,7 @@ const FileRow: FC<FileRowProps> = ({ instance, path }) => {
           appearance="base"
           hasIcon
           className="u-no-margin--bottom file-row-toggle"
-          aria-label={`Toggle ${fileName} visibility`}
+          aria-label={t("toggleFileVisibility", { fileName: fileName })}
           aria-controls={fileName}
           aria-hidden={!isOpen}
           onClick={toggleVisibility}
@@ -55,7 +57,7 @@ const FileRow: FC<FileRowProps> = ({ instance, path }) => {
         </Button>
         <a
           href={fileUrl}
-          aria-label={`File ${fileName} URL`}
+          aria-label={t("fileUrl", { fileName: fileName })}
           className="p-button--base u-no-margin--bottom"
         >
           <Icon name="get-link" alt="link" />
@@ -74,8 +76,8 @@ const FileRow: FC<FileRowProps> = ({ instance, path }) => {
           aria-hidden={!isOpen}
         >
           <code>
-            {isLoading && <>Downloading file content...</>}
-            {isSuccess && !logContent && <>This file is empty.</>}
+            {isLoading && <>{t("downloading-file-content")}</>}
+            {isSuccess && !logContent && <>{t("this-file-is-empty")}</>}
             {isSuccess && logContent && <>{logContent}</>}
           </code>
         </pre>

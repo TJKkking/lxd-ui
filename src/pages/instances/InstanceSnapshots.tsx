@@ -24,6 +24,7 @@ import { isSnapshotsDisabled } from "util/snapshots";
 import useSortTableData from "util/useSortTableData";
 import { useToastNotification } from "context/toastNotificationProvider";
 import NotificationRow from "components/NotificationRow";
+import { useTranslation } from "react-i18next";
 
 const collapsedViewMaxWidth = 1250;
 export const figureCollapsedScreen = (): boolean =>
@@ -42,6 +43,7 @@ const InstanceSnapshots = (props: Props) => {
   const [selectedNames, setSelectedNames] = useState<string[]>([]);
   const [processingNames, setProcessingNames] = useState<string[]>([]);
   const [isSmallScreen, setSmallScreen] = useState(figureCollapsedScreen());
+  const { t } = useTranslation();
 
   const onSuccess = (message: ReactNode) => {
     toastNotify.success(message);
@@ -83,12 +85,12 @@ const InstanceSnapshots = (props: Props) => {
     {
       content: isSmallScreen ? (
         <>
-          Name
+          {t("name")}
           <br />
-          <div className="header-second-row">Date created</div>
+          <div className="header-second-row">{t("date-created")}</div>
         </>
       ) : (
-        "Name"
+        t("name")
       ),
       sortKey: isSmallScreen ? "created_at" : "name",
       className: "name",
@@ -97,18 +99,18 @@ const InstanceSnapshots = (props: Props) => {
       ? []
       : [
           {
-            content: "Date created",
+            content: t("date-created"),
             sortKey: "created_at",
             className: "created",
           },
         ]),
     {
-      content: "Expiry date",
+      content: t("expiry-date"),
       sortKey: "expires_at",
       className: "expiration",
     },
-    { content: "Stateful", sortKey: "stateful", className: "stateful" },
-    { "aria-label": "Actions", className: "actions" },
+    { content: t("stateful"), sortKey: "stateful", className: "stateful" },
+    { "aria-label": t("actions"), className: "actions" },
   ];
 
   const rows = filteredSnapshots.map((snapshot) => {
@@ -128,7 +130,7 @@ const InstanceSnapshots = (props: Props) => {
         {
           content: (
             <>
-              <div className="u-truncate" title={`Snapshot ${snapshot.name}`}>
+              <div className="u-truncate" title={t("snapshot") + snapshot.name}>
                 <ItemName item={snapshot} />
               </div>
               {isSmallScreen && (
@@ -139,7 +141,7 @@ const InstanceSnapshots = (props: Props) => {
             </>
           ),
           role: "rowheader",
-          "aria-label": "Name",
+          "aria-label": t("name"),
           className: "name",
         },
         ...(isSmallScreen
@@ -148,26 +150,26 @@ const InstanceSnapshots = (props: Props) => {
               {
                 content: isoTimeToString(snapshot.created_at),
                 role: "rowheader",
-                "aria-label": "Created at",
+                "aria-label": t("created-at"),
                 className: "created",
               },
             ]),
         {
           content: isoTimeToString(snapshot.expires_at),
           role: "rowheader",
-          "aria-label": "Expires at",
+          "aria-label": t("expires-at"),
           className: "expiration",
         },
         {
-          content: snapshot.stateful ? "Yes" : "No",
+          content: snapshot.stateful ? t("yes") : t("no"),
           role: "rowheader",
-          "aria-label": "Stateful",
+          "aria-label": t("stateful"),
           className: "stateful",
         },
         {
           content: actions,
           role: "rowheader",
-          "aria-label": "Actions",
+          "aria-label": t("actions"),
           className: "u-align--right actions",
         },
       ],
@@ -207,9 +209,9 @@ const InstanceSnapshots = (props: Props) => {
                   onChange={(value) => {
                     setQuery(value);
                   }}
-                  placeholder="Search for snapshots"
+                  placeholder={t("search-for-snapshots")}
                   value={query}
-                  aria-label="Search for snapshots"
+                  aria-label={t("search-for-snapshots")}
                 />
               </div>
               <InstanceConfigureSnapshotsBtn
@@ -253,7 +255,7 @@ const InstanceSnapshots = (props: Props) => {
               id="pagination"
               itemName="snapshot"
               className="u-no-margin--top"
-              aria-label="Table pagination control"
+              aria-label={t("table-pagination-control")}
               description={
                 selectedNames.length > 0 && (
                   <SelectedTableNotification
@@ -272,7 +274,7 @@ const InstanceSnapshots = (props: Props) => {
                 headers={headers}
                 rows={sortedRows}
                 sortable
-                emptyStateMsg="No snapshot found matching this search"
+                emptyStateMsg={t("no-snapshot-found-matching-this-search")}
                 itemName="snapshot"
                 parentName="instance"
                 selectedNames={selectedNames}
@@ -292,16 +294,16 @@ const InstanceSnapshots = (props: Props) => {
         <EmptyState
           className="empty-state"
           image={<Icon name="containers" className="empty-state-icon" />}
-          title="No snapshots found"
+          title={t("no-snapshots-found-0")}
         >
           <p>
             {project && snapshotsDisabled ? (
               <>
-                Snapshots are disabled for project{" "}
+                {t("snapshots-are-disabled-for-project")}{" "}
                 <ItemName item={project} bold />.
               </>
             ) : (
-              "There are no snapshots of this instance."
+              t("there-are-no-snapshots-of-this-instance")
             )}
           </p>
           <p>
@@ -310,7 +312,7 @@ const InstanceSnapshots = (props: Props) => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Learn more about snapshots
+              {t("learn-more-about-snapshots")}
               <Icon className="external-link-icon" name="external-link" />
             </a>
           </p>

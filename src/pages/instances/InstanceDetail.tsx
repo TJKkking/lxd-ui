@@ -14,17 +14,11 @@ import EditInstance from "./EditInstance";
 import InstanceDetailHeader from "pages/instances/InstanceDetailHeader";
 import CustomLayout from "components/CustomLayout";
 import TabLinks from "components/TabLinks";
-
-const tabs: string[] = [
-  "Overview",
-  "Configuration",
-  "Snapshots",
-  "Terminal",
-  "Console",
-  "Logs",
-];
+import { i } from "vitest/dist/reporters-rzC174PQ";
+import { useTranslation } from "react-i18next";
 
 const InstanceDetail: FC = () => {
+  const { t } = useTranslation();
   const { name, project, activeTab } = useParams<{
     name: string;
     project: string;
@@ -32,11 +26,20 @@ const InstanceDetail: FC = () => {
   }>();
 
   if (!name) {
-    return <>Missing name</>;
+    return <>{t("missing-name")}</>;
   }
   if (!project) {
-    return <>Missing project</>;
+    return <>{t("missing-project")}</>;
   }
+
+  const tabs: string[] = [
+    t("overview"),
+    t("configuration"),
+    t("snapshots"),
+    t("terminal"),
+    t("console"),
+    t("logs"),
+  ];
 
   const {
     data: instance,
@@ -58,11 +61,11 @@ const InstanceDetail: FC = () => {
       }
       contentClassName="detail-page"
     >
-      {isLoading && <Loader text="Loading instance details..." />}
-      {!isLoading && !instance && !error && <>Loading instance failed</>}
+      {isLoading && <Loader text={t("loading-instance-details")} />}
+      {!isLoading && !instance && !error && <>{t("loading-instance-failed")}</>}
       {error && (
         <Strip>
-          <Notification severity="negative" title="Error">
+          <Notification severity="negative" title={t("error")}>
             {error.message}
           </Notification>
         </Strip>

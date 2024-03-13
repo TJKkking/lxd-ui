@@ -12,6 +12,7 @@ import useEventListener from "@use-it/event-listener";
 import { TerminalConnectPayload } from "types/terminal";
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   payload: TerminalConnectPayload;
@@ -22,8 +23,10 @@ interface Props {
 const TerminalPayloadForm: FC<Props> = ({ payload, close, reconnect }) => {
   const ref = useRef<HTMLDivElement>(null);
 
+  const { t } = useTranslation();
+
   const TerminalSchema = Yup.object().shape({
-    command: Yup.string().required("This field is required"),
+    command: Yup.string().required(t("this-field-is-required")),
     environment: Yup.array().of(
       Yup.object().shape({
         key: Yup.string(),
@@ -53,7 +56,7 @@ const TerminalPayloadForm: FC<Props> = ({ payload, close, reconnect }) => {
   };
 
   const handleEscKey = (e: KeyboardEvent<HTMLElement>) => {
-    if (e.key === "Escape") {
+    if (e.key === t("escape")) {
       close();
     }
   };
@@ -76,25 +79,25 @@ const TerminalPayloadForm: FC<Props> = ({ payload, close, reconnect }) => {
   return (
     <Modal
       close={close}
-      title="Reconnect terminal"
+      title={t("reconnect-terminal")}
       buttonRow={
         <>
           <Button
             appearance="base"
             className="u-no-margin--bottom"
             type="button"
-            aria-label="cancel reconnect"
+            aria-label={t("cancel-reconnect")}
             onClick={close}
           >
-            Cancel
+            {t("cancel")}
           </Button>
           <ActionButton
             className="u-no-margin--bottom"
             appearance="positive"
-            aria-label="submit reconnect"
+            aria-label={t("submit-reconnect")}
             onClick={() => void formik.submitForm()}
           >
-            Reconnect
+            {t("reconnect")}
           </ActionButton>
         </>
       }
@@ -102,12 +105,12 @@ const TerminalPayloadForm: FC<Props> = ({ payload, close, reconnect }) => {
     >
       <Form onSubmit={formik.handleSubmit}>
         {/* hidden submit to enable enter key in inputs */}
-        <Input type="submit" hidden value="Hidden input" />
+        <Input type="submit" hidden value={t("hidden-input")} />
         <div className="content-wrapper">
           <Input
             id="command"
             name="command"
-            label="Command"
+            label={t("command")}
             labelClassName="u-no-margin--bottom"
             type="text"
             required
@@ -119,7 +122,7 @@ const TerminalPayloadForm: FC<Props> = ({ payload, close, reconnect }) => {
           <Input
             id="user"
             name="user"
-            label="User ID"
+            label={t("user-id")}
             labelClassName="u-no-margin--bottom"
             type="number"
             onBlur={formik.handleBlur}
@@ -129,7 +132,7 @@ const TerminalPayloadForm: FC<Props> = ({ payload, close, reconnect }) => {
           <Input
             id="group"
             name="group"
-            label="Group ID"
+            label={t("group-id")}
             labelClassName="u-no-margin--bottom"
             type="number"
             onBlur={formik.handleBlur}
@@ -137,15 +140,15 @@ const TerminalPayloadForm: FC<Props> = ({ payload, close, reconnect }) => {
             value={formik.values.group}
           />
           <p className="u-no-margin--bottom p-form__label">
-            Environment variables
+            {t("environment-variables")}
           </p>
           {formik.values.environment.map((_variable, index) => (
             <div key={index} className="env-variables">
               <Input
                 type="text"
-                placeholder="Key"
+                placeholder={t("key")}
                 labelClassName="u-off-screen"
-                label={`Key of variable ${index}`}
+                label={t("keyOfVariable", { index: index })}
                 id={`environment.${index}.key`}
                 name={`environment.${index}.key`}
                 onBlur={formik.handleBlur}
@@ -154,9 +157,9 @@ const TerminalPayloadForm: FC<Props> = ({ payload, close, reconnect }) => {
               />
               <Input
                 type="text"
-                placeholder="Value"
+                placeholder={t("value")}
                 labelClassName="u-off-screen"
-                label={`Value of variable ${index}`}
+                label={t("valueOfVariable", { index: index })}
                 id={`environment.${index}.value`}
                 name={`environment.${index}.value`}
                 onBlur={formik.handleBlur}
@@ -164,7 +167,7 @@ const TerminalPayloadForm: FC<Props> = ({ payload, close, reconnect }) => {
                 value={formik.values.environment[index].value}
               />
               <Button
-                aria-label={`remove variable ${index}`}
+                aria-label={t("removeVariable", { index: index })}
                 onClick={() => removeEnvironmentRow(index)}
                 type="button"
                 hasIcon
@@ -175,11 +178,11 @@ const TerminalPayloadForm: FC<Props> = ({ payload, close, reconnect }) => {
           ))}
           <div ref={ref}>
             <Button
-              aria-label="add variable"
+              aria-label={t("add-variable")}
               onClick={addEnvironmentRow}
               type="button"
             >
-              <span>Add variable</span>
+              <span>{t("add-variable-0")}</span>
             </Button>
           </div>
         </div>

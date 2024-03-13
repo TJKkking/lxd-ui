@@ -11,6 +11,7 @@ import InstanceOverviewMetrics from "./InstanceOverviewMetrics";
 import InstanceIps from "pages/instances/InstanceIps";
 import { useSettings } from "context/useSettings";
 import NotificationRow from "components/NotificationRow";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   instance: LxdInstance;
@@ -19,6 +20,8 @@ interface Props {
 const InstanceOverview: FC<Props> = ({ instance }) => {
   const notify = useNotify();
   const { data: settings } = useSettings();
+
+  const { t } = useTranslation();
 
   const onFailure = (title: string, e: unknown) => {
     notify.failure(title, e);
@@ -38,21 +41,21 @@ const InstanceOverview: FC<Props> = ({ instance }) => {
       <NotificationRow />
       <Row className="general">
         <Col size={3}>
-          <h2 className="p-heading--5">General</h2>
+          <h2 className="p-heading--5">{t("general")}</h2>
         </Col>
         <Col size={7}>
           <table>
             <tbody>
               <tr>
-                <th className="p-muted-heading">Base image</th>
+                <th className="p-muted-heading">{t("base-image")}</th>
                 <td>{instance.config["image.description"] ?? "-"}</td>
               </tr>
               <tr>
-                <th className="p-muted-heading">Description</th>
+                <th className="p-muted-heading">{t("description")}</th>
                 <td>{instance.description ? instance.description : "-"}</td>
               </tr>
               <tr>
-                <th className="p-muted-heading">Type</th>
+                <th className="p-muted-heading">{t("type")}</th>
                 <td>
                   {
                     instanceCreationTypes.filter(
@@ -74,11 +77,11 @@ const InstanceOverview: FC<Props> = ({ instance }) => {
                 </td>
               </tr>
               <tr>
-                <th className="p-muted-heading">Architecture</th>
+                <th className="p-muted-heading">{t("architecture")}</th>
                 <td>{instance.architecture}</td>
               </tr>
               <tr>
-                <th className="p-muted-heading">Location</th>
+                <th className="p-muted-heading">{t("location")}</th>
                 <td>
                   {settings?.environment?.server_clustered
                     ? instance.location
@@ -90,11 +93,11 @@ const InstanceOverview: FC<Props> = ({ instance }) => {
                 <td>{pid}</td>
               </tr>
               <tr>
-                <th className="p-muted-heading">Date created</th>
+                <th className="p-muted-heading">{t("date-created")}</th>
                 <td>{isoTimeToString(instance.created_at)}</td>
               </tr>
               <tr>
-                <th className="p-muted-heading">Last used</th>
+                <th className="p-muted-heading">{t("last-used")}</th>
                 <td>{isoTimeToString(instance.last_used_at)}</td>
               </tr>
             </tbody>
@@ -103,7 +106,7 @@ const InstanceOverview: FC<Props> = ({ instance }) => {
       </Row>
       <Row className="usage">
         <Col size={3}>
-          <h2 className="p-heading--5">Usage</h2>
+          <h2 className="p-heading--5">{t("usage")}</h2>
         </Col>
         <Col size={7}>
           <InstanceOverviewMetrics instance={instance} onFailure={onFailure} />
@@ -111,7 +114,7 @@ const InstanceOverview: FC<Props> = ({ instance }) => {
       </Row>
       <Row className="networks">
         <Col size={3}>
-          <h2 className="p-heading--5">Networks</h2>
+          <h2 className="p-heading--5">{t("networks")}</h2>
         </Col>
         <Col size={7}>
           <InstanceOverviewNetworks instance={instance} onFailure={onFailure} />
@@ -119,7 +122,7 @@ const InstanceOverview: FC<Props> = ({ instance }) => {
       </Row>
       <Row className="profiles">
         <Col size={3}>
-          <h2 className="p-heading--5">Profiles</h2>
+          <h2 className="p-heading--5">{t("profiles")}</h2>
         </Col>
         <Col size={7}>
           <InstanceOverviewProfiles instance={instance} onFailure={onFailure} />

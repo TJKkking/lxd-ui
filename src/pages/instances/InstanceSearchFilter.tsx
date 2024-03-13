@@ -11,6 +11,7 @@ import {
   paramsFromSearchData,
   searchParamsToChips,
 } from "util/searchAndFilter";
+import { useTranslation } from "react-i18next";
 
 export const QUERY = "query";
 export const STATUS = "status";
@@ -25,6 +26,7 @@ interface Props {
 
 const InstanceSearchFilter: FC<Props> = ({ instances }) => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const { t } = useTranslation();
 
   const profileSet = [
     ...new Set(instances.flatMap((instance) => instance.profiles)),
@@ -33,21 +35,21 @@ const InstanceSearchFilter: FC<Props> = ({ instances }) => {
   const searchAndFilterData: SearchAndFilterData[] = [
     {
       id: 1,
-      heading: "Status",
+      heading: t("status"),
       chips: instanceStatuses.map((status) => {
         return { lead: STATUS, value: status };
       }),
     },
     {
       id: 2,
-      heading: "Instance type",
+      heading: t("instance-type"),
       chips: instanceTypes.map((type) => {
         return { lead: TYPE, value: type };
       }),
     },
     {
       id: 3,
-      heading: "Profile",
+      heading: t("profile"),
       chips: profileSet.map((profile) => {
         return { lead: PROFILE, value: profile };
       }),
@@ -68,7 +70,7 @@ const InstanceSearchFilter: FC<Props> = ({ instances }) => {
 
   return (
     <>
-      <h2 className="u-off-screen">Search and filter</h2>
+      <h2 className="u-off-screen">{t("search-and-filter")}</h2>
       <SearchAndFilter
         existingSearchData={searchParamsToChips(searchParams, QUERY_PARAMS)}
         filterPanelData={searchAndFilterData}

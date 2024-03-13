@@ -17,6 +17,7 @@ import ItemName from "components/ItemName";
 import DetailPanel from "components/DetailPanel";
 import InstanceIps from "pages/instances/InstanceIps";
 import { useSettings } from "context/useSettings";
+import { useTranslation } from "react-i18next";
 
 const RECENT_SNAPSHOT_LIMIT = 5;
 
@@ -24,6 +25,7 @@ const InstanceDetailPanel: FC = () => {
   const notify = useNotify();
   const panelParams = usePanelParams();
   const { data: settings } = useSettings();
+  const { t } = useTranslation();
 
   const {
     data: instance,
@@ -37,7 +39,7 @@ const InstanceDetailPanel: FC = () => {
   });
 
   if (error) {
-    notify.failure("Loading instance failed", error);
+    notify.failure(t("loading-instance-failed"), error);
   }
 
   const networkDevices = Object.values(instance?.expanded_devices ?? {}).filter(
@@ -46,7 +48,7 @@ const InstanceDetailPanel: FC = () => {
 
   return (
     <DetailPanel
-      title="Instance summary"
+      title={t("instance-summary")}
       hasLoadingError={!instance}
       className="instance-detail-panel"
       isLoading={isLoading}
@@ -72,13 +74,13 @@ const InstanceDetailPanel: FC = () => {
         <table className="u-table-layout--auto u-no-margin--bottom">
           <tbody>
             <tr>
-              <th className="u-text--muted">Name</th>
+              <th className="u-text--muted">{t("name")}</th>
               <td>
                 <InstanceLink instance={instance} />
               </td>
             </tr>
             <tr>
-              <th className="u-text--muted">Base image</th>
+              <th className="u-text--muted">{t("base-image")}</th>
               <td>
                 <div
                   className="u-truncate base-image"
@@ -89,17 +91,17 @@ const InstanceDetailPanel: FC = () => {
               </td>
             </tr>
             <tr>
-              <th className="u-text--muted">Status</th>
+              <th className="u-text--muted">{t("status")}</th>
               <td>
                 <InstanceStatusIcon instance={instance} />
               </td>
             </tr>
             <tr>
-              <th className="u-text--muted">Description</th>
+              <th className="u-text--muted">{t("description")}</th>
               <td>{instance.description ? instance.description : "-"}</td>
             </tr>
             <tr>
-              <th className="u-text--muted">Type</th>
+              <th className="u-text--muted">{t("type")}</th>
               <td>
                 {
                   instanceCreationTypes.filter(
@@ -121,11 +123,11 @@ const InstanceDetailPanel: FC = () => {
               </td>
             </tr>
             <tr>
-              <th className="u-text--muted">Architecture</th>
+              <th className="u-text--muted">{t("architecture")}</th>
               <td>{instance.architecture}</td>
             </tr>
             <tr>
-              <th className="u-text--muted">Location</th>
+              <th className="u-text--muted">{t("location")}</th>
               <td>
                 {settings?.environment?.server_clustered
                   ? instance.location
@@ -133,11 +135,11 @@ const InstanceDetailPanel: FC = () => {
               </td>
             </tr>
             <tr>
-              <th className="u-text--muted">Created</th>
+              <th className="u-text--muted">{t("created")}</th>
               <td>{isoTimeToString(instance.created_at)}</td>
             </tr>
             <tr>
-              <th className="u-text--muted last-used">Last used</th>
+              <th className="u-text--muted last-used">{t("last-used")}</th>
               <td>{isoTimeToString(instance.last_used_at)}</td>
             </tr>
             <tr>
@@ -146,7 +148,7 @@ const InstanceDetailPanel: FC = () => {
                   <Link
                     to={`/ui/project/${instance.project}/instance/${instance.name}/configuration`}
                   >
-                    Profiles
+                    {t("profiles")}
                   </Link>
                 </h3>
               </th>
@@ -167,7 +169,9 @@ const InstanceDetailPanel: FC = () => {
             {networkDevices.length > 0 ? (
               <tr>
                 <th>
-                  <h3 className="p-muted-heading p-heading--5">Networks</h3>
+                  <h3 className="p-muted-heading p-heading--5">
+                    {t("networks")}
+                  </h3>
                 </th>
                 <td>
                   <List
@@ -186,14 +190,16 @@ const InstanceDetailPanel: FC = () => {
             ) : (
               <tr>
                 <td colSpan={2}>
-                  <h3 className="p-muted-heading p-heading--5">Networks</h3>
+                  <h3 className="p-muted-heading p-heading--5">
+                    {t("networks")}
+                  </h3>
                   <p>
-                    No networks found.
+                    {t("no-networks-found")}
                     <br />
                     <Link
                       to={`/ui/project/${instance.project}/instance/${instance.name}/configuration/networks`}
                     >
-                      Configure instance networks
+                      {t("configure-instance-networks")}
                     </Link>
                   </p>
                 </td>
@@ -205,7 +211,7 @@ const InstanceDetailPanel: FC = () => {
                   <Link
                     to={`/ui/project/${instance.project}/instance/${instance.name}/snapshots`}
                   >
-                    Snapshots
+                    {t("snapshots")}
                   </Link>
                 </h3>
               </th>
@@ -239,7 +245,9 @@ const InstanceDetailPanel: FC = () => {
                       <Link
                         to={`/ui/project/${instance.project}/instance/${instance.name}/snapshots`}
                       >
-                        {`View all (${instance.snapshots.length})`}
+                        {t("viewAllInstanceLength", {
+                          count: instance.snapshots.length,
+                        })}
                       </Link>
                     </td>
                   </tr>
@@ -249,12 +257,12 @@ const InstanceDetailPanel: FC = () => {
               <tr>
                 <td colSpan={2}>
                   <p className="no-snapshots">
-                    No snapshots found.
+                    {t("no-snapshots-found")}
                     <br />
                     <Link
                       to={`/ui/project/${instance.project}/instance/${instance.name}/snapshots`}
                     >
-                      Manage instance snapshots
+                      {t("manage-instance-snapshots")}
                     </Link>
                   </p>
                 </td>

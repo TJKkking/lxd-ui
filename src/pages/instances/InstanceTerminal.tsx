@@ -19,6 +19,7 @@ import {
   useNotify,
 } from "@canonical/react-components";
 import NotificationRow from "components/NotificationRow";
+import { useTranslation } from "react-i18next";
 
 const XTERM_OPTIONS = {
   theme: {
@@ -60,28 +61,29 @@ const InstanceTerminal: FC<Props> = ({ instance }) => {
   const [fitAddon] = useState<FitAddon>(new FitAddon());
   const [userInteracted, setUserInteracted] = useState(false);
   const xtermRef = useRef<Terminal>(null);
+  const { t } = useTranslation();
 
   usePrompt({
     when: userInteracted,
-    message: "Are you sure you want to leave this page?",
+    message: t("are-you-sure-you-want-to-leave-this-page"),
   });
 
   const handleCloseTab = (e: BeforeUnloadEvent) => {
     if (userInteracted) {
-      e.returnValue = "Are you sure you want to leave this page?";
+      e.returnValue = t("are-you-sure-you-want-to-leave-this-page");
     }
   };
   useEventListener("beforeunload", handleCloseTab);
 
-  const isRunning = instance.status === "Running";
+  const isRunning = instance.status === t("running");
 
   const openWebsockets = async (payload: TerminalConnectPayload) => {
     if (!name) {
-      notify.failure("Missing name", new Error());
+      notify.failure(t("missing-name"), new Error());
       return;
     }
     if (!project) {
-      notify.failure("Missing project", new Error());
+      notify.failure(t("missing-project"), new Error());
       return;
     }
 
@@ -89,7 +91,7 @@ const InstanceTerminal: FC<Props> = ({ instance }) => {
     const result = await connectInstanceExec(name, project, payload).catch(
       (e) => {
         setLoading(false);
-        notify.failure("Connection failed", e);
+        notify.failure(t("connection-failed"), e);
       },
     );
     if (!result) {
@@ -109,12 +111,12 @@ const InstanceTerminal: FC<Props> = ({ instance }) => {
     };
 
     control.onerror = (e) => {
-      notify.failure("Error", e);
+      notify.failure(t("error"), e);
     };
 
     control.onclose = (event) => {
       if (1005 !== event.code) {
-        notify.failure("Error", event.reason, getWsErrorMsg(event.code));
+        notify.failure(t("error"), event.reason, getWsErrorMsg(event.code));
       }
       setControlWs(null);
     };
@@ -124,12 +126,12 @@ const InstanceTerminal: FC<Props> = ({ instance }) => {
     };
 
     data.onerror = (e) => {
-      notify.failure("Error", e);
+      notify.failure(t("error"), e);
     };
 
     data.onclose = (event) => {
       if (1005 !== event.code) {
-        notify.failure("Error", event.reason, getWsErrorMsg(event.code));
+        notify.failure(t("error"), event.reason, getWsErrorMsg(event.code));
       }
       setDataWs(null);
       setUserInteracted(false);
@@ -200,7 +202,7 @@ const InstanceTerminal: FC<Props> = ({ instance }) => {
             <ReconnectTerminalBtn reconnect={setPayload} payload={payload} />
           </div>
           <NotificationRow />
-          {isLoading && <Loader text="Loading terminal session..." />}
+          {isLoading && <Loader text={t("loading-terminal-session")} />}
           {controlWs && (
             <Xterm
               ref={xtermRef}
@@ -220,15 +222,15 @@ const InstanceTerminal: FC<Props> = ({ instance }) => {
         <EmptyState
           className="empty-state"
           image={<Icon name="containers" className="empty-state-icon" />}
-          title="Instance stopped"
+          title={t("instance-stopped")}
         >
-          <p>Start the instance to access the terminal.</p>
+          <p>{t("start-the-instance-to-access-the-terminal")}</p>
           <ActionButton
             appearance="positive"
             loading={isStartLoading}
             onClick={handleStart}
           >
-            Start instance
+            {t("start-instance")}
           </ActionButton>
         </EmptyState>
       )}

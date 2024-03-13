@@ -9,6 +9,7 @@ import {
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { LxdClusterMember } from "types/cluster";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   close: () => void;
@@ -27,8 +28,10 @@ const MigrateInstanceForm: FC<Props> = ({
 }) => {
   const memberNames = members.map((member) => member.server_name);
 
+  const { t } = useTranslation();
+
   const MigrateSchema = Yup.object().shape({
-    target: Yup.string().min(1, "This field is required"),
+    target: Yup.string().min(1, t("this-field-is-required")),
   });
 
   const formik = useFormik({
@@ -42,7 +45,7 @@ const MigrateInstanceForm: FC<Props> = ({
   });
 
   const handleEscKey = (e: KeyboardEvent<HTMLElement>) => {
-    if (e.key === "Escape") {
+    if (e.key === t("escape")) {
       close();
     }
   };
@@ -51,17 +54,17 @@ const MigrateInstanceForm: FC<Props> = ({
     <Modal
       close={close}
       className="migrate-instance-modal"
-      title={`Migrate instance ${instance}`}
+      title={t("migrateInstance", { instance: instance })}
       buttonRow={
         <>
           <Button
             className="u-no-margin--bottom"
             type="button"
-            aria-label="cancel migrate"
+            aria-label={t("cancel-migrate")}
             appearance="base"
             onClick={close}
           >
-            Cancel
+            {t("cancel")}
           </Button>
           <ActionButton
             appearance="positive"
@@ -69,7 +72,7 @@ const MigrateInstanceForm: FC<Props> = ({
             onClick={() => void formik.submitForm()}
             disabled={!formik.isValid}
           >
-            Migrate
+            {t("migrate")}
           </ActionButton>
         </>
       }
@@ -78,7 +81,7 @@ const MigrateInstanceForm: FC<Props> = ({
       <Form onSubmit={formik.handleSubmit}>
         <Select
           id="locationMember"
-          label="Move instance to cluster member"
+          label={t("move-instance-to-cluster-member")}
           onChange={(e) => void formik.setFieldValue("target", e.target.value)}
           value={formik.values.target}
           options={memberNames.map((member) => {

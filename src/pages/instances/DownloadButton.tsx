@@ -2,6 +2,7 @@ import { FC, useRef } from "react";
 import { Button, Icon } from "@canonical/react-components";
 import { LxdInstance } from "types/instance";
 import { fetchInstanceLogFile } from "api/instances";
+import { useTranslation } from "react-i18next";
 
 interface DownloadButtonProps {
   instance: LxdInstance;
@@ -14,6 +15,8 @@ const DownloadButton: FC<DownloadButtonProps> = ({
   content,
   fileName,
 }) => {
+  const { t } = useTranslation();
+
   const buttonRef = useRef<HTMLDivElement | null>(null);
 
   const generateLink = (linkId: string, href: string) => {
@@ -52,8 +55,8 @@ const DownloadButton: FC<DownloadButtonProps> = ({
       appearance="base"
       className="u-no-margin--bottom"
       onClick={() => void handleDownload()}
-      title={`Download ${fileName}`}
-      aria-label={`Download ${fileName} file`}
+      title={t("downloadFile", { fileName: fileName })}
+      aria-label={t("downloadFileLabel", { fileName: fileName })}
       hasIcon
       dense
       ref={buttonRef}

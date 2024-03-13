@@ -56,6 +56,7 @@ import FormFooterLayout from "components/forms/FormFooterLayout";
 import { useToastNotification } from "context/toastNotificationProvider";
 import InstanceLink from "pages/instances/InstanceLink";
 import { useDocs } from "context/useDocs";
+import { useTranslation } from "react-i18next";
 
 export interface InstanceEditDetailsFormValues {
   name: string;
@@ -80,6 +81,7 @@ interface Props {
 }
 
 const EditInstance: FC<Props> = ({ instance }) => {
+  const { t } = useTranslation();
   const docBaseLink = useDocs();
   const eventQueue = useEventQueue();
   const toastNotify = useToastNotification();
@@ -92,7 +94,7 @@ const EditInstance: FC<Props> = ({ instance }) => {
   const [isConfigOpen, setConfigOpen] = useState(true);
 
   if (!project) {
-    return <>Missing project</>;
+    return <>{t("missing-project")}</>;
   }
 
   const updateFormHeight = () => {
@@ -120,12 +122,12 @@ const EditInstance: FC<Props> = ({ instance }) => {
           eventQueue.set(
             operation.metadata.id,
             () => {
-              toastNotify.success(<>Instance {instanceLink} updated.</>);
+              toastNotify.success(t("instanceUpdated", { link: instanceLink }));
               void formik.setValues(getInstanceEditValues(instancePayload));
             },
             (msg) =>
               toastNotify.failure(
-                "Instance update failed.",
+                t("instance-update-failed"),
                 new Error(msg),
                 instanceLink,
               ),
@@ -139,7 +141,7 @@ const EditInstance: FC<Props> = ({ instance }) => {
         })
         .catch((e) => {
           formik.setSubmitting(false);
-          toastNotify.failure("Instance update failed.", e, instanceLink);
+          toastNotify.failure(t("instance-update-failed"), e, instanceLink);
         });
     },
   });
@@ -226,15 +228,18 @@ const EditInstance: FC<Props> = ({ instance }) => {
                 setYaml={(yaml) => void formik.setFieldValue("yaml", yaml)}
                 readOnly={readOnly}
               >
-                <Notification severity="information" title="YAML Configuration">
-                  This is the YAML representation of the instance.
+                <Notification
+                  severity="information"
+                  title={t("yaml-configuration")}
+                >
+                  {t("this-is-the-yaml-representation-of-the-instance")}
                   <br />
                   <a
                     href={`${docBaseLink}/instances`}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    Learn more about instances
+                    {t("learn-more-about-instances")}
                   </a>
                 </Notification>
               </YamlForm>
@@ -250,7 +255,7 @@ const EditInstance: FC<Props> = ({ instance }) => {
               void formik.setFieldValue("readOnly", false);
             }}
           >
-            Edit instance
+            {t("edit-instance")}
           </Button>
         ) : (
           <>
@@ -258,7 +263,7 @@ const EditInstance: FC<Props> = ({ instance }) => {
               appearance="base"
               onClick={() => formik.setValues(getInstanceEditValues(instance))}
             >
-              Cancel
+              {t("cancel")}
             </Button>
             <ActionButton
               appearance="positive"
@@ -270,7 +275,7 @@ const EditInstance: FC<Props> = ({ instance }) => {
               }
               onClick={() => void formik.submitForm()}
             >
-              Save changes
+              {t("save-changes")}
             </ActionButton>
           </>
         )}

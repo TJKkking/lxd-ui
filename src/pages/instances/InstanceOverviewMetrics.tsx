@@ -8,6 +8,7 @@ import Meter from "components/Meter";
 import Loader from "components/Loader";
 import { LxdInstance } from "types/instance";
 import { useAuth } from "context/auth";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   instance: LxdInstance;
@@ -16,6 +17,8 @@ interface Props {
 
 const InstanceOverviewMetrics: FC<Props> = ({ instance, onFailure }) => {
   const { isRestricted } = useAuth();
+
+  const { t } = useTranslation();
 
   const {
     data: metrics = [],
@@ -29,7 +32,7 @@ const InstanceOverviewMetrics: FC<Props> = ({ instance, onFailure }) => {
   });
 
   if (error) {
-    onFailure("Loading metrics failed", error);
+    onFailure(t("loading-metrics-failed"), error);
   }
 
   const instanceMetrics = getInstanceMetrics(metrics, instance);
@@ -37,7 +40,7 @@ const InstanceOverviewMetrics: FC<Props> = ({ instance, onFailure }) => {
   if (isRestricted) {
     return (
       <div className="u-text--muted">
-        Details are not available for restricted users
+        {t("details-are-not-available-for-restricted-users")}
       </div>
     );
   }
@@ -45,12 +48,12 @@ const InstanceOverviewMetrics: FC<Props> = ({ instance, onFailure }) => {
   return (
     <>
       {isLoading ? (
-        <Loader text="Loading metrics..." />
+        <Loader text={t("loading-metrics")} />
       ) : (
         <table>
           <tbody>
             <tr className="metric-row">
-              <th className="p-muted-heading">Memory</th>
+              <th className="p-muted-heading">{t("memory")}</th>
               <td>
                 {instanceMetrics.memory ? (
                   <div>
@@ -67,7 +70,7 @@ const InstanceOverviewMetrics: FC<Props> = ({ instance, onFailure }) => {
                         ) +
                         " of " +
                         humanFileSize(instanceMetrics.memory.total) +
-                        " memory used"
+                        "{t('memory-used')}"
                       }
                     />
                   </div>
@@ -77,7 +80,7 @@ const InstanceOverviewMetrics: FC<Props> = ({ instance, onFailure }) => {
               </td>
             </tr>
             <tr className="metric-row">
-              <th className="p-muted-heading">Disk</th>
+              <th className="p-muted-heading">{t("disk")}</th>
               <td>
                 {instanceMetrics.disk ? (
                   <div>
@@ -93,7 +96,7 @@ const InstanceOverviewMetrics: FC<Props> = ({ instance, onFailure }) => {
                         ) +
                         " of " +
                         humanFileSize(instanceMetrics.disk.total) +
-                        " disk used"
+                        " {t('disk-used')}"
                       }
                     />
                   </div>

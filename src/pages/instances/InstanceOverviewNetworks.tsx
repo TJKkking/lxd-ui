@@ -7,6 +7,7 @@ import { LxdInstance } from "types/instance";
 import { Link } from "react-router-dom";
 import { fetchNetworks } from "api/networks";
 import { isNicDevice } from "util/devices";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   instance: LxdInstance;
@@ -23,8 +24,10 @@ const InstanceOverviewNetworks: FC<Props> = ({ instance, onFailure }) => {
     queryFn: () => fetchNetworks(instance.project),
   });
 
+  const { t } = useTranslation();
+
   if (error) {
-    onFailure("Loading networks failed", error);
+    onFailure(t("loading-networks-failed"), error);
   }
 
   const instanceNetworks = Object.values(instance.expanded_devices ?? {})
@@ -34,15 +37,15 @@ const InstanceOverviewNetworks: FC<Props> = ({ instance, onFailure }) => {
   const hasNetworks = instanceNetworks.length > 0;
 
   const networksHeaders = [
-    { content: "Name", sortKey: "name", className: "p-muted-heading" },
+    { content: t("name"), sortKey: "name", className: "p-muted-heading" },
     {
-      content: "Interface",
+      content: t("interface"),
       sortKey: "interfaceName",
       className: "p-muted-heading",
     },
-    { content: "Type", sortKey: "type", className: "p-muted-heading" },
+    { content: t("type"), sortKey: "type", className: "p-muted-heading" },
     {
-      content: "Managed",
+      content: t("managed"),
       sortKey: "managed",
       className: "p-muted-heading u-hide--small u-hide--medium",
     },
@@ -64,28 +67,28 @@ const InstanceOverviewNetworks: FC<Props> = ({ instance, onFailure }) => {
             content: (
               <Link
                 to={`/ui/project/${instance.project}/network/${network.name}`}
-                title={`Network ${network.name}`}
+                title={t("networkName", { name: network.name })}
               >
                 {network.name}
               </Link>
             ),
             role: "rowheader",
-            "aria-label": "Name",
+            "aria-label": t("name"),
           },
           {
             content: interfaceNames.length > 0 ? interfaceNames.join(" ") : "-",
             role: "rowheader",
-            "aria-label": "Interface",
+            "aria-label": t("interface"),
           },
           {
             content: network.type,
             role: "rowheader",
-            "aria-label": "Type",
+            "aria-label": t("type"),
           },
           {
-            content: network.managed ? "Yes" : "No",
+            content: network.managed ? t("yes") : t("no"),
             role: "rowheader",
-            "aria-label": "Managed",
+            "aria-label": t("managed"),
           },
         ],
         sortData: {
@@ -99,7 +102,7 @@ const InstanceOverviewNetworks: FC<Props> = ({ instance, onFailure }) => {
 
   return (
     <>
-      {isLoading && <Loader text="Loading networks..." />}
+      {isLoading && <Loader text={t("loading-networks")} />}
       {!isLoading && hasNetworks && (
         <MainTable headers={networksHeaders} rows={networksRows} sortable />
       )}

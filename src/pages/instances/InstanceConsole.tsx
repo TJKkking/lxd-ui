@@ -20,18 +20,20 @@ import {
 import AttachIsoBtn from "pages/instances/actions/AttachIsoBtn";
 import NotificationRow from "components/NotificationRow";
 import { useSupportedFeatures } from "context/useSupportedFeatures";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   instance: LxdInstance;
 }
 
 const InstanceConsole: FC<Props> = ({ instance }) => {
+  const { t } = useTranslation();
   const notify = useNotify();
   const isVm = instance.type === "virtual-machine";
   const [isGraphic, setGraphic] = useState(isVm);
   const { hasCustomVolumeIso } = useSupportedFeatures();
 
-  const isRunning = instance.status === "Running";
+  const isRunning = instance.status === t("running");
 
   const onFailure = (title: string, e: unknown, message?: string) => {
     notify.failure(title, e, message);
@@ -39,8 +41,8 @@ const InstanceConsole: FC<Props> = ({ instance }) => {
 
   const showNotRunningInfo = () => {
     notify.info(
-      "Start the instance to interact with the text console.",
-      "Instance not running",
+      t("start-the-instance-to-interact-with-the-text-console"),
+      t("instance-not-running"),
     );
   };
 
@@ -66,12 +68,12 @@ const InstanceConsole: FC<Props> = ({ instance }) => {
           <div className="console-radio-wrapper">
             <RadioInput
               labelClassName="right-margin"
-              label="Graphic"
+              label={t("graphic")}
               checked={isGraphic}
               onChange={() => setGraphicConsole(true)}
             />
             <RadioInput
-              label="Text console"
+              label={t("text-console")}
               checked={!isGraphic}
               onChange={() => setGraphicConsole(false)}
             />
@@ -83,23 +85,23 @@ const InstanceConsole: FC<Props> = ({ instance }) => {
                 className="u-no-margin--bottom"
                 onClick={() => handleFullScreen()}
               >
-                <span>Fullscreen</span>
+                <span>{t("fullscreen")}</span>
               </Button>
               <ContextualMenu
                 hasToggleIcon
-                toggleLabel="Shortcuts"
+                toggleLabel={t("shortcuts")}
                 toggleClassName="u-no-margin--bottom"
                 links={[
                   {
-                    children: "Send Ctrl + Alt + Del",
+                    children: t("send-ctrl-alt-del"),
                     onClick: () => sendCtrlAltDel(window.spice_connection),
                   },
                   {
-                    children: "Send Alt + TAB",
+                    children: t("send-alt-tab"),
                     onClick: () => sendAltTab(window.spice_connection),
                   },
                   {
-                    children: "Send Alt + F4",
+                    children: t("send-alt-f4"),
                     onClick: () => sendAltF4(window.spice_connection),
                   },
                 ]}
@@ -113,15 +115,15 @@ const InstanceConsole: FC<Props> = ({ instance }) => {
         <EmptyState
           className="empty-state"
           image={<Icon name="containers" className="empty-state-icon" />}
-          title="Instance stopped"
+          title={t("instance-stopped")}
         >
-          <p>Start the instance to access the graphic console.</p>
+          <p>{t("start-the-instance-to-access-the-graphic-console")}</p>
           <ActionButton
             appearance="positive"
             loading={isLoading}
             onClick={handleStart}
           >
-            Start instance
+            {t("start-instance")}
           </ActionButton>
         </EmptyState>
       )}

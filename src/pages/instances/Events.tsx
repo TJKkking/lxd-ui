@@ -5,6 +5,7 @@ import { useAuth } from "context/auth";
 import { useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "util/queryKeys";
 import { useOperations } from "context/operationsProvider";
+import { useTranslation } from "react-i18next";
 
 const Events: FC = () => {
   const { isAuthenticated } = useAuth();
@@ -12,18 +13,19 @@ const Events: FC = () => {
   const queryClient = useQueryClient();
   const [eventWs, setEventWs] = useState<WebSocket | null>(null);
   const { refetchOperations } = useOperations();
+  const { t } = useTranslation();
 
   const handleEvent = (event: LxdEvent) => {
     const eventCallback = eventQueue.get(event.metadata.id);
     if (!eventCallback) {
       return;
     }
-    if (event.metadata.status === "Success") {
+    if (event.metadata.status === t("success")) {
       eventCallback.onSuccess();
       eventCallback.onFinish?.();
       eventQueue.remove(event.metadata.id);
     }
-    if (event.metadata.status === "Failure") {
+    if (event.metadata.status === t("failure")) {
       eventCallback.onFailure(event.metadata.err ?? "");
       eventCallback.onFinish?.();
       eventQueue.remove(event.metadata.id);
