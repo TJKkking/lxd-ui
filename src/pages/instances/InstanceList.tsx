@@ -56,6 +56,7 @@ import { useDocs } from "context/useDocs";
 import { LxdInstanceStatus } from "types/instance";
 import useSortTableData from "util/useSortTableData";
 import PageHeader from "components/PageHeader";
+import { useTranslation } from "react-i18next";
 
 const loadHidden = () => {
   const saved = localStorage.getItem("instanceListHiddenColumns");
@@ -69,14 +70,16 @@ const saveHidden = (columns: string[]) => {
 const isMediumScreen = () => isWidthBelow(820);
 
 const InstanceList: FC = () => {
+  const { t } = useTranslation();
   const docBaseLink = useDocs();
   const instanceLoading = useInstanceLoading();
   const navigate = useNavigate();
   const notify = useNotify();
   const panelParams = usePanelParams();
   const { project } = useParams<{ project: string }>();
-  const [createButtonLabel, _setCreateButtonLabel] =
-    useState<string>("Create instance");
+  const [createButtonLabel, _setCreateButtonLabel] = useState<string>(
+    t("create-instance"),
+  );
   const [searchParams] = useSearchParams();
 
   const filters: InstanceFilters = {
@@ -95,7 +98,7 @@ const InstanceList: FC = () => {
   const [processingNames, setProcessingNames] = useState<string[]>([]);
 
   if (!project) {
-    return <>Missing project</>;
+    return <>{t("missing-project")}</>;
   }
 
   const {
@@ -108,11 +111,13 @@ const InstanceList: FC = () => {
   });
 
   if (error) {
-    notify.failure("Loading instances failed", error);
+    notify.failure(t("loading-instances-failed"), error);
   }
 
   const setCreateButtonLabel = () => {
-    _setCreateButtonLabel(isMediumScreen() ? "Create" : "Create instance");
+    _setCreateButtonLabel(
+      isMediumScreen() ? t("create") : t("create-instance"),
+    );
   };
   useEventListener("resize", setCreateButtonLabel);
 
@@ -127,20 +132,20 @@ const InstanceList: FC = () => {
   });
 
   if (error) {
-    notify.failure("Loading operations failed", error);
+    notify.failure(t("loading-operations-failed"), error);
   }
 
   const creationNames: string[] = [];
   const creationOperations = (operationList?.running ?? [])
     .concat(operationList?.success ?? [])
     .filter((operation) => {
-      const isCreating = operation.description === "Creating instance";
+      const isCreating = operation.description === t("creating-instance");
       if (!isCreating) {
         return false;
       }
       const name = getInstanceName(operation);
       const isInInstanceList = instances.some((item) => item.name === name);
-      const isRunning = operation.status === "Running";
+      const isRunning = operation.status === t("running");
 
       if (!isRunning && isInInstanceList) {
         return false;
@@ -236,7 +241,7 @@ const InstanceList: FC = () => {
         style: { width: `${COLUMN_WIDTHS[STATUS]}px` },
       },
       {
-        "aria-label": "Actions",
+        "aria-label": t("actions"),
         className: classnames({ "u-hide": panelParams.instance }),
         style: { width: `${COLUMN_WIDTHS[ACTIONS]}px` },
       },
@@ -286,7 +291,7 @@ const InstanceList: FC = () => {
                 {
                   content: (
                     <>
-                      <Spinner className="status-icon" /> Setting up
+                      <Spinner className="status-icon" /> {t("setting-up")}
                     </>
                   ),
                   role: "rowheader",
@@ -302,7 +307,7 @@ const InstanceList: FC = () => {
             className: classnames("u-align--right", {
               "u-hide": panelParams.instance,
             }),
-            "aria-label": "Actions",
+            "aria-label": t("actions"),
             style: { width: `${COLUMN_WIDTHS[ACTIONS]}px` },
           },
         ],
@@ -330,7 +335,10 @@ const InstanceList: FC = () => {
         columns: [
           {
             content: (
-              <div className="u-truncate" title={`Instance ${instance.name}`}>
+              <div
+                className="u-truncate"
+                title={t("instance-instance-name", { name: instance.name })}
+              >
                 <InstanceLink instance={instance} />
               </div>
             ),
@@ -416,7 +424,7 @@ const InstanceList: FC = () => {
             className: classnames("u-align--right", {
               "u-hide": panelParams.instance,
             }),
-            "aria-label": "Actions",
+            "aria-label": t("actions"),
             style: { width: `${COLUMN_WIDTHS[ACTIONS]}px` },
           },
         ].filter((item) => !hiddenCols.includes(item["aria-label"])),
@@ -499,9 +507,9 @@ const InstanceList: FC = () => {
             <PageHeader.Title>
               <HelpLink
                 href={`${docBaseLink}/explanation/instances/#expl-instances`}
-                title="Learn more about instances"
+                title={t("learn-more-about-instances")}
               >
-                Instances
+                {t("instances")}
               </HelpLink>
             </PageHeader.Title>
             {hasInstances && selectedNames.length === 0 && (
@@ -555,7 +563,7 @@ const InstanceList: FC = () => {
                   id="pagination"
                   itemName="instance"
                   className="u-no-margin--top"
-                  aria-label="Table pagination control"
+                  aria-label={t("table-pagination-control")}
                   description={
                     selectedNames.length > 0 && (
                       <SelectedTableNotification
@@ -587,9 +595,9 @@ const InstanceList: FC = () => {
                     sortable
                     emptyStateMsg={
                       isLoading ? (
-                        <Loader text="Loading instances..." />
+                        <Loader text={t("loading-instances-failed")} />
                       ) : (
-                        <>No instance found matching this search</>
+                        <>{t("no-instance-found-matching-this-search")}</>
                       )
                     }
                     itemName="instance"
@@ -625,11 +633,12 @@ const InstanceList: FC = () => {
             <EmptyState
               className="empty-state"
               image={<Icon name="containers" className="empty-state-icon" />}
-              title="No instances found"
+              title={t("no-instances-found")}
             >
               <p>
-                There are no instances in this project. Spin up your first
-                instance!
+                {t(
+                  "there-are-no-instances-in-this-project-spin-up-your-first-instance",
+                )}
               </p>
               <p>
                 <a
@@ -637,7 +646,7 @@ const InstanceList: FC = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  How to create instances
+                  {t("how-to-create-instances")}
                   <Icon className="external-link-icon" name="external-link" />
                 </a>
               </p>
@@ -648,7 +657,7 @@ const InstanceList: FC = () => {
                   navigate(`/ui/project/${project}/instances/create`)
                 }
               >
-                Create instance
+                {t("create-instance")}
               </Button>
             </EmptyState>
           )}

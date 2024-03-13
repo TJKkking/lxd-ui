@@ -75,6 +75,7 @@ import {
 import FormFooterLayout from "components/forms/FormFooterLayout";
 import { useToastNotification } from "context/toastNotificationProvider";
 import { useDocs } from "context/useDocs";
+import { useTranslation } from "react-i18next";
 
 export type CreateInstanceFormValues = InstanceDetailsFormValues &
   FormDeviceValues &
@@ -92,6 +93,7 @@ interface PresetFormState {
 }
 
 const CreateInstance: FC = () => {
+  const { t } = useTranslation();
   const docBaseLink = useDocs();
   const eventQueue = useEventQueue();
   const location = useLocation() as Location<PresetFormState | null>;
@@ -105,25 +107,25 @@ const CreateInstance: FC = () => {
   const [isConfigOpen, setConfigOpen] = useState(false);
 
   if (!project) {
-    return <>Missing project</>;
+    return <>{t("missing-project")}</>;
   }
 
   const InstanceSchema = Yup.object().shape({
     name: Yup.string()
       .test(
         "deduplicate",
-        "An instance with this name already exists",
+        t("an-instance-with-this-name-already-exists"),
         (value) =>
           checkDuplicateName(value, project, controllerState, "instances"),
       )
       .matches(/^[A-Za-z0-9-]+$/, {
-        message: "Only alphanumeric and hyphen characters are allowed",
+        message: t("only-alphanumeric-and-hyphen-characters-are-allowed"),
       })
       .matches(/^[A-Za-z].*$/, {
-        message: "Instance name must start with a letter",
+        message: t("instance-name-must-start-with-a-letter"),
       })
       .optional(),
-    instanceType: Yup.string().required("Instance type is required"),
+    instanceType: Yup.string().required(t("instance-type-is-required")),
   });
 
   const updateFormHeight = () => {
@@ -145,22 +147,26 @@ const CreateInstance: FC = () => {
   };
 
   const notifyCreationStarted = (instanceName: string) => {
-    toastNotify.info(<>Creation for instance {instanceName} started.</>);
+    toastNotify.info(
+      t("instanceCreationStarted", { instanceName: instanceName }),
+    );
   };
 
   const notifyCreatedNowStarting = (instanceLink: ReactNode) => {
-    toastNotify.info(<>Created instance {instanceLink}, now starting it.</>);
+    toastNotify.info(
+      <>t('created-instance') {instanceLink}t('now-starting-it')</>,
+    );
     clearCache();
   };
 
   const notifyCreatedAndStarted = (instanceLink: ReactNode) => {
-    toastNotify.success(<>Created and started instance {instanceLink}.</>);
+    toastNotify.success(<>t('created-and-started-instance') {instanceLink}.</>);
     clearCache();
   };
 
   const notifyCreatedButStartFailed = (instanceLink: ReactNode, e: Error) => {
     toastNotify.failure(
-      "The instance was created, but could not be started.",
+      t("the-instance-was-created-but-could-not-be-started"),
       e,
       instanceLink,
     );
@@ -170,7 +176,7 @@ const CreateInstance: FC = () => {
   const notifyCreated = (instanceLink: ReactNode, message?: ReactNode) => {
     toastNotify.success(
       <>
-        Created instance {instanceLink}.{message}
+        {t("created-instance")} {instanceLink}.{message}
       </>,
     );
     clearCache();
@@ -184,9 +190,9 @@ const CreateInstance: FC = () => {
     retryFormSection?: string,
   ) => {
     const notifier = notifierType === "toast" ? toastNotify : notify;
-    notifier.failure("Instance creation failed", e, null, [
+    notifier.failure(t("instance-creation-failed"), e, null, [
       {
-        label: "Check configuration",
+        label: t("check-configuration"),
         onClick: () =>
           navigate(formUrl, {
             state: { retryFormValues: values, retryFormSection },
@@ -227,10 +233,10 @@ const CreateInstance: FC = () => {
       const consoleUrl = `/ui/project/${project}/instance/${instanceName}/console`;
       const message = isIsoImage && (
         <>
-          <p>Continue the installation process from its console.</p>
+          <p>{t("continue-the-installation-process-from-its-console")}</p>
           <Button onClick={() => navigate(consoleUrl)} hasIcon>
             <Icon name="canvas" />
-            <span>Open console</span>
+            <span>{t("open-console")}</span>
           </Button>
         </>
       );
@@ -279,7 +285,7 @@ const CreateInstance: FC = () => {
         );
       })
       .catch((e: Error) => {
-        if (e.message === "Cancelled") {
+        if (e.message === t("cancelled")) {
           return;
         }
         notifyCreationFailed(e, formUrl, values, undefined, section);
@@ -379,7 +385,10 @@ const CreateInstance: FC = () => {
     !formik.isValid || !formik.values.image || diskError || networkError;
 
   return (
-    <BaseLayout title="Create an instance" contentClassName="create-instance">
+    <BaseLayout
+      title={t("create-an-instance")}
+      contentClassName="create-instance"
+    >
       <Form onSubmit={formik.handleSubmit} className="form">
         <InstanceFormMenu
           active={section}
@@ -428,15 +437,18 @@ const CreateInstance: FC = () => {
                 yaml={getYaml()}
                 setYaml={(yaml) => void formik.setFieldValue("yaml", yaml)}
               >
-                <Notification severity="information" title="YAML Configuration">
-                  This is the YAML representation of the instance.
+                <Notification
+                  severity="information"
+                  title={t("yaml-configuration")}
+                >
+                  {t("this-is-the-yaml-representation-of-the-instance")}
                   <br />
                   <a
                     href={`${docBaseLink}/instances`}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    Learn more about instances
+                    {t("learn-more-about-instances")}
                   </a>
                 </Notification>
               </YamlForm>
@@ -454,7 +466,7 @@ const CreateInstance: FC = () => {
             )
           }
         >
-          Cancel
+          {t("cancel")}
         </Button>
         <ActionButton
           loading={formik.isSubmitting}
@@ -462,7 +474,7 @@ const CreateInstance: FC = () => {
           appearance={isLocalIsoImage ? "positive" : "default"}
           onClick={() => submit(formik.values, false)}
         >
-          Create
+          {t("create")}
         </ActionButton>
         {!isLocalIsoImage && (
           <ActionButton
@@ -471,7 +483,7 @@ const CreateInstance: FC = () => {
             disabled={hasErrors}
             onClick={() => submit(formik.values)}
           >
-            Create and start
+            {t("create-and-start")}
           </ActionButton>
         )}
       </FormFooterLayout>
