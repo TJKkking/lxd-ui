@@ -1,0 +1,41 @@
+.profile-list {
+  .profile-content {
+    padding-bottom: 0;
+
+    @media screen and (width <= 860px) {
+      margin-top: 0;
+    }
+
+    .p-notification--caution {
+      background-image: none;
+      border: 0;
+      margin-bottom: $spv--small;
+      padding-left: $spv--large;
+    }
+
+    .p-notification--positive,
+    .p-notification--negative {
+      margin-bottom: $spv--large;
+    }
+  }
+
+  .u-row:hover,
+  .u-row-selected {
+    background-color: $colors--light-theme--background-hover;
+  }
+
+  .clickable-cell {
+    cursor: pointer;
+  }
+
+  .p-panel {
+    min-height: auto;
+  }
+
+  .profile-description {
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+}

@@ -1,0 +1,31 @@
+.storage-volume-form,
+.edit-storage-volume {
+  padding-bottom: 0;
+
+  .form-contents {
+    width: 100%;
+  }
+
+  .form-contents > div {
+    margin-left: 0;
+    max-width: 54rem !important;
+  }
+
+  .memory-limit-with-unit :first-child {
+    flex-grow: 1;
+  }
+}
+
+.custom-volume-modal {
+  > section {
+    min-height: 100%;
+    padding-bottom: 0;
+  }
+
+  .table-volume-select {
+    .u-row:hover {
+      background-color: $colors--light-theme--background-hover;
+      cursor: pointer;
+    }
+  }
+}

@@ -1,0 +1,41 @@
+.instance-detail-panel {
+  .actions {
+    display: flex;
+    margin-left: $sph--x-large;
+    margin-right: $sph--x-large;
+    padding-top: $spv--x-large;
+
+    .primary {
+      flex-grow: 1;
+    }
+  }
+
+  .p-panel__content {
+    padding-top: 0;
+  }
+
+  .base-image,
+  .ip {
+    max-width: 10rem;
+  }
+
+  .last-used {
+    padding-bottom: 1.25rem !important;
+  }
+
+  tr:last-child {
+    border: 0;
+  }
+
+  .snapshots-header {
+    padding-bottom: 0 !important;
+  }
+
+  .snapshot-name {
+    display: inline-block;
+  }
+
+  .no-snapshots {
+    padding-top: 0;
+  }
+}

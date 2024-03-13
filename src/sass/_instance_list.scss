@@ -1,0 +1,118 @@
+.instance-list {
+  .bulk-actions {
+    display: inline-block;
+    margin-bottom: -2px;
+    margin-right: $sph--large;
+
+    > .bulk-action-frame {
+      border: 1px solid #0000008f;
+      border-radius: 2.25px;
+
+      > .bulk-action {
+        border-left: 1px solid rgb(0 0 0 / 10%);
+      }
+    }
+  }
+
+  @media screen and (max-width: $breakpoint-large) {
+    .bulk-actions {
+      .confirmation-toggle-caption {
+        display: none;
+      }
+
+      .has-icon > i {
+        margin: 0;
+      }
+    }
+  }
+
+  .instance-content {
+    padding-bottom: 0;
+
+    @media screen and (max-width: $breakpoint-large) {
+      margin-top: 0;
+    }
+
+    .p-notification--positive,
+    .p-notification--negative {
+      margin-bottom: $spv--large;
+    }
+  }
+
+  .u-row:hover,
+  .u-row-selected {
+    background-color: $colors--light-theme--background-hover;
+  }
+
+  .clickable-cell {
+    cursor: pointer;
+  }
+
+  .instance-actions button {
+    margin-bottom: -3px;
+  }
+
+  // show actions only on hover if a pointing device is used
+  @media screen and (pointer: fine) {
+    .instance-actions {
+      visibility: hidden;
+    }
+
+    .u-row:hover {
+      .instance-actions {
+        visibility: visible;
+      }
+    }
+
+    .u-row-selected:hover {
+      .instance-actions {
+        visibility: hidden;
+      }
+    }
+  }
+
+  .configurable-table-toggle {
+    float: right;
+    margin-bottom: -3.5rem;
+  }
+
+  th:last-child {
+    display: none;
+  }
+
+  td:last-child {
+    padding-bottom: 0;
+    padding-right: $sph--large;
+  }
+
+  .status-icon {
+    margin-left: $spv--x-large;
+  }
+
+  .status-header {
+    padding-left: 3.33rem;
+    pointer-events: none;
+
+    > * {
+      pointer-events: all;
+    }
+  }
+
+  #instance-table-measure {
+    max-height: 1px;
+    overflow: hidden;
+  }
+
+  .p-panel {
+    min-height: auto;
+    overflow: hidden;
+  }
+}
+
+.table-column-select-list {
+  min-width: 12rem;
+
+  label {
+    margin-left: 1rem;
+  }
+}

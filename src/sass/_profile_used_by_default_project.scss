@@ -1,0 +1,11 @@
+.list-wrapper {
+  .flexible-container {
+    display: flex;
+
+    .u-float-right {
+      flex-grow: 1;
+      margin-left: $sph--x-small;
+      margin-right: $sph--small;
+    }
+  }
+}

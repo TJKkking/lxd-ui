@@ -1,0 +1,19 @@
+.profile-detail-panel {
+  .last-of-section {
+    padding-bottom: 1.25rem !important;
+  }
+
+  .used-by-header,
+  tr:last-child {
+    border-bottom: none;
+  }
+
+  .used-by-header + tr {
+    border-top: none;
+  }
+
+  .no-instances {
+    display: block;
+    padding-bottom: $spv--small;
+  }
+}

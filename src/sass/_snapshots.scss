@@ -1,0 +1,82 @@
+.snapshot-list {
+  .p-panel__controls {
+    padding-top: 0;
+  }
+
+  .pagination {
+    margin-top: 0;
+  }
+
+  .name {
+    min-width: 170px;
+  }
+
+  .created {
+    min-width: 200px;
+  }
+
+  .expiration {
+    min-width: 200px;
+  }
+
+  .stateful {
+    width: 105px;
+  }
+
+  .actions {
+    width: 240px;
+  }
+
+  .u-row:hover {
+    background-color: $colors--light-theme--background-hover;
+  }
+
+  // show actions only on hover if a pointing device is used
+  @media screen and (pointer: fine) {
+    .u-snapshot-actions {
+      visibility: hidden;
+    }
+
+    .u-row:hover {
+      .u-snapshot-actions {
+        visibility: visible;
+      }
+    }
+  }
+
+  .edit-snapshot-config {
+    tbody {
+      height: inherit !important;
+      min-height: inherit !important;
+    }
+  }
+}
+
+.snapshot-creation-modal {
+  text-align: left !important;
+
+  .p-modal__dialog {
+    min-width: 30rem;
+    padding-bottom: 0;
+    padding-left: $sph--x-large;
+    padding-right: $sph--x-large;
+  }
+
+  .p-form__label {
+    margin-bottom: 0;
+  }
+
+  .p-inline-list {
+    margin-bottom: $spv--small;
+  }
+
+  .p-inline-list__item {
+    margin-right: $sph--small;
+  }
+
+  .expiration-wrapper {
+    grid-gap: $sph--large;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}

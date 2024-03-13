@@ -1,0 +1,23 @@
+.custom-iso-modal {
+  @include large {
+    > section {
+      min-height: 25rem;
+      width: 50rem;
+    }
+
+    .iso-table {
+      min-height: 15rem;
+    }
+  }
+
+  .iso-name {
+    max-width: 20rem;
+  }
+
+  .table-iso-select {
+    .u-row:hover {
+      background-color: $colors--light-theme--background-hover;
+      cursor: pointer;
+    }
+  }
+}

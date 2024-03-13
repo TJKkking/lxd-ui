@@ -1,0 +1,92 @@
+import { FC, useState } from "react";
+import { LxdInstance } from "types/instance";
+import { useQueryClient } from "@tanstack/react-query";
+import { stopInstance } from "api/instances";
+import { queryKeys } from "util/queryKeys";
+import { useInstanceLoading } from "context/instanceLoading";
+import InstanceLink from "pages/instances/InstanceLink";
+import ConfirmationForce from "components/ConfirmationForce";
+import ItemName from "components/ItemName";
+import { ConfirmationButton, Icon } from "@canonical/react-components";
+import { useEventQueue } from "context/eventQueue";
+import { useToastNotification } from "context/toastNotificationProvider";
+
+interface Props {
+  instance: LxdInstance;
+}
+
+const StopInstanceBtn: FC<Props> = ({ instance }) => {
+  const eventQueue = useEventQueue();
+  const instanceLoading = useInstanceLoading();
+  const toastNotify = useToastNotification();
+  const [isForce, setForce] = useState(false);
+  const queryClient = useQueryClient();
+  const isLoading =
+    instanceLoading.getType(instance) === "Stopping" ||
+    instance.status === "Stopping";
+
+  const handleStop = () => {
+    instanceLoading.setLoading(instance, "Stopping");
+    void stopInstance(instance, isForce)
+      .then((operation) => {
+        eventQueue.set(
+          operation.metadata.id,
+          () =>
+            toastNotify.success(
+              <>
+                Instance <InstanceLink instance={instance} /> stopped.
+              </>,
+            ),
+          (msg) =>
+            toastNotify.failure(
+              "Instance stop failed",
+              new Error(msg),
+              <InstanceLink instance={instance} />,
+            ),
+          () => {
+            instanceLoading.setFinish(instance);
+            void queryClient.invalidateQueries({
+              queryKey: [queryKeys.instances],
+            });
+          },
+        );
+      })
+      .catch((e) => {
+        toastNotify.failure(
+          "Instance stop failed",
+          e,
+          <InstanceLink instance={instance} />,
+        );
+        instanceLoading.setFinish(instance);
+      });
+  };
+
+  return (
+    <ConfirmationButton
+      appearance="base"
+      loading={isLoading}
+      disabled={instance.status === "Stopped"}
+      confirmationModalProps={{
+        title: "Confirm stop",
+        children: (
+          <p>
+            This will stop instance <ItemName item={instance} bold />.
+          </p>
+        ),
+        confirmExtra: (
+          <ConfirmationForce label="Force stop" force={[isForce, setForce]} />
+        ),
+        onConfirm: handleStop,
+        close: () => setForce(false),
+        confirmButtonLabel: "Stop",
+      }}
+      className="has-icon is-dense"
+      shiftClickEnabled
+      showShiftClickHint
+    >
+      <Icon name="stop" />
+    </ConfirmationButton>
+  );
+};
+
+export default StopInstanceBtn;
