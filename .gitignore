@@ -13,6 +13,7 @@ Thumbs.db
 .spelling
 .vscode
 .idea
+lxd-ui.code-workspace
 
 # [cache] Cache and backup
 *.bak
