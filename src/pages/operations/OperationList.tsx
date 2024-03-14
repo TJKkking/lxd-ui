@@ -15,21 +15,24 @@ import OperationInstanceName from "pages/operations/OperationInstanceName";
 import NotificationRow from "components/NotificationRow";
 import { getProjectName } from "util/operations";
 import { useOperations } from "context/operationsProvider";
+import { useTranslation } from "react-i18next";
+
+const { t } = useTranslation();
 
 const OperationList: FC = () => {
   const notify = useNotify();
   const { operations, isLoading, error } = useOperations();
 
   if (error) {
-    notify.failure("Loading operations failed", error);
+    notify.failure(t("loading-operations-failed"), error);
   }
 
   const headers = [
-    { content: "Time", className: "time", sortKey: "created_at" },
-    { content: "Action", className: "action", sortKey: "action" },
-    { content: "Info", className: "info" },
-    { content: "Status", className: "status", sortKey: "status" },
-    { "aria-label": "Actions", className: "cancel u-align--right" },
+    { content: t("time"), className: "time", sortKey: "created_at" },
+    { content: t("action"), className: "action", sortKey: "action" },
+    { content: t("info"), className: "info" },
+    { content: t("status"), className: "status", sortKey: "status" },
+    { "aria-label": t("actions"), className: "cancel u-align--right" },
   ];
 
   const getIconNameForStatus = (status: LxdOperationStatus) => {
@@ -50,12 +53,12 @@ const OperationList: FC = () => {
             <>
               <div>Initiated: {isoTimeToString(operation.created_at)}</div>
               <div className="u-text--muted">
-                Last update: {isoTimeToString(operation.updated_at)}
+                t('last-update') {isoTimeToString(operation.updated_at)}
               </div>
             </>
           ),
           role: "rowheader",
-          "aria-label": "Time",
+          "aria-label": t("time"),
           className: "time",
         },
         {
@@ -71,7 +74,7 @@ const OperationList: FC = () => {
             </>
           ),
           role: "rowheader",
-          "aria-label": "Action",
+          "aria-label": t("action"),
           className: "action",
         },
         {
@@ -88,7 +91,7 @@ const OperationList: FC = () => {
             </>
           ),
           role: "rowheader",
-          "aria-label": "Info",
+          "aria-label": t("info"),
           className: "info",
         },
         {
@@ -102,14 +105,14 @@ const OperationList: FC = () => {
             </>
           ),
           role: "rowheader",
-          "aria-label": "Status",
+          "aria-label": t("status"),
           className: "status",
         },
         {
           content: <CancelOperationBtn operation={operation} />,
           role: "rowheader",
           className: "u-align--right cancel",
-          "aria-label": "Actions",
+          "aria-label": t("actions"),
         },
       ],
       sortData: {
@@ -122,7 +125,7 @@ const OperationList: FC = () => {
 
   return (
     <>
-      <BaseLayout title="Ongoing operations">
+      <BaseLayout title={t("ongoing-operations")}>
         <NotificationRow />
         <Row>
           {operations.length > 0 && (
@@ -135,9 +138,9 @@ const OperationList: FC = () => {
               className="operation-list"
               emptyStateMsg={
                 isLoading ? (
-                  <Loader text="Loading operations..." />
+                  <Loader text={t("loading-operations")} />
                 ) : (
-                  "No data to display"
+                  t("no-data-to-display")
                 )
               }
             />
@@ -146,9 +149,9 @@ const OperationList: FC = () => {
             <EmptyState
               className="empty-state"
               image={<Icon name="status" className="empty-state-icon" />}
-              title="No operations found"
+              title={t("no-operations-found")}
             >
-              <p>There are no ongoing operations.</p>
+              <p>{t("there-are-no-ongoing-operations")}</p>
             </EmptyState>
           )}
         </Row>

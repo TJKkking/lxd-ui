@@ -271,5 +271,6 @@
   "no-networks-found-0": "未发现网络",
   "there-are-no-networks-in-this-project": "此项目中没有网络。",
   "learn-more-about-networks": "了解更多关于网络",
-  "network-map-beta": "网络地图（测试版）"
+  "network-map-beta": "网络地图（测试版）",
+  "operationCancelled": "操作 {{description}} 已取消"
 }
