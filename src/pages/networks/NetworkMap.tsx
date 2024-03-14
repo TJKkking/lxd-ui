@@ -17,6 +17,7 @@ import MapTooltip, {
   mountElement,
 } from "pages/networks/MapTooltip";
 import MapLegend from "pages/networks/MapLegend";
+import { useTranslation } from "react-i18next";
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 Cytoscape.use(popper);
@@ -44,6 +45,8 @@ const NetworkMap: FC = () => {
   const { project } = useParams<{ project: string }>();
   const cyPopperRef = useRef<PopperRef | null>(null);
 
+  const { t } = useTranslation();
+
   const { data: instances = [], isLoading: instanceLoading } = useQuery({
     queryKey: [queryKeys.instances, project],
     queryFn: () => fetchInstances(project ?? ""),
@@ -57,7 +60,7 @@ const NetworkMap: FC = () => {
   });
 
   if (!project) {
-    return <>Missing project</>;
+    return <>{t("missing-project")}</>;
   }
 
   if (instanceLoading || networkLoading) {
@@ -66,7 +69,7 @@ const NetworkMap: FC = () => {
 
   const getInstanceColor = (instance: LxdInstance) => {
     switch (instance.status) {
-      case "Running":
+      case t("running"):
         return "#0E8420";
       default:
         return "#D9D9D9";
@@ -127,7 +130,7 @@ const NetworkMap: FC = () => {
   const elements = [...networkNodes, ...instanceNodes, ...edges];
 
   return (
-    <BaseLayout title="Network map (beta)">
+    <BaseLayout title={t("network-map-beta")}>
       <Row>
         <Col size={12} id="network-map" className="network-map">
           <MapLegend />

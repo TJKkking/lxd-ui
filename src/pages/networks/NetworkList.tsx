@@ -17,15 +17,17 @@ import NotificationRow from "components/NotificationRow";
 import HelpLink from "components/HelpLink";
 import { useDocs } from "context/useDocs";
 import NetworkForwardCount from "pages/networks/NetworkForwardCount";
+import { useTranslation } from "react-i18next";
 
 const NetworkList: FC = () => {
   const docBaseLink = useDocs();
   const navigate = useNavigate();
   const notify = useNotify();
   const { project } = useParams<{ project: string }>();
+  const { t } = useTranslation();
 
   if (!project) {
-    return <>Missing project</>;
+    return <>{t("missing-project")}</>;
   }
 
   const {
@@ -38,21 +40,21 @@ const NetworkList: FC = () => {
   });
 
   if (error) {
-    notify.failure("Loading networks failed", error);
+    notify.failure(t("loading-networks-failed"), error);
   }
 
   const hasNetworks = networks.length > 0;
 
   const headers = [
-    { content: "Name", sortKey: "name" },
-    { content: "Type", sortKey: "type" },
-    { content: "Managed", sortKey: "managed" },
+    { content: t("name"), sortKey: "name" },
+    { content: t("type"), sortKey: "type" },
+    { content: t("managed"), sortKey: "managed" },
     { content: "IPV4", className: "u-align--right" },
     { content: "IPV6" },
-    { content: "Description", sortKey: "description" },
-    { content: "Forwards", className: "u-align--right" },
-    { content: "Used by", sortKey: "usedBy", className: "u-align--right" },
-    { content: "State", sortKey: "state" },
+    { content: t("description"), sortKey: "description" },
+    { content: t("forwards"), className: "u-align--right" },
+    { content: t("used-by"), sortKey: "usedBy", className: "u-align--right" },
+    { content: t("state"), sortKey: "state" },
   ];
 
   const rows = networks.map((network) => {
@@ -65,17 +67,17 @@ const NetworkList: FC = () => {
             </Link>
           ),
           role: "rowheader",
-          "aria-label": "Name",
+          "aria-label": t("name"),
         },
         {
           content: network.type,
           role: "rowheader",
-          "aria-label": "Type",
+          "aria-label": t("type"),
         },
         {
-          content: network.managed ? "Yes" : "No",
+          content: network.managed ? t("yes") : t("no"),
           role: "rowheader",
-          "aria-label": "Managed",
+          "aria-label": t("managed"),
         },
         {
           content: network.config["ipv4.address"],
@@ -91,24 +93,24 @@ const NetworkList: FC = () => {
         {
           content: network.description,
           role: "rowheader",
-          "aria-label": "Description",
+          "aria-label": t("description"),
         },
         {
           content: <NetworkForwardCount network={network} project={project} />,
           role: "rowheader",
           className: "u-align--right",
-          "aria-label": "Forwards",
+          "aria-label": t("forwards"),
         },
         {
           content: network.used_by?.length ?? "0",
           role: "rowheader",
           className: "u-align--right",
-          "aria-label": "Used by",
+          "aria-label": t("used-by"),
         },
         {
           content: network.status,
           role: "rowheader",
-          "aria-label": "State",
+          "aria-label": t("state"),
         },
       ],
       sortData: {
@@ -132,9 +134,9 @@ const NetworkList: FC = () => {
         title={
           <HelpLink
             href={`${docBaseLink}/explanation/networks/`}
-            title="Learn more about networking"
+            title={t("learn-more-about-networking")}
           >
-            Networks
+            {t("networks")}
           </HelpLink>
         }
         controls={
@@ -144,7 +146,7 @@ const NetworkList: FC = () => {
                 className="u-no-margin--bottom"
                 onClick={() => navigate(`/ui/project/${project}/networks/map`)}
               >
-                See map
+                {t("see-map")}
               </Button>
             )}
             <Button
@@ -152,7 +154,7 @@ const NetworkList: FC = () => {
               className="u-no-margin--bottom"
               onClick={() => navigate(`/ui/project/${project}/networks/create`)}
             >
-              Create network
+              {t("create-network")}
             </Button>
           </>
         }
@@ -167,23 +169,23 @@ const NetworkList: FC = () => {
               responsive
               sortable
               className="u-table-layout--auto"
-              emptyStateMsg="No data to display"
+              emptyStateMsg={t("no-data-to-display")}
             />
           )}
           {!isLoading && !hasNetworks && (
             <EmptyState
               className="empty-state"
               image={<Icon className="empty-state-icon" name="connected" />}
-              title="No networks found"
+              title={t("no-networks-found-0")}
             >
-              <p>There are no networks in this project.</p>
+              <p>{t("there-are-no-networks-in-this-project")}</p>
               <p>
                 <a
                   href={`${docBaseLink}/explanation/networks/`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Learn more about networks
+                  {t("learn-more-about-networks")}
                   <Icon className="external-link-icon" name="external-link" />
                 </a>
               </p>

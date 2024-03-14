@@ -9,6 +9,7 @@ import { renameNetwork } from "api/networks";
 import DeleteNetworkBtn from "pages/networks/actions/DeleteNetworkBtn";
 import { useNotify } from "@canonical/react-components";
 import { useToastNotification } from "context/toastNotificationProvider";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   name: string;
@@ -17,6 +18,7 @@ interface Props {
 }
 
 const NetworkDetailHeader: FC<Props> = ({ name, network, project }) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const notify = useNotify();
   const toastNotify = useToastNotification();
@@ -26,12 +28,12 @@ const NetworkDetailHeader: FC<Props> = ({ name, network, project }) => {
     name: Yup.string()
       .test(
         "deduplicate",
-        "A network with this name already exists",
+        t("a-network-with-this-name-already-exists"),
         (value) =>
           network?.name === value ||
           checkDuplicateName(value, project, controllerState, "networks"),
       )
-      .required("Network name is required"),
+      .required(t("network-name-is-required")),
   });
 
   const formik = useFormik<RenameHeaderValues>({
@@ -49,11 +51,13 @@ const NetworkDetailHeader: FC<Props> = ({ name, network, project }) => {
       renameNetwork(name, values.name, project)
         .then(() => {
           navigate(`/ui/project/${project}/network/${values.name}`);
-          toastNotify.success(`Network ${name} renamed to ${values.name}.`);
+          toastNotify.success(
+            t("networkRenamed", { oldName: name, newName: values.name }),
+          );
           void formik.setFieldValue("isRenaming", false);
         })
         .catch((e) => {
-          notify.failure("Renaming failed", e);
+          notify.failure(t("renaming-failed"), e);
         })
         .finally(() => formik.setSubmitting(false));
     },
@@ -67,14 +71,14 @@ const NetworkDetailHeader: FC<Props> = ({ name, network, project }) => {
       name={name}
       parentItems={[
         <Link to={`/ui/project/${project}/networks`} key={1}>
-          Networks
+          {t("networks")}
         </Link>,
       ]}
       renameDisabledReason={
         !isManaged
-          ? "Can not rename, network is not managed"
+          ? t("can-not-rename-network-is-not-managed")
           : isUsed
-            ? "Can not rename, network is currently in use."
+            ? t("can-not-rename-network-is-currently-in-use")
             : undefined
       }
       controls={

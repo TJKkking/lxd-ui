@@ -13,6 +13,7 @@ import Loader from "components/Loader";
 import { filterUsedByType, LxdUsedBy } from "util/usedBy";
 import InstanceLink from "pages/instances/InstanceLink";
 import ExpandableList from "components/ExpandableList";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   network: LxdNetwork;
@@ -21,8 +22,10 @@ interface Props {
 const NetworkDetailOverview: FC<Props> = ({ network }) => {
   const { project } = useParams<{ project: string }>();
 
+  const { t } = useTranslation();
+
   if (!project) {
-    return <>Missing project</>;
+    return <>{t("missing-project")}</>;
   }
 
   const { data: networkState, isLoading } = useQuery({
@@ -57,27 +60,27 @@ const NetworkDetailOverview: FC<Props> = ({ network }) => {
     <div className="network-overview-tab">
       <Row className="section">
         <Col size={3}>
-          <h2 className="p-heading--5">General</h2>
+          <h2 className="p-heading--5">{t("general")}</h2>
         </Col>
         <Col size={7}>
           <table>
             <tbody>
               <tr>
-                <th className="p-muted-heading">Name</th>
+                <th className="p-muted-heading">{t("name")}</th>
                 <td>
                   <ItemName item={network} />
                 </td>
               </tr>
               <tr>
-                <th className="p-muted-heading">Description</th>
+                <th className="p-muted-heading">{t("description")}</th>
                 <td>{network.description ? network.description : "-"}</td>
               </tr>
               <tr>
-                <th className="p-muted-heading">Type</th>
+                <th className="p-muted-heading">{t("type")}</th>
                 <td>{network.type}</td>
               </tr>
               <tr>
-                <th className="p-muted-heading">State</th>
+                <th className="p-muted-heading">{t("state")}</th>
                 <td>{network.status}</td>
               </tr>
               <tr>
@@ -94,7 +97,7 @@ const NetworkDetailOverview: FC<Props> = ({ network }) => {
       </Row>
       <Row className="section">
         <Col size={3}>
-          <h2 className="p-heading--5">Status</h2>
+          <h2 className="p-heading--5">{t("status")}</h2>
         </Col>
         <Col size={7}>
           <table>
@@ -127,14 +130,16 @@ const NetworkDetailOverview: FC<Props> = ({ network }) => {
       </Row>
       <Row className="usage list-wrapper">
         <Col size={3}>
-          <h2 className="p-heading--5">Usage ({usageCount})</h2>
+          <h2 className="p-heading--5">
+            {t("usage")} ({usageCount})
+          </h2>
         </Col>
         <Col size={7}>
           <table>
             <tbody>
               <tr className="list-wrapper">
                 <th className="p-muted-heading">
-                  Instances ({data.instances.length})
+                  t("instances") ({data.instances.length})
                 </th>
                 <td>
                   {data.instances.length > 0 ? (
@@ -154,7 +159,7 @@ const NetworkDetailOverview: FC<Props> = ({ network }) => {
               </tr>
               <tr className="list-wrapper">
                 <th className="p-muted-heading">
-                  Profiles ({data.profiles.length})
+                  {t("profiles")} ({data.profiles.length})
                 </th>
                 <td>
                   {data.profiles.length > 0 ? (

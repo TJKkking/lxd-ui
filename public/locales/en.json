@@ -254,5 +254,22 @@
   "protect-your-certificate-by-adding-a-password": "Protect your certificate by adding a password.",
   "password": "Password",
   "for-macos-an-empty-password-is-not-allowed-on-other-systems-this-step-can-be-skipped": "For macOS an empty password is not allowed. On other systems this step can be skipped.",
-  "password-confirmation": "Password confirmation"
+  "password-confirmation": "Password confirmation",
+  "forwards": "Forwards",
+  "a-network-with-this-name-already-exists": "A network with this name already exists",
+  "network-name-is-required": "Network name is required",
+  "renaming-failed": "Renaming failed",
+  "can-not-rename-network-is-not-managed": "Can not rename, network is not managed",
+  "can-not-rename-network-is-currently-in-use": "Can not rename, network is currently in use.",
+  "networkRenamed": "Network {{oldName}} renamed to {{newName}}.",
+  "state": "State",
+  "used-by": "Used by",
+  "learn-more-about-networking": "Learn more about networking",
+  "see-map": "See map",
+  "create-network": "Create network",
+  "no-data-to-display": "No data to display",
+  "no-networks-found-0": "No networks found",
+  "there-are-no-networks-in-this-project": "There are no networks in this project.",
+  "learn-more-about-networks": "Learn more about networks",
+  "network-map-beta": "Network map (beta)"
 }

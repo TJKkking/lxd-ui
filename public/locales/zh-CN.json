@@ -254,5 +254,22 @@
   "protect-your-certificate-by-adding-a-password": "通过添加密码来保护您的证书。",
   "password": "密码",
   "for-macos-an-empty-password-is-not-allowed-on-other-systems-this-step-can-be-skipped": "对于macOS，不允许空密码。在其他系统上，可以跳过此步骤。",
-  "password-confirmation": "密码确认"
+  "password-confirmation": "密码确认",
+  "forwards": "转发",
+  "a-network-with-this-name-already-exists": "已存在同名网络",
+  "network-name-is-required": "需要网络名称",
+  "renaming-failed": "重命名失败",
+  "can-not-rename-network-is-not-managed": "无法重命名，网络未被管理",
+  "can-not-rename-network-is-currently-in-use": "无法重命名，网络当前正在使用中。",
+  "networkRenamed": "网络 {{oldName}} 已重命名为 {{newName}}。",
+  "state": "状态",
+  "used-by": "使用者",
+  "learn-more-about-networking": "了解更多关于网络",
+  "see-map": "查看地图",
+  "create-network": "创建网络",
+  "no-data-to-display": "没有数据显示",
+  "no-networks-found-0": "未发现网络",
+  "there-are-no-networks-in-this-project": "此项目中没有网络。",
+  "learn-more-about-networks": "了解更多关于网络",
+  "network-map-beta": "网络地图（测试版）"
 }

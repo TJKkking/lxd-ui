@@ -12,8 +12,11 @@ import NetworkDetailOverview from "pages/networks/NetworkDetailOverview";
 import CustomLayout from "components/CustomLayout";
 import TabLinks from "components/TabLinks";
 import NetworkForwards from "pages/networks/NetworkForwards";
+import { useTranslation } from "react-i18next";
 
-const tabs: string[] = ["Overview", "Configuration", "Forwards"];
+const { t } = useTranslation();
+
+const tabs: string[] = [t("overview"), t("configuration"), t("forwards")];
 
 const NetworkDetail: FC = () => {
   const { name, project, activeTab } = useParams<{
@@ -23,11 +26,11 @@ const NetworkDetail: FC = () => {
   }>();
 
   if (!name) {
-    return <>Missing name</>;
+    return <>{t("missing-name")}</>;
   }
 
   if (!project) {
-    return <>Missing project</>;
+    return <>{t("missing-project")}</>;
   }
 
   const { data: network, isLoading } = useQuery({
@@ -48,7 +51,7 @@ const NetworkDetail: FC = () => {
     >
       <Row>
         <TabLinks
-          tabs={network?.managed ? tabs : ["Overview"]}
+          tabs={network?.managed ? tabs : [t("overview")]}
           activeTab={activeTab}
           tabUrl={`/ui/project/${project}/network/${name}`}
         />
