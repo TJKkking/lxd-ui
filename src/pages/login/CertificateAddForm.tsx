@@ -1,10 +1,12 @@
 import { FC, useState } from "react";
 import { Button, Form, Textarea, useNotify } from "@canonical/react-components";
 import { addCertificate } from "api/certificates";
+import { useTranslation } from "react-i18next";
 
 const CertificateAddForm: FC = () => {
   const notify = useNotify();
   const [token, setToken] = useState("");
+  const { t } = useTranslation();
 
   const useToken = () => {
     const sanitisedToken =
@@ -17,7 +19,7 @@ const CertificateAddForm: FC = () => {
       .then(() => {
         location.reload();
       })
-      .catch((e) => notify.failure("Error using token", e));
+      .catch((e) => notify.failure(t("error-using-token"), e));
   };
 
   return (
@@ -25,8 +27,8 @@ const CertificateAddForm: FC = () => {
       <Textarea
         id="token"
         name="token"
-        label="Paste the token from the previous step"
-        placeholder="Paste your token here"
+        label={t("paste-the-token-from-the-previous-step")}
+        placeholder={t("paste-your-token-here")}
         rows={3}
         onChange={(e) => setToken(e.target.value)}
       />
@@ -36,7 +38,7 @@ const CertificateAddForm: FC = () => {
         type="button"
         onClick={useToken}
       >
-        Import
+        {t("import")}
       </Button>
     </Form>
   );

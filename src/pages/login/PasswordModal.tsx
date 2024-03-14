@@ -7,6 +7,7 @@ import {
 } from "@canonical/react-components";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   onConfirm: (password: string) => void;
@@ -14,11 +15,12 @@ interface Props {
 }
 
 const PasswordModal: FC<Props> = ({ onConfirm, onClose }) => {
+  const { t } = useTranslation();
   const PasswordSchema = Yup.object().shape({
     password: Yup.string(),
     passwordConfirm: Yup.string().oneOf(
-      [Yup.ref("password"), null],
-      "Passwords must match",
+      [Yup.ref("password"), ""],
+      t("passwords-must-match"),
     ),
   });
 
@@ -40,11 +42,11 @@ const PasswordModal: FC<Props> = ({ onConfirm, onClose }) => {
   return (
     <Modal
       close={onClose}
-      title="Add a password"
+      title={t("add-a-password")}
       buttonRow={
         <>
           <Button className="u-no-margin--bottom" onClick={handleSkip}>
-            Skip
+            {t("skip")}
           </Button>
           <ActionButton
             appearance="positive"
@@ -55,26 +57,28 @@ const PasswordModal: FC<Props> = ({ onConfirm, onClose }) => {
               formik.values.password.length === 0
             }
           >
-            Generate certificate
+            {t("generate-certificate")}
           </ActionButton>
         </>
       }
     >
-      <p>Protect your certificate by adding a password.</p>
+      <p>{t("protect-your-certificate-by-adding-a-password")}</p>
       <Input
         id="password"
         type="password"
-        label="Password"
+        label={t("password")}
         onBlur={formik.handleBlur}
         onChange={formik.handleChange}
         value={formik.values.password}
         error={formik.touched.password ? formik.errors.password : null}
-        help="For macOS an empty password is not allowed. On other systems this step can be skipped."
+        help={t(
+          "for-macos-an-empty-password-is-not-allowed-on-other-systems-this-step-can-be-skipped",
+        )}
       />
       <Input
         id="passwordConfirm"
         type="password"
-        label="Password confirmation"
+        label={t("password-confirmation")}
         onBlur={formik.handleBlur}
         onChange={formik.handleChange}
         value={formik.values.passwordConfirm}

@@ -6,6 +6,7 @@ import {
   Row,
   Tabs,
 } from "@canonical/react-components";
+import { useTranslation } from "react-i18next";
 
 const FIREFOX = "Firefox";
 const CHROME_LINUX = "Chrome (Linux)";
@@ -21,30 +22,38 @@ interface Props {
 const BrowserImport: FC<Props> = ({ sendPfx }) => {
   const [activeTab, handleTabChange] = useState(FIREFOX);
 
+  const { t } = useTranslation();
+
   const windowsDialogSteps = (
     <>
       <li className="p-list__item">
-        This opens a certificate management dialog. Click <code>Import...</code>
-        then <code>Next</code> and select the <code>lxd-ui.pfx</code> file you
-        just downloaded. Enter your password, or leave the field empty if you
-        have not set one. Click <code>Next</code>.
+        {t("this-opens-a-certificate-management-dialog-click")}{" "}
+        <code>Import...</code>
+        then <code>{t("next")}</code> {t("and-select-the")}{" "}
+        <code>lxd-ui.pfx</code>{" "}
+        {t(
+          "file-you-just-downloaded-enter-your-password-or-leave-the-field-empty-if-you-have-not-set-one-click",
+        )}{" "}
+        <code>{t("next")}</code>.
       </li>
       <li className="p-list__item">
-        Select <code>Automatically select the certificate store</code> and click{" "}
-        <code>Next</code>, then click <code>Finish</code>.
+        {t("select")}{" "}
+        <code>{t("automatically-select-the-certificate-store")}</code>{" "}
+        {t("and-click")} <code>{t("next")}</code>
+        {t("then-click")} <code>{t("finish")}</code>.
       </li>
       <li className="p-list__item">
-        Restart the browser and open LXD-UI. Select the LXD-UI certificate.
+        {t("restart-the-browser-and-open-lxd-ui-select-the-lxd-ui-certificate")}
       </li>
     </>
   );
 
   const downloadPfx = (
     <li className="p-list__item u-clearfix">
-      Download <code>lxd-ui.pfx</code>
+      {t("download")} <code>lxd-ui.pfx</code>
       {sendPfx && (
         <div className="u-float-right--large">
-          <Button onClick={sendPfx}>Download pfx</Button>
+          <Button onClick={sendPfx}>{t("download-pfx")}</Button>
         </div>
       )}
     </li>
@@ -66,7 +75,7 @@ const BrowserImport: FC<Props> = ({ sendPfx }) => {
             <ul className="p-list--divided u-no-margin--bottom">
               {downloadPfx}
               <li className="p-list__item">
-                Paste this link into the address bar:
+                {t("paste-this-link-into-the-address-bar")}
                 <div className="p-code-snippet u-no-margin--bottom">
                   <pre className="p-code-snippet__block">
                     <code>about:preferences#privacy</code>
@@ -74,21 +83,23 @@ const BrowserImport: FC<Props> = ({ sendPfx }) => {
                 </div>
               </li>
               <li className="p-list__item">
-                Scroll down to the certificates section and click the{" "}
-                <code>View Certificates</code> button.
+                {t("scroll-down-to-the-certificates-section-and-click-the")}{" "}
+                <code>{t("view-certificates")}</code> button.
               </li>
               <li className="p-list__item">
-                In the popup click <code>Your certificates</code> and then{" "}
-                <code>Import</code>.
+                {t("in-the-popup-click")} <code>{t("your-certificates")}</code>{" "}
+                {t("and-then")} <code>{t("import")}</code>.
               </li>
               <li className="p-list__item">
-                Select the <code>lxd-ui.pfx</code> file you just downloaded.
-                Enter your password, or leave the field empty if you have not
-                set one.
+                {t("select-the")} <code>lxd-ui.pfx</code>{" "}
+                {t(
+                  "file-you-just-downloaded-enter-your-password-or-leave-the-field-empty-if-you-have-not-set-one",
+                )}
               </li>
               <li className="p-list__item">
-                Restart the browser and open LXD-UI. Select the LXD-UI
-                certificate.
+                {t(
+                  "restart-the-browser-and-open-lxd-ui-select-the-lxd-ui-certificate",
+                )}
               </li>
             </ul>
           </div>
@@ -99,7 +110,7 @@ const BrowserImport: FC<Props> = ({ sendPfx }) => {
             <ul className="p-list--divided u-no-margin--bottom">
               {downloadPfx}
               <li className="p-list__item">
-                Paste into the address bar:
+                {t("paste-into-the-address-bar")}
                 <div className="p-code-snippet u-no-margin--bottom">
                   <pre className="p-code-snippet__block">
                     <code>chrome://settings/certificates</code>
@@ -107,13 +118,16 @@ const BrowserImport: FC<Props> = ({ sendPfx }) => {
                 </div>
               </li>
               <li className="p-list__item">
-                Click the <code>Import</code> button and select the{" "}
-                <code>lxd-ui.pfx</code> file you just downloaded. Enter your
-                password, or leave the field empty if you have not set one.
+                {t("click-the")} <code>{t("import")}</code>{" "}
+                {t("button-and-select-the")} <code>lxd-ui.pfx</code>{" "}
+                {t(
+                  "file-you-just-downloaded-enter-your-password-or-leave-the-field-empty-if-you-have-not-set-one",
+                )}
               </li>
               <li className="p-list__item">
-                Restart the browser and open LXD-UI. Select the LXD-UI
-                certificate.
+                {t(
+                  "restart-the-browser-and-open-lxd-ui-select-the-lxd-ui-certificate-0",
+                )}
               </li>
             </ul>
           </div>
@@ -124,7 +138,7 @@ const BrowserImport: FC<Props> = ({ sendPfx }) => {
             <ul className="p-list--divided u-no-margin--bottom">
               {downloadPfx}
               <li className="p-list__item">
-                Paste into the address bar:
+                {t("paste-into-the-address-bar")}
                 <div className="p-code-snippet u-no-margin--bottom">
                   <pre className="p-code-snippet__block">
                     <code>chrome://settings/security</code>
@@ -132,8 +146,8 @@ const BrowserImport: FC<Props> = ({ sendPfx }) => {
                 </div>
               </li>
               <li className="p-list__item">
-                Scroll down to the <code>Advanced settings</code> and click{" "}
-                <code>Manage device certificates</code>
+                {t("scroll-down-to-the")} <code>{t("advanced-settings")}</code>{" "}
+                {t("and-click")} <code>{t("manage-device-certificates")}</code>
               </li>
               {windowsDialogSteps}
             </ul>
@@ -145,7 +159,7 @@ const BrowserImport: FC<Props> = ({ sendPfx }) => {
             <ul className="p-list--divided u-no-margin--bottom">
               {downloadPfx}
               <li className="p-list__item">
-                Paste into the address bar:
+                {t("paste-into-the-address-bar")}
                 <div className="p-code-snippet u-no-margin--bottom">
                   <pre className="p-code-snippet__block">
                     <code>edge://settings/privacy</code>
@@ -153,8 +167,8 @@ const BrowserImport: FC<Props> = ({ sendPfx }) => {
                 </div>
               </li>
               <li className="p-list__item">
-                Scroll to the <code>Security</code> section and click{" "}
-                <code>Manage Certificates</code>
+                {t("scroll-to-the")} <code>{t("security")}</code>{" "}
+                {t("section-and-click")} <code>{t("manage-certificates")}</code>
               </li>
               {windowsDialogSteps}
             </ul>
@@ -169,26 +183,30 @@ const BrowserImport: FC<Props> = ({ sendPfx }) => {
                   severity="caution"
                   className="u-no-margin--bottom"
                 >
-                  The certificate must be protected by password. An empty
-                  password will fail to be imported on macOS.
+                  {t(
+                    "the-certificate-must-be-protected-by-password-an-empty-password-will-fail-to-be-imported-on-macos",
+                  )}
                 </Notification>
               </li>
               {downloadPfx}
               <li className="p-list__item">
-                Start the Keychain Access app on your Mac, select the login
-                keychain.
+                {t(
+                  "start-the-keychain-access-app-on-your-mac-select-the-login-keychain",
+                )}
               </li>
               <li className="p-list__item">
-                Drag the <code>lxd-ui.pfx</code> file onto the Keychain Access
-                app.
+                {t("drag-the")} <code>lxd-ui.pfx</code>{" "}
+                {t("file-onto-the-keychain-access-app")}
               </li>
               <li className="p-list__item">
-                If you are asked to provide a name and password, type the name
-                and password for an administrator user on this computer.
+                {t(
+                  "if-you-are-asked-to-provide-a-name-and-password-type-the-name-and-password-for-an-administrator-user-on-this-computer",
+                )}
               </li>
               <li className="p-list__item">
-                Restart the browser and open LXD-UI. Select the LXD-UI
-                certificate.
+                {t(
+                  "restart-the-browser-and-open-lxd-ui-select-the-lxd-ui-certificate",
+                )}
               </li>
             </ul>
           </div>

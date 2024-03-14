@@ -6,6 +6,7 @@ import { useAuth } from "context/auth";
 import Loader from "components/Loader";
 import PasswordModal from "pages/login/PasswordModal";
 import CustomLayout from "components/CustomLayout";
+import { useTranslation } from "react-i18next";
 
 interface Certs {
   crt: string;
@@ -17,6 +18,7 @@ const CertificateGenerate: FC = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [certs, setCerts] = useState<Certs | null>(null);
   const { isAuthenticated, isAuthLoading } = useAuth();
+  const { t } = useTranslation();
 
   if (isAuthLoading) {
     return <Loader />;
@@ -82,7 +84,7 @@ const CertificateGenerate: FC = () => {
       mainClassName="certificate-generate"
       header={
         <div className="p-panel__header is-sticky">
-          <h1 className="p-panel__title">Setup LXD UI</h1>
+          <h1 className="p-panel__title">{t("setup-lxd-ui")}</h1>
         </div>
       }
     >
@@ -93,12 +95,12 @@ const CertificateGenerate: FC = () => {
               <Row>
                 <Col size={3}>
                   <h2 className="p-stepped-list__title p-heading--5">
-                    Generate
+                    {t("generate")}
                   </h2>
                 </Col>
                 <Col size={6}>
                   <div className="p-stepped-list__content">
-                    <p>Create a new certificate</p>
+                    <p>{t("create-a-new-certificate")}</p>
                   </div>
                 </Col>
                 <Col size={3}>
@@ -132,13 +134,15 @@ const CertificateGenerate: FC = () => {
             <li className="p-stepped-list__item">
               <Row>
                 <Col size={3}>
-                  <h2 className="p-stepped-list__title p-heading--5">Trust</h2>
+                  <h2 className="p-stepped-list__title p-heading--5">
+                    {t("trust")}
+                  </h2>
                 </Col>
                 <Col size={6}>
                   <div className="p-stepped-list__content">
                     <p>
-                      Download <code>lxd-ui.crt</code> and add it to the LXD
-                      trust store
+                      {t("download")} <code>lxd-ui.crt</code>{" "}
+                      {t("and-add-it-to-the-lxd-trust-store")}
                     </p>
                     <div className="p-code-snippet">
                       <pre className="p-code-snippet__block--icon">
@@ -157,7 +161,7 @@ const CertificateGenerate: FC = () => {
                         )
                       }
                     >
-                      Download crt
+                      {t("download-crt")}
                     </Button>
                   </Col>
                 )}
@@ -166,7 +170,9 @@ const CertificateGenerate: FC = () => {
             <li className="p-stepped-list__item">
               <Row>
                 <Col size={3}>
-                  <h2 className="p-stepped-list__title p-heading--5">Import</h2>
+                  <h2 className="p-stepped-list__title p-heading--5">
+                    {t("import")}
+                  </h2>
                 </Col>
                 <Col size={8}>
                   <BrowserImport
@@ -186,7 +192,9 @@ const CertificateGenerate: FC = () => {
             <li className="p-stepped-list__item u-no-margin--bottom">
               <Row>
                 <Col size={3}>
-                  <h2 className="p-stepped-list__title p-heading--5">Done</h2>
+                  <h2 className="p-stepped-list__title p-heading--5">
+                    {t("done")}
+                  </h2>
                 </Col>
                 <Col size={6}>
                   <div className="p-stepped-list__content">

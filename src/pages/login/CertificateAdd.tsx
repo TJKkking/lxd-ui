@@ -6,10 +6,12 @@ import Loader from "components/Loader";
 import CertificateAddForm from "pages/login/CertificateAddForm";
 import NotificationRow from "components/NotificationRow";
 import CustomLayout from "components/CustomLayout";
+import { useTranslation } from "react-i18next";
 
 const CertificateAdd: FC = () => {
   const { isAuthenticated, isAuthLoading } = useAuth();
   const notify = useNotify();
+  const { t } = useTranslation();
 
   if (isAuthLoading) {
     return <Loader />;
@@ -24,7 +26,7 @@ const CertificateAdd: FC = () => {
       mainClassName="certificate-generate"
       header={
         <div className="p-panel__header is-sticky">
-          <h1 className="p-panel__title">Add existing certificate</h1>
+          <h1 className="p-panel__title">{t("add-existing-certificate")}</h1>
         </div>
       }
     >
@@ -33,7 +35,9 @@ const CertificateAdd: FC = () => {
       ) : (
         <Row>
           <Notification severity="caution">
-            A client certificate must be present and selected in your browser
+            {t(
+              "a-client-certificate-must-be-present-and-selected-in-your-browser",
+            )}
           </Notification>
         </Row>
       )}
@@ -44,12 +48,12 @@ const CertificateAdd: FC = () => {
               <Row>
                 <Col size={3}>
                   <h2 className="p-stepped-list__title p-heading--5">
-                    Create token
+                    {t("create-token")}
                   </h2>
                 </Col>
                 <Col size={6}>
                   <div className="p-stepped-list__content">
-                    <p>Generate a token on the command line</p>
+                    <p>{t("generate-a-token-on-the-command-line")}</p>
                     <div className="p-code-snippet">
                       <pre className="p-code-snippet__block--icon">
                         <code>lxc config trust add --name lxd-ui</code>
@@ -62,7 +66,9 @@ const CertificateAdd: FC = () => {
             <li className="p-stepped-list__item">
               <Row>
                 <Col size={3}>
-                  <h2 className="p-stepped-list__title p-heading--5">Import</h2>
+                  <h2 className="p-stepped-list__title p-heading--5">
+                    {t("import")}
+                  </h2>
                 </Col>
                 <Col size={6}>
                   <div className="p-stepped-list__content">
@@ -74,7 +80,9 @@ const CertificateAdd: FC = () => {
             <li className="p-stepped-list__item u-no-margin--bottom">
               <Row>
                 <Col size={3}>
-                  <h2 className="p-stepped-list__title p-heading--5">Done</h2>
+                  <h2 className="p-stepped-list__title p-heading--5">
+                    {t("done")}
+                  </h2>
                 </Col>
                 <Col size={6}>
                   <div className="p-stepped-list__content">
