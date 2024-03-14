@@ -3,6 +3,7 @@ import { Button } from "@canonical/react-components";
 import usePortal from "react-useportal";
 import { LxdImageType, RemoteImage } from "types/image";
 import CustomIsoModal from "pages/images/CustomIsoModal";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   onSelect: (image: RemoteImage, type: LxdImageType | null) => void;
@@ -16,6 +17,8 @@ const UseCustomIsoBtn: FC<Props> = ({ onSelect }) => {
     onSelect(image, type);
   };
 
+  const { t } = useTranslation();
+
   return (
     <>
       <Button
@@ -24,7 +27,7 @@ const UseCustomIsoBtn: FC<Props> = ({ onSelect }) => {
         type="button"
         id="select-custom-iso"
       >
-        <span>Use custom ISO</span>
+        <span>{t("use-custom-iso")}</span>
       </Button>
       {isOpen && (
         <Portal>

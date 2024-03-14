@@ -8,6 +8,7 @@ import MigrateInstanceBtn from "pages/instances/actions/MigrateInstanceBtn";
 import { isClusteredServer } from "util/settings";
 import AutoExpandingTextArea from "components/AutoExpandingTextArea";
 import ScrollableForm from "components/ScrollableForm";
+import { useTranslation } from "react-i18next";
 
 export const instanceEditDetailPayload = (values: EditInstanceFormValues) => {
   return {
@@ -27,6 +28,7 @@ const EditInstanceDetails: FC<Props> = ({ formik, project }) => {
   const readOnly = formik.values.readOnly;
   const { data: settings } = useSettings();
   const isClustered = isClusteredServer(settings);
+  const { t } = useTranslation();
 
   return (
     <ScrollableForm>
@@ -36,9 +38,9 @@ const EditInstanceDetails: FC<Props> = ({ formik, project }) => {
             id="name"
             name="name"
             type="text"
-            label="Instance name"
-            help="Click the name in the header to rename the instance"
-            placeholder="Enter name"
+            label={t("instance-name")}
+            help={t("click-the-name-in-the-header-to-rename-the-instance")}
+            placeholder={t("enter-name")}
             onBlur={formik.handleBlur}
             onChange={formik.handleChange}
             value={formik.values.name}
@@ -49,8 +51,8 @@ const EditInstanceDetails: FC<Props> = ({ formik, project }) => {
           <AutoExpandingTextArea
             id="description"
             name="description"
-            label="Description"
-            placeholder="Enter description"
+            label={t("description")}
+            placeholder={t("enter-description")}
             onBlur={formik.handleBlur}
             onChange={formik.handleChange}
             value={formik.values.description}
@@ -66,7 +68,7 @@ const EditInstanceDetails: FC<Props> = ({ formik, project }) => {
               id="target"
               name="target"
               type="text"
-              label="Instance location"
+              label={t("instance-location")}
               value={formik.values.location}
               required
               disabled={true}

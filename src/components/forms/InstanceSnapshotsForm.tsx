@@ -13,6 +13,7 @@ import SnapshotScheduleInput from "components/SnapshotScheduleInput";
 import { useProject } from "context/project";
 import { isSnapshotsDisabled } from "util/snapshots";
 import SnapshotDiabledWarningLink from "components/SnapshotDiabledWarningLink";
+import { useTranslation } from "react-i18next";
 
 export interface SnapshotFormValues {
   snapshots_pattern?: string;
@@ -39,13 +40,14 @@ interface Props {
 const InstanceSnapshotsForm: FC<Props> = ({ formik }) => {
   const { project } = useProject();
   const snapshotDisabled = isSnapshotsDisabled(project);
+  const { t } = useTranslation();
 
   return (
     <>
       {snapshotDisabled && (
         <Notification
           severity="caution"
-          title={`Snapshot creation has been disabled for instances in the project ${project?.name}`}
+          title={t("snapshotCreationDisabled", { projectName: project?.name })}
         >
           <SnapshotDiabledWarningLink project={project} />
         </Notification>
@@ -54,25 +56,27 @@ const InstanceSnapshotsForm: FC<Props> = ({ formik }) => {
         rows={[
           getConfigurationRow({
             formik,
-            label: "Snapshot name pattern",
+            label: t("snapshot-name-pattern"),
             name: "snapshots_pattern",
             defaultValue: "",
-            children: <Input placeholder="Enter name pattern" type="text" />,
-          }),
-
-          getConfigurationRow({
-            formik,
-            label: "Expire after",
-            name: "snapshots_expiry",
-            defaultValue: "",
             children: (
-              <Input placeholder="Enter expiry expression" type="text" />
+              <Input placeholder={t("enter-name-pattern")} type="text" />
             ),
           }),
 
           getConfigurationRow({
             formik,
-            label: "Snapshot stopped instances",
+            label: t("expire-after"),
+            name: "snapshots_expiry",
+            defaultValue: "",
+            children: (
+              <Input placeholder={t("enter-expiry-expression")} type="text" />
+            ),
+          }),
+
+          getConfigurationRow({
+            formik,
+            label: t("snapshot-stopped-instances"),
             name: "snapshots_schedule_stopped",
             defaultValue: "",
             readOnlyRenderer: (val) => optionRenderer(val, optionYesNo),
@@ -81,7 +85,7 @@ const InstanceSnapshotsForm: FC<Props> = ({ formik }) => {
 
           getConfigurationRow({
             formik,
-            label: "Schedule",
+            label: t("schedule"),
             name: "snapshots_schedule",
             defaultValue: "",
             children: (

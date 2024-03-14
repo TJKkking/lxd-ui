@@ -5,6 +5,7 @@ import { updateMaxHeight } from "util/updateMaxHeight";
 import useEventListener from "@use-it/event-listener";
 import YamlConfirmation from "components/forms/YamlConfirmation";
 import { InstanceAndProfileFormikProps } from "components/forms/instanceAndProfileFormValues";
+import { useTranslation } from "react-i18next";
 
 export const MAIN_CONFIGURATION = "Main configuration";
 export const DISK_DEVICES = "Disk devices";
@@ -36,6 +37,7 @@ const InstanceFormMenu: FC<Props> = ({
   hasNetworkError,
   formik,
 }) => {
+  const { t } = useTranslation();
   const notify = useNotify();
   const [confirmModal, setConfirmModal] = useState<ReactNode | null>(null);
   const menuItemProps = {
@@ -69,9 +71,9 @@ const InstanceFormMenu: FC<Props> = ({
   return (
     <div className="p-side-navigation--accordion form-navigation">
       {confirmModal}
-      <nav aria-label="Instance form navigation">
+      <nav aria-label={t("instance-form-navigation")}>
         <ul className="p-side-navigation__list">
-          <MenuItem label={MAIN_CONFIGURATION} {...menuItemProps} />
+          <MenuItem label={t("main-configuration")} {...menuItemProps} />
           <li className="p-side-navigation__item">
             <Button
               type="button"
@@ -81,30 +83,32 @@ const InstanceFormMenu: FC<Props> = ({
               disabled={isConfigDisabled}
               title={
                 isConfigDisabled
-                  ? "Please select an image before adding custom configuration"
+                  ? t(
+                      "please-select-an-image-before-adding-custom-configuration",
+                    )
                   : ""
               }
             >
-              Advanced
+              {t("advanced")}{" "}
             </Button>
             <ul
               className="p-side-navigation__list"
               aria-expanded={isConfigOpen ? "true" : "false"}
             >
               <MenuItem
-                label={DISK_DEVICES}
+                label={t("disk-devices")}
                 hasError={hasDiskError}
                 {...menuItemProps}
               />
               <MenuItem
-                label={NETWORK_DEVICES}
+                label={t("network-devices")}
                 hasError={hasNetworkError}
                 {...menuItemProps}
               />
-              <MenuItem label={RESOURCE_LIMITS} {...menuItemProps} />
-              <MenuItem label={SECURITY_POLICIES} {...menuItemProps} />
-              <MenuItem label={SNAPSHOTS} {...menuItemProps} />
-              <MenuItem label={CLOUD_INIT} {...menuItemProps} />
+              <MenuItem label={t("resource-limits")} {...menuItemProps} />
+              <MenuItem label={t("security-policies")} {...menuItemProps} />
+              <MenuItem label={t("snapshots")} {...menuItemProps} />
+              <MenuItem label={t("cloud-init")} {...menuItemProps} />
             </ul>
           </li>
           {isConfigDisabled ? (
@@ -112,13 +116,15 @@ const InstanceFormMenu: FC<Props> = ({
               <Button
                 className="p-side-navigation__link p-button--base"
                 disabled={true}
-                title="Please select an image before adding custom configuration"
+                title={t(
+                  "please-select-an-image-before-adding-custom-configuration",
+                )}
               >
-                {YAML_CONFIGURATION}
+                {t("yaml-configuration-0")}
               </Button>
             </li>
           ) : (
-            <MenuItem label={YAML_CONFIGURATION} {...menuItemProps} />
+            <MenuItem label={t("yaml-configuration-0")} {...menuItemProps} />
           )}
         </ul>
       </nav>

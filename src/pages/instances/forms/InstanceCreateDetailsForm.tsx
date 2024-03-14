@@ -19,6 +19,7 @@ import UseCustomIsoBtn from "pages/images/actions/UseCustomIsoBtn";
 import AutoExpandingTextArea from "components/AutoExpandingTextArea";
 import ScrollableForm from "components/ScrollableForm";
 import { useSupportedFeatures } from "context/useSupportedFeatures";
+import { useTranslation } from "react-i18next";
 
 export interface InstanceDetailsFormValues {
   name?: string;
@@ -69,6 +70,7 @@ const InstanceCreateDetailsForm: FC<Props> = ({
   project,
 }) => {
   const { hasCustomVolumeIso } = useSupportedFeatures();
+  const { t } = useTranslation();
 
   function figureBaseImageName() {
     const image = formik.values.image;
@@ -85,8 +87,8 @@ const InstanceCreateDetailsForm: FC<Props> = ({
             id="name"
             name="name"
             type="text"
-            label="Instance name"
-            placeholder="Enter name"
+            label={t("instance-name")}
+            placeholder={t("enter-name")}
             onBlur={formik.handleBlur}
             onChange={formik.handleChange}
             value={formik.values.name}
@@ -95,8 +97,8 @@ const InstanceCreateDetailsForm: FC<Props> = ({
           <AutoExpandingTextArea
             id="description"
             name="description"
-            label="Description"
-            placeholder="Enter description"
+            label={t("description")}
+            placeholder={t("enter-description")}
             onBlur={formik.handleBlur}
             onChange={formik.handleChange}
             value={formik.values.description}
@@ -106,7 +108,7 @@ const InstanceCreateDetailsForm: FC<Props> = ({
       </Row>
       <Row>
         <Col size={12}>
-          <p className="p-form__label">Base Image*</p>
+          <p className="p-form__label">{t("base-image-0")}</p>
           <div className="p-form__control u-clearfix base-image">
             {formik.values.image ? (
               <>
@@ -117,7 +119,7 @@ const InstanceCreateDetailsForm: FC<Props> = ({
                   appearance="base"
                   type="button"
                   onClick={() => void formik.setFieldValue("image", undefined)}
-                  title="Clear"
+                  title={t("clear")}
                   hasIcon
                 >
                   <Icon name="close" />
@@ -134,7 +136,7 @@ const InstanceCreateDetailsForm: FC<Props> = ({
           </div>
           <Select
             id="instanceType"
-            label="Instance type"
+            label={t("instance-type")}
             name="instanceType"
             onBlur={formik.handleBlur}
             onChange={formik.handleChange}
@@ -147,7 +149,7 @@ const InstanceCreateDetailsForm: FC<Props> = ({
             }
             title={
               !formik.values.image
-                ? "Please select an image before adding a type"
+                ? t("please-select-an-image-before-adding-a-type")
                 : ""
             }
           />
@@ -161,7 +163,7 @@ const InstanceCreateDetailsForm: FC<Props> = ({
         readOnly={!formik.values.image}
         title={
           !formik.values.image
-            ? "Please select an image before adding profiles"
+            ? t("please-select-an-image-before-adding-profiles")
             : ""
         }
       />
