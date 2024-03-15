@@ -21,6 +21,7 @@ import { toConfigFields } from "util/config";
 import CustomLayout from "components/CustomLayout";
 import PageHeader from "components/PageHeader";
 import { useSupportedFeatures } from "context/useSupportedFeatures";
+import { useTranslation } from "react-i18next";
 
 const Settings: FC = () => {
   const docBaseLink = useDocs();
@@ -38,12 +39,14 @@ const Settings: FC = () => {
     queryFn: () => fetchConfigOptions(hasMetadataConfiguration),
   });
 
+  const { t } = useTranslation();
+
   if (isConfigOptionsLoading || isSettingsLoading) {
     return <Loader />;
   }
 
   if (settingsError) {
-    notify.failure("Loading settings failed", settingsError);
+    notify.failure(t("loading-settings-failed"), settingsError);
   }
 
   const getValue = (configField: ConfigField): string | undefined => {
@@ -62,9 +65,9 @@ const Settings: FC = () => {
   };
 
   const headers = [
-    { content: "Group", className: "group" },
-    { content: "Key", className: "key" },
-    { content: "Value" },
+    { content: t("group"), className: "group" },
+    { content: t("key"), className: "key" },
+    { content: t("value") },
   ];
 
   const configFields = toConfigFields(configOptions?.configs?.server ?? {});
@@ -73,7 +76,7 @@ const Settings: FC = () => {
     key: "user.ui_title",
     category: "user",
     default: "",
-    shortdesc: "Title for the LXD-UI web page. Shows the hostname when unset.",
+    shortdesc: t("title-for-the-lxd-ui-web-page-shows-the-hostname-when-unset"),
     type: "string",
   });
 
@@ -102,7 +105,7 @@ const Settings: FC = () => {
             ),
             role: "cell",
             className: "group",
-            "aria-label": "Group",
+            "aria-label": t("group"),
           },
           {
             content: (
@@ -120,7 +123,7 @@ const Settings: FC = () => {
             ),
             role: "cell",
             className: "key",
-            "aria-label": "Key",
+            "aria-label": t("key"),
           },
           {
             content: (
@@ -131,7 +134,7 @@ const Settings: FC = () => {
               />
             ),
             role: "cell",
-            "aria-label": "Value",
+            "aria-label": t("value"),
             className: "u-vertical-align-middle",
           },
         ],
@@ -147,9 +150,9 @@ const Settings: FC = () => {
               <PageHeader.Title>
                 <HelpLink
                   href={`${docBaseLink}/server/`}
-                  title="Learn more about server configuration"
+                  title={t("learn-more-about-server-configuration")}
                 >
-                  Settings
+                  {t("settings")}
                 </HelpLink>
               </PageHeader.Title>
               <PageHeader.Search>
@@ -160,7 +163,7 @@ const Settings: FC = () => {
                   onChange={(value) => {
                     setQuery(value);
                   }}
-                  placeholder="Search"
+                  placeholder={t("search")}
                   value={query}
                 />
               </PageHeader.Search>
@@ -174,10 +177,12 @@ const Settings: FC = () => {
           {!hasMetadataConfiguration && (
             <Notification
               severity="information"
-              title="Get more server settings"
+              title={t("get-more-server-settings")}
               titleElement="h2"
             >
-              Update to LXD v5.19.0 or later to access more server settings
+              {t(
+                "update-to-lxd-v5-19-0-or-later-to-access-more-server-settings",
+              )}
             </Notification>
           )}
           <ScrollableTable
@@ -189,7 +194,7 @@ const Settings: FC = () => {
               id="settings-table"
               headers={headers}
               rows={rows}
-              emptyStateMsg="No data to display"
+              emptyStateMsg={t("no-data-to-display")}
             />
           </ScrollableTable>
         </Row>

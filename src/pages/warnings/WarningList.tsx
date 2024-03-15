@@ -9,10 +9,13 @@ import Loader from "components/Loader";
 import NotificationRow from "components/NotificationRow";
 import HelpLink from "components/HelpLink";
 import { useDocs } from "context/useDocs";
+import { useTranslation } from "react-i18next";
 
 const WarningList: FC = () => {
   const docBaseLink = useDocs();
   const notify = useNotify();
+
+  const { t } = useTranslation();
 
   const {
     data: warnings = [],
@@ -24,18 +27,18 @@ const WarningList: FC = () => {
   });
 
   if (error) {
-    notify.failure("Loading warnings failed", error);
+    notify.failure(t("loading-warnings-failed"), error);
   }
 
   const headers = [
-    { content: "Type", sortKey: "type" },
-    { content: "Last message", sortKey: "lastMessage" },
-    { content: "Status", sortKey: "status" },
-    { content: "Severity", sortKey: "severity" },
-    { content: "Count", sortKey: "count", className: "u-align--right" },
-    { content: "Project", sortKey: "project" },
-    { content: "First seen", sortKey: "firstSeen" },
-    { content: "Last seen", sortKey: "lastSeen" },
+    { content: t("type"), sortKey: "type" },
+    { content: t("last-message"), sortKey: "lastMessage" },
+    { content: t("status"), sortKey: "status" },
+    { content: t("severity"), sortKey: "severity" },
+    { content: t("count"), sortKey: "count", className: "u-align--right" },
+    { content: t("project"), sortKey: "project" },
+    { content: t("first-seen"), sortKey: "firstSeen" },
+    { content: t("last-seen"), sortKey: "lastSeen" },
   ];
 
   const rows = warnings.map((warning) => {
@@ -44,44 +47,44 @@ const WarningList: FC = () => {
         {
           content: warning.type,
           role: "rowheader",
-          "aria-label": "Type",
+          "aria-label": t("type"),
         },
         {
           content: warning.last_message,
           role: "rowheader",
-          "aria-label": "Last message",
+          "aria-label": t("last-message"),
         },
         {
           content: warning.status,
           role: "rowheader",
-          "aria-label": "Status",
+          "aria-label": t("status"),
         },
         {
           content: warning.severity,
           role: "rowheader",
-          "aria-label": "Severity",
+          "aria-label": t("severity"),
         },
         {
           content: warning.count,
           role: "rowheader",
           className: "u-align--right",
-          "aria-label": "Count",
+          "aria-label": t("count"),
         },
         {
           content: warning.project,
           role: "rowheader",
           className: "u-align--center",
-          "aria-label": "Project",
+          "aria-label": t("project"),
         },
         {
           content: isoTimeToString(warning.first_seen_at),
           role: "rowheader",
-          "aria-label": "First seen",
+          "aria-label": t("first-seen"),
         },
         {
           content: isoTimeToString(warning.last_seen_at),
           role: "rowheader",
-          "aria-label": "Last seen",
+          "aria-label": t("last-seen"),
         },
       ],
       sortData: {
@@ -103,9 +106,9 @@ const WarningList: FC = () => {
         title={
           <HelpLink
             href={`${docBaseLink}/howto/troubleshoot/`}
-            title="Learn more about troubleshooting"
+            title={t("learn-more-about-troubleshooting")}
           >
-            Warnings
+            {t("warnings")}
           </HelpLink>
         }
       >
@@ -120,9 +123,9 @@ const WarningList: FC = () => {
             className="u-table-layout--auto"
             emptyStateMsg={
               isLoading ? (
-                <Loader text="Loading warnings..." />
+                <Loader text={t("loading-warnings")} />
               ) : (
-                "No data to display"
+                t("no-data-to-display")
               )
             }
           />
