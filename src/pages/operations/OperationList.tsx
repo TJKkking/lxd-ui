@@ -17,11 +17,10 @@ import { getProjectName } from "util/operations";
 import { useOperations } from "context/operationsProvider";
 import { useTranslation } from "react-i18next";
 
-const { t } = useTranslation();
-
 const OperationList: FC = () => {
   const notify = useNotify();
   const { operations, isLoading, error } = useOperations();
+  const { t } = useTranslation();
 
   if (error) {
     notify.failure(t("loading-operations-failed"), error);

@@ -14,16 +14,16 @@ import TabLinks from "components/TabLinks";
 import NetworkForwards from "pages/networks/NetworkForwards";
 import { useTranslation } from "react-i18next";
 
-const { t } = useTranslation();
-
-const tabs: string[] = [t("overview"), t("configuration"), t("forwards")];
-
 const NetworkDetail: FC = () => {
   const { name, project, activeTab } = useParams<{
     name: string;
     project: string;
     activeTab?: string;
   }>();
+
+  const { t } = useTranslation();
+
+  const tabs: string[] = [t("overview"), t("configuration"), t("forwards")];
 
   if (!name) {
     return <>{t("missing-name")}</>;
@@ -61,12 +61,12 @@ const NetworkDetail: FC = () => {
             {network && <NetworkDetailOverview network={network} />}
           </div>
         )}
-        {activeTab === "configuration" && (
+        {activeTab === t("configuration") && (
           <div role="tabpanel" aria-labelledby="configuration">
             {network && <EditNetwork network={network} project={project} />}
           </div>
         )}
-        {activeTab === "forwards" && (
+        {activeTab === t("forwards") && (
           <div role="tabpanel" aria-labelledby="forwards">
             {network && <NetworkForwards network={network} project={project} />}
           </div>
