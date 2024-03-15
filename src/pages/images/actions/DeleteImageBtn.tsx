@@ -6,6 +6,7 @@ import { queryKeys } from "util/queryKeys";
 import { ConfirmationButton, Icon } from "@canonical/react-components";
 import { useEventQueue } from "context/eventQueue";
 import { useToastNotification } from "context/toastNotificationProvider";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   image: LxdImage;
@@ -17,6 +18,8 @@ const DeleteImageBtn: FC<Props> = ({ image, project }) => {
   const toastNotify = useToastNotification();
   const [isLoading, setLoading] = useState(false);
   const queryClient = useQueryClient();
+
+  const { t } = useTranslation();
 
   const handleDelete = () => {
     setLoading(true);
@@ -32,12 +35,14 @@ const DeleteImageBtn: FC<Props> = ({ image, project }) => {
               queryKey: [queryKeys.projects, project],
             });
             toastNotify.success(
-              `Image ${image.properties.description} deleted.`,
+              t("imageDeleted", { description: image.properties.description }),
             );
           },
           (msg) =>
             toastNotify.failure(
-              `Image ${image.properties.description} deletion failed`,
+              t("imageDeletionFailed", {
+                description: image.properties.description,
+              }),
               new Error(msg),
             ),
           () => setLoading(false),
@@ -45,7 +50,9 @@ const DeleteImageBtn: FC<Props> = ({ image, project }) => {
       )
       .catch((e) => {
         toastNotify.failure(
-          `Image ${image.properties.description} deletion failed`,
+          t("imageDeletionFailed", {
+            description: image.properties.description,
+          }),
           e,
         );
         setLoading(false);
@@ -56,15 +63,15 @@ const DeleteImageBtn: FC<Props> = ({ image, project }) => {
     <ConfirmationButton
       loading={isLoading}
       confirmationModalProps={{
-        title: "Confirm delete",
+        title: t("confirm-delete"),
         children: (
           <p>
-            This will permanently delete image{" "}
+            t('this-will-permanently-delete-image'){" "}
             <b>{image.properties.description}</b>.<br />
-            This action cannot be undone, and can result in data loss.
+            {t("this-action-cannot-be-undone-and-can-result-in-data-loss")}
           </p>
         ),
-        confirmButtonLabel: "Delete",
+        confirmButtonLabel: t("delete"),
         onConfirm: handleDelete,
       }}
       className="has-icon"

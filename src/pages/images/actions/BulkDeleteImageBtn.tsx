@@ -7,6 +7,7 @@ import { useEventQueue } from "context/eventQueue";
 import { getPromiseSettledCounts } from "util/helpers";
 import { pluralize } from "util/instanceBulkActions";
 import { useToastNotification } from "context/toastNotificationProvider";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   fingerprints: string[];
@@ -26,6 +27,8 @@ const BulkDeleteImageBtn: FC<Props> = ({
   const [isLoading, setLoading] = useState(false);
   const queryClient = useQueryClient();
 
+  const { t } = useTranslation();
+
   const count = fingerprints.length;
 
   const handleDelete = () => {
@@ -43,22 +46,22 @@ const BulkDeleteImageBtn: FC<Props> = ({
         );
       } else if (rejectedCount === count) {
         toastNotify.failure(
-          "Image bulk deletion failed",
+          t("image-bulk-deletion-failed"),
           undefined,
           <>
-            <b>{count}</b> {pluralize("image", count)} could not be deleted.
+            <b>{count}</b> {pluralize("image", count)} t('could-not-be-deleted')
           </>,
         );
       } else {
         toastNotify.failure(
-          "Image bulk deletion partially failed",
+          t("image-bulk-deletion-partially-failed"),
           undefined,
           <>
             <b>{fulfilledCount}</b> {pluralize("image", fulfilledCount)}{" "}
             deleted.
             <br />
-            <b>{rejectedCount}</b> {pluralize("image", rejectedCount)} could not
-            be deleted.
+            <b>{rejectedCount}</b> {pluralize("image", rejectedCount)}{" "}
+            t('could-not-be-deleted')
           </>,
         );
       }
@@ -74,18 +77,18 @@ const BulkDeleteImageBtn: FC<Props> = ({
     <ConfirmationButton
       loading={isLoading}
       confirmationModalProps={{
-        title: "Confirm delete",
+        title: t("confirm-delete"),
         children: (
           <p>
-            This will permanently delete{" "}
+            t('this-will-permanently-delete'){" "}
             <b>
               {fingerprints.length} {pluralize("image", fingerprints.length)}
             </b>
             .<br />
-            This action cannot be undone, and can result in data loss.
+            {t("this-action-cannot-be-undone-and-can-result-in-data-loss")}
           </p>
         ),
-        confirmButtonLabel: "Delete",
+        confirmButtonLabel: t("delete"),
         onConfirm: handleDelete,
       }}
       appearance=""
@@ -94,7 +97,7 @@ const BulkDeleteImageBtn: FC<Props> = ({
       shiftClickEnabled
       showShiftClickHint
     >
-      Delete {pluralize("image", fingerprints.length)}
+      {t("delete")} {pluralize("image", fingerprints.length)}
     </ConfirmationButton>
   );
 };

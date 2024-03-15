@@ -8,6 +8,7 @@ import Loader from "components/Loader";
 import { useProject } from "context/project";
 import { LxdImageType, RemoteImage } from "types/image";
 import { IsoImage } from "types/iso";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   primaryImage: IsoImage | null;
@@ -25,17 +26,19 @@ const CustomIsoSelector: FC<Props> = ({
   const { project } = useProject();
   const projectName = project?.name ?? "";
 
+  const { t } = useTranslation();
+
   const { data: images = [], isLoading } = useQuery({
     queryKey: [queryKeys.isoVolumes, project],
     queryFn: () => loadIsoVolumes(projectName),
   });
 
   const headers = [
-    { content: "Name", sortKey: "name" },
-    { content: "Storage pool", sortKey: "storagePool" },
-    { content: "Upload date", sortKey: "uploadedAt" },
-    { content: "Size", sortKey: "size" },
-    { "aria-label": "Actions", className: "actions" },
+    { content: t("name"), sortKey: "name" },
+    { content: t("storage-pool"), sortKey: "storagePool" },
+    { content: t("upload-date"), sortKey: "uploadedAt" },
+    { content: t("size"), sortKey: "size" },
+    { "aria-label": t("actions"), className: "actions" },
   ];
 
   const rows = images.map((image) => {
@@ -51,19 +54,19 @@ const CustomIsoSelector: FC<Props> = ({
             </div>
           ),
           role: "cell",
-          "aria-label": "Name",
+          "aria-label": t("name"),
           onClick: selectIso,
         },
         {
           content: image.pool,
           role: "cell",
-          "aria-label": "Storage pool",
+          "aria-label": t("storage-pool"),
           onClick: selectIso,
         },
         {
           content: isoTimeToString(new Date(image.created_at).toISOString()),
           role: "cell",
-          "aria-label": "Uploaded at",
+          "aria-label": t("uploaded-at"),
           onClick: selectIso,
         },
         {
@@ -71,7 +74,7 @@ const CustomIsoSelector: FC<Props> = ({
             image.volume?.config.size &&
             humanFileSize(+image.volume.config.size),
           role: "cell",
-          "aria-label": "Size",
+          "aria-label": t("size"),
           onClick: selectIso,
         },
         {
@@ -86,11 +89,11 @@ const CustomIsoSelector: FC<Props> = ({
               onClick={selectIso}
               dense
             >
-              Select
+              t('select')
             </Button>
           ),
           role: "cell",
-          "aria-label": "Actions",
+          "aria-label": t("actions"),
           className: "u-align--right",
           onClick: selectIso,
         },
@@ -114,9 +117,9 @@ const CustomIsoSelector: FC<Props> = ({
           className="table-iso-select u-table-layout--auto"
           emptyStateMsg={
             isLoading ? (
-              <Loader text="Loading images..." />
+              <Loader text={t("loading-images")} />
             ) : (
-              "No custom ISOs found"
+              t("no-custom-isos-found")
             )
           }
         />
@@ -127,7 +130,7 @@ const CustomIsoSelector: FC<Props> = ({
           className="u-no-margin--bottom"
           onClick={onCancel}
         >
-          Cancel
+          {t("cancel")}
         </Button>
         <Button
           appearance={rows.length === 0 ? "positive" : ""}
@@ -135,7 +138,7 @@ const CustomIsoSelector: FC<Props> = ({
           type="button"
           className="iso-btn u-no-margin--bottom"
         >
-          <span>Upload custom ISO</span>
+          <span>{t("upload-custom-iso")}</span>
         </Button>
       </footer>
     </>

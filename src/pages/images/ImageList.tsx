@@ -27,6 +27,7 @@ import NotificationRow from "components/NotificationRow";
 import { useDocs } from "context/useDocs";
 import CustomLayout from "components/CustomLayout";
 import PageHeader from "components/PageHeader";
+import { useTranslation } from "react-i18next";
 
 const ImageList: FC = () => {
   const docBaseLink = useDocs();
@@ -36,8 +37,10 @@ const ImageList: FC = () => {
   const [processingNames, setProcessingNames] = useState<string[]>([]);
   const [selectedNames, setSelectedNames] = useState<string[]>([]);
 
+  const { t } = useTranslation();
+
   if (!project) {
-    return <>Missing project</>;
+    return <>{t("missing-project")}</>;
   }
 
   const {
@@ -50,7 +53,7 @@ const ImageList: FC = () => {
   });
 
   if (error) {
-    notify.failure("Loading images failed", error);
+    notify.failure(t("loading-images-failed"), error);
   }
 
   useEffect(() => {
@@ -64,26 +67,26 @@ const ImageList: FC = () => {
   }, [images]);
 
   const headers = [
-    { content: "Name", sortKey: "name" },
-    { content: "Alias", sortKey: "alias" },
+    { content: t("name"), sortKey: "name" },
+    { content: t("alias"), sortKey: "alias" },
     {
-      content: "Architecture",
+      content: t("architecture"),
       sortKey: "architecture",
       className: "architecture",
     },
     {
-      content: "Public",
+      content: t("public"),
       sortKey: "public",
       className: "public",
     },
-    { content: "Type", sortKey: "type", className: "type" },
+    { content: t("type"), sortKey: "type", className: "type" },
     {
-      content: "Upload date",
+      content: t("upload-date"),
       sortKey: "uploaded_at",
       className: "uploaded_at",
     },
-    { content: "Size", sortKey: "size", className: "u-align--right size" },
-    { "aria-label": "Actions", className: "actions" },
+    { content: t("size"), sortKey: "size", className: "u-align--right size" },
+    { "aria-label": t("actions"), className: "actions" },
   ];
 
   const filteredImages = images.filter(
@@ -121,48 +124,48 @@ const ImageList: FC = () => {
         {
           content: image.properties.description,
           role: "cell",
-          "aria-label": "Name",
+          "aria-label": t("name"),
         },
         {
           content: imageAlias,
           role: "cell",
-          "aria-label": "Aliases",
+          "aria-label": t("aliases"),
           className: "aliases",
         },
         {
           content: image.architecture,
           role: "cell",
-          "aria-label": "Architecture",
+          "aria-label": t("architecture"),
           className: "architecture",
         },
         {
-          content: image.public ? "Yes" : "No",
+          content: image.public ? t("yes") : t("no"),
           role: "cell",
-          "aria-label": "Public",
+          "aria-label": t("public"),
           className: "public",
         },
         {
-          content: image.type == "virtual-machine" ? "VM" : "Container",
+          content: image.type == "virtual-machine" ? "VM" : t("container"),
           role: "cell",
-          "aria-label": "Type",
+          "aria-label": t("type"),
           className: "type",
         },
         {
           content: isoTimeToString(image.uploaded_at),
           role: "cell",
-          "aria-label": "Upload date",
+          "aria-label": t("upload-date"),
           className: "uploaded_at",
         },
         {
           content: humanFileSize(image.size),
           role: "cell",
-          "aria-label": "Size",
+          "aria-label": t("size"),
           className: "u-align--right size",
         },
         {
           content: actions,
           role: "cell",
-          "aria-label": "Actions",
+          "aria-label": t("actions"),
           className: "u-align--right actions",
         },
       ],
@@ -181,7 +184,7 @@ const ImageList: FC = () => {
   const { rows: sortedRows, updateSort } = useSortTableData({ rows });
 
   if (isLoading) {
-    return <Loader text="Loading images..." />;
+    return <Loader text={t("loading-images")} />;
   }
 
   return (
@@ -193,9 +196,9 @@ const ImageList: FC = () => {
             <PageHeader.Title>
               <HelpLink
                 href={`${docBaseLink}/image-handling/`}
-                title="Learn more about images"
+                title={t("learn-more-about-images")}
               >
-                Images
+                {t("images")}
               </HelpLink>
             </PageHeader.Title>
             {selectedNames.length === 0 && images.length > 0 && (
@@ -207,9 +210,9 @@ const ImageList: FC = () => {
                   onChange={(value) => {
                     setQuery(value);
                   }}
-                  placeholder="Search"
+                  placeholder={t("search")}
                   value={query}
-                  aria-label="Search for images"
+                  aria-label={t("search-for-images")}
                 />
               </PageHeader.Search>
             )}
@@ -231,10 +234,12 @@ const ImageList: FC = () => {
           <EmptyState
             className="empty-state"
             image={<Icon name="mount" className="empty-state-icon" />}
-            title="No images found in this project"
+            title={t("no-images-found-in-this-project")}
           >
             <p>
-              Images will appear here, when launching an instance from a remote.
+              {t(
+                "images-will-appear-here-when-launching-an-instance-from-a-remote",
+              )}
             </p>
           </EmptyState>
         )}
@@ -249,7 +254,7 @@ const ImageList: FC = () => {
               id="pagination"
               itemName="image"
               className="u-no-margin--top"
-              aria-label="Table pagination control"
+              aria-label={t("table-pagination-control")}
               description={
                 selectedNames.length > 0 && (
                   <SelectedTableNotification
@@ -270,7 +275,7 @@ const ImageList: FC = () => {
                 headers={headers}
                 sortable
                 className="image-table"
-                emptyStateMsg="No images found matching this search"
+                emptyStateMsg={t("no-images-found-matching-this-search")}
                 onUpdateSort={updateSort}
                 selectedNames={selectedNames}
                 setSelectedNames={setSelectedNames}

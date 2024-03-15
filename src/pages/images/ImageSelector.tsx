@@ -27,6 +27,7 @@ import { useSettings } from "context/useSettings";
 import ScrollableTable from "components/ScrollableTable";
 import { fetchImageList } from "api/images";
 import { useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   onSelect: (image: RemoteImage, type: LxdImageType | null) => void;
@@ -53,6 +54,8 @@ const ImageSelector: FC<Props> = ({ onSelect, onClose }) => {
   const [type, setType] = useState<LxdImageType | null>(null);
   const [variant, setVariant] = useState<string>(ANY);
   const { project } = useParams<{ project: string }>();
+
+  const { t } = useTranslation();
 
   const loadImages = (file: string, server: string): Promise<RemoteImage[]> => {
     return new Promise((resolve, reject) => {
@@ -296,7 +299,7 @@ const ImageSelector: FC<Props> = ({ onSelect, onClose }) => {
   return (
     <Modal
       close={onClose}
-      title="Select base image"
+      title={t("select-base-image")}
       className="image-select-modal"
     >
       <Row className="u-no-padding--left u-no-padding--right">
@@ -401,7 +404,7 @@ const ImageSelector: FC<Props> = ({ onSelect, onClose }) => {
                   setOs("");
                   setRelease("");
                 }}
-                placeholder="Search an image"
+                placeholder={t("search-an-image")}
                 value={query}
               />
             </div>
@@ -416,9 +419,9 @@ const ImageSelector: FC<Props> = ({ onSelect, onClose }) => {
                 className="table-image-select"
                 emptyStateMsg={
                   isLoading ? (
-                    <Loader text="Loading images..." />
+                    <Loader text={t("loading-images")} />
                   ) : (
-                    "No matching images found"
+                    t("no-matching-images-found")
                   )
                 }
                 headers={headers}
