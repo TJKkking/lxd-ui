@@ -28,6 +28,7 @@ import BaseLayout from "components/BaseLayout";
 import HelpLink from "components/HelpLink";
 import { useDocs } from "context/useDocs";
 import useSortTableData from "util/useSortTableData";
+import { useTranslation } from "react-i18next";
 
 const ClusterList: FC = () => {
   const docBaseLink = useDocs();
@@ -35,6 +36,8 @@ const ClusterList: FC = () => {
   const { group: activeGroup } = useParams<{ group: string }>();
   const { data: settings } = useSettings();
   const isClustered = isClusteredServer(settings);
+
+  const { t } = useTranslation();
 
   const {
     data: members = [],
@@ -47,7 +50,7 @@ const ClusterList: FC = () => {
   });
 
   if (error) {
-    notify.failure("Loading cluster members failed", error);
+    notify.failure(t("loading-cluster-members-failed"), error);
   }
 
   const filteredMembers = members.filter(
@@ -65,7 +68,7 @@ const ClusterList: FC = () => {
       title={
         <HelpLink
           href={`${docBaseLink}/explanation/clustering/`}
-          title="Learn more about clustering"
+          title={t("learn-more-about-clustering")}
         >
           {isClustered ? (
             <ClusterGroupSelector
@@ -73,7 +76,7 @@ const ClusterList: FC = () => {
               key={activeGroup}
             />
           ) : (
-            "Cluster"
+            t("cluster")
           )}
         </HelpLink>
       }
@@ -93,9 +96,9 @@ const ClusterList: FC = () => {
               <TablePagination
                 data={sortedRows}
                 id="pagination"
-                itemName="cluster member"
+                itemName={t("cluster-member")}
                 className="u-no-margin--top"
-                aria-label="Table pagination control"
+                aria-label={t("table-pagination-control")}
               >
                 <MainTable
                   id="cluster-table"
@@ -103,7 +106,7 @@ const ClusterList: FC = () => {
                   sortable
                   onUpdateSort={updateSort}
                   emptyStateMsg={
-                    isLoading && <Loader text="Loading cluster members..." />
+                    isLoading && <Loader text={t("loading-cluster-members")} />
                   }
                 />
               </TablePagination>
@@ -117,16 +120,16 @@ const ClusterList: FC = () => {
             <EmptyState
               className="empty-state"
               image={<Icon name="machines" className="empty-state-icon" />}
-              title="Cluster group empty"
+              title={t("cluster-group-empty")}
             >
-              <p>Add cluster members to this group.</p>
+              <p>{t("add-cluster-members-to-this-group")}</p>
               <p>
                 <a
                   href={`${docBaseLink}/explanation/clustering/`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Learn more about clustering
+                  {t("learn-more-about-clustering")}
                   <Icon className="external-link-icon" name="external-link" />
                 </a>
               </p>
@@ -137,11 +140,12 @@ const ClusterList: FC = () => {
           <EmptyState
             className="empty-state"
             image={<Icon name="machines" className="empty-state-icon" />}
-            title="This server is not clustered"
+            title={t("this-server-is-not-clustered")}
           >
             <p>
-              Creating cluster members is not supported in LXD UI. Create one
-              using LXD CLI
+              {t(
+                "creating-cluster-members-is-not-supported-in-lxd-ui-create-one-using-lxd-cli",
+              )}
             </p>
             <p>
               <a
@@ -149,7 +153,7 @@ const ClusterList: FC = () => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Learn more about clustering
+                {t("learn-more-about-clustering")}
                 <Icon className="external-link-icon" name="external-link" />
               </a>
             </p>

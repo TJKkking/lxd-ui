@@ -6,6 +6,7 @@ import { queryKeys } from "util/queryKeys";
 import { useQueryClient } from "@tanstack/react-query";
 import { ConfirmationButton, useNotify } from "@canonical/react-components";
 import { useToastNotification } from "context/toastNotificationProvider";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   group: string;
@@ -17,17 +18,18 @@ const DeleteClusterGroupBtn: FC<Props> = ({ group }) => {
   const [isLoading, setLoading] = useState(false);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
 
   const handleDelete = () => {
     setLoading(true);
     deleteClusterGroup(group)
       .then(() => {
         navigate(`/ui/cluster`);
-        toastNotify.success(`Cluster group ${group} deleted.`);
+        toastNotify.success(t("clusterGroupDeleted", { group: group }));
       })
       .catch((e) => {
         setLoading(false);
-        notify.failure("Cluster group deletion failed", e);
+        notify.failure(t("cluster-group-deletion-failed"), e);
       })
       .finally(() => {
         void queryClient.invalidateQueries({
@@ -39,9 +41,9 @@ const DeleteClusterGroupBtn: FC<Props> = ({ group }) => {
   const isDefaultGroup = group === "default";
   const getHoverText = () => {
     if (isDefaultGroup) {
-      return "The default cluster group cannot be deleted";
+      return t("the-default-cluster-group-cannot-be-deleted");
     }
-    return "Delete cluster group";
+    return t("delete-cluster-group");
   };
 
   return (
@@ -50,22 +52,22 @@ const DeleteClusterGroupBtn: FC<Props> = ({ group }) => {
       appearance=""
       loading={isLoading}
       confirmationModalProps={{
-        title: "Confirm delete",
+        title: t("confirm-delete"),
         confirmMessage: (
           <p>
-            This will permanently delete cluster group{" "}
+            {t("this-will-permanently-delete-cluster-group")}{" "}
             <ItemName item={{ name: group }} bold />. <br />
-            This action cannot be undone, and can result in data loss.
+            {t("this-action-cannot-be-undone-and-can-result-in-data-loss")}
           </p>
         ),
-        confirmButtonLabel: "Delete",
+        confirmButtonLabel: t("delete"),
         onConfirm: handleDelete,
       }}
       disabled={isDefaultGroup}
       shiftClickEnabled
       showShiftClickHint
     >
-      <span>Delete cluster group</span>
+      <span>t('delete-cluster-group')</span>
     </ConfirmationButton>
   );
 };

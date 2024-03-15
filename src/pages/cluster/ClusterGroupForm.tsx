@@ -28,6 +28,7 @@ import NotificationRow from "components/NotificationRow";
 import BaseLayout from "components/BaseLayout";
 import AutoExpandingTextArea from "components/AutoExpandingTextArea";
 import { useToastNotification } from "context/toastNotificationProvider";
+import { useTranslation } from "react-i18next";
 
 export interface ClusterGroupFormValues {
   description: string;
@@ -47,20 +48,22 @@ const ClusterGroupForm: FC<Props> = ({ group }) => {
   const queryClient = useQueryClient();
   const controllerState = useState<AbortController | null>(null);
 
+  const { t } = useTranslation();
+
   const { data: members = [], error } = useQuery({
     queryKey: [queryKeys.cluster, queryKeys.members],
     queryFn: fetchClusterMembers,
   });
 
   if (error) {
-    notify.failure("Loading cluster members failed", error);
+    notify.failure(t("loading-cluster-members-failed"), error);
   }
 
   const ClusterGroupSchema = Yup.object().shape({
     name: Yup.string()
       .test(
         "deduplicate",
-        "A cluster group with this name already exists",
+        t("a-cluster-group-with-this-name-already-exists"),
         (value) =>
           group?.name === value ||
           checkDuplicateName(value, "", controllerState, "cluster/groups"),
@@ -85,12 +88,14 @@ const ClusterGroupForm: FC<Props> = ({ group }) => {
         .then(() => {
           const verb = group ? "saved" : "created";
           navigate(`/ui/cluster/group/${values.name}`);
-          toastNotify.success(`Cluster group ${values.name} ${verb}.`);
+          toastNotify.success(
+            t("clusterGroupAction", { name: values.name, action: verb }),
+          );
         })
         .catch((e: Error) => {
           formik.setSubmitting(false);
           const verb = group ? "save" : "creation";
-          notify.failure(`Cluster group ${verb} failed`, e);
+          notify.failure(t("clusterGroupActionFailed", { action: verb }), e);
         })
         .finally(() => {
           void queryClient.invalidateQueries({
@@ -108,7 +113,7 @@ const ClusterGroupForm: FC<Props> = ({ group }) => {
 
   return (
     <BaseLayout
-      title={group ? "Edit cluster group" : "Create cluster group"}
+      title={group ? t("edit-cluster-group") : t("create-cluster-group")}
       contentClassName="cluster-group-form"
     >
       <Form onSubmit={formik.handleSubmit} className="form">
@@ -119,8 +124,8 @@ const ClusterGroupForm: FC<Props> = ({ group }) => {
               <Input
                 id="name"
                 type="text"
-                label="Group name"
-                placeholder="Enter name"
+                label={t("group-name")}
+                placeholder={t("enter-name")}
                 required
                 disabled={Boolean(group)}
                 onBlur={formik.handleBlur}
@@ -131,8 +136,8 @@ const ClusterGroupForm: FC<Props> = ({ group }) => {
               <AutoExpandingTextArea
                 id="description"
                 name="description"
-                label="Description"
-                placeholder="Enter description"
+                label={t("description")}
+                placeholder={t("enter-description")}
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 value={formik.values.description}
@@ -143,7 +148,7 @@ const ClusterGroupForm: FC<Props> = ({ group }) => {
               />
             </div>
             <div className="choose-label">
-              Choose members from the list{" "}
+              {t("choose-members-from-the-list")}{" "}
               <span className="u-text--muted">
                 ({formik.values.members.length} selected)
               </span>{" "}
@@ -170,7 +175,7 @@ const ClusterGroupForm: FC<Props> = ({ group }) => {
         <Row className="u-align--right">
           <Col size={12}>
             <Button appearance="base" onClick={() => navigate(`/ui/cluster`)}>
-              Cancel
+              {t("cancel")}
             </Button>
             <ActionButton
               appearance="positive"
@@ -178,7 +183,7 @@ const ClusterGroupForm: FC<Props> = ({ group }) => {
               disabled={!formik.isValid || !formik.values.name}
               onClick={() => void formik.submitForm()}
             >
-              {group ? "Save changes" : "Create"}
+              {group ? t("save-changes") : t("create")}
             </ActionButton>
           </Col>
         </Row>
