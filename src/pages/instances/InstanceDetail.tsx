@@ -84,31 +84,31 @@ const InstanceDetail: FC = () => {
             </div>
           )}
 
-          {activeTab === "configuration" && (
+          {activeTab === t("configuration") && (
             <div role="tabpanel" aria-labelledby="configuration">
               <EditInstance instance={instance} />
             </div>
           )}
 
-          {activeTab === "snapshots" && (
+          {activeTab === t("snapshots") && (
             <div role="tabpanel" aria-labelledby="snapshots">
               <InstanceSnapshots instance={instance} />
             </div>
           )}
 
-          {activeTab === "terminal" && (
+          {activeTab === t("terminal") && (
             <div role="tabpanel" aria-labelledby="terminal">
               <InstanceTerminal instance={instance} />
             </div>
           )}
 
-          {activeTab === "console" && (
+          {activeTab === t("console") && (
             <div role="tabpanel" aria-labelledby="console">
               <InstanceConsole instance={instance} />
             </div>
           )}
 
-          {activeTab === "logs" && (
+          {activeTab === t("logs") && (
             <div role="tabpanel" aria-labelledby="logs">
               <InstanceLogs instance={instance} />
             </div>
