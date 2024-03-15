@@ -354,5 +354,22 @@
   "cluster-group-deletion-failed": "集群组删除失败",
   "delete-cluster-group": "删除集群组",
   "this-will-permanently-delete-cluster-group": "这将永久删除集群组",
-  "the-default-cluster-group-cannot-be-deleted": "默认集群组无法删除"
+  "the-default-cluster-group-cannot-be-deleted": "默认集群组无法删除",
+  "loading-warnings-failed": "加载警告失败",
+  "last-message": "最后一条消息",
+  "severity": "严重性",
+  "count": "计数",
+  "project": "项目",
+  "first-seen": "首次出现",
+  "last-seen": "最后出现",
+  "learn-more-about-troubleshooting": "了解更多关于故障排除的信息",
+  "warnings": "警告",
+  "loading-warnings": "正在加载警告...",
+  "loading-settings-failed": "加载设置失败",
+  "group": "组",
+  "title-for-the-lxd-ui-web-page-shows-the-hostname-when-unset": "LXD-UI网页的标题。未设置时显示主机名。",
+  "learn-more-about-server-configuration": "了解更多关于服务器配置",
+  "settings": "设置",
+  "get-more-server-settings": "获取更多服务器设置",
+  "update-to-lxd-v5-19-0-or-later-to-access-more-server-settings": "更新至LXD v5.19.0或更高版本以访问更多服务器设置"
 }

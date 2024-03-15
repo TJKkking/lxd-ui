@@ -354,5 +354,22 @@
   "delete-cluster-group": "Delete cluster group",
   "this-will-permanently-delete-cluster-group": "This will permanently delete cluster group",
   "the-default-cluster-group-cannot-be-deleted": "The default cluster group cannot be deleted",
-  "clusterGroupDeleted": "Cluster group {{group}} deleted."
+  "clusterGroupDeleted": "Cluster group {{group}} deleted.",
+  "loading-warnings-failed": "Loading warnings failed",
+  "last-message": "Last message",
+  "severity": "Severity",
+  "count": "Count",
+  "project": "Project",
+  "first-seen": "First seen",
+  "last-seen": "Last seen",
+  "learn-more-about-troubleshooting": "Learn more about troubleshooting",
+  "warnings": "Warnings",
+  "loading-warnings": "Loading warnings...",
+  "loading-settings-failed": "Loading settings failed",
+  "group": "Group",
+  "title-for-the-lxd-ui-web-page-shows-the-hostname-when-unset": "Title for the LXD-UI web page. Shows the hostname when unset.",
+  "learn-more-about-server-configuration": "Learn more about server configuration",
+  "settings": "Settings",
+  "get-more-server-settings": "Get more server settings",
+  "update-to-lxd-v5-19-0-or-later-to-access-more-server-settings": "Update to LXD v5.19.0 or later to access more server settings"
 }
