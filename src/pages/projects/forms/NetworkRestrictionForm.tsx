@@ -5,6 +5,7 @@ import ScrollableConfigurationTable from "components/forms/ScrollableConfigurati
 import { ProjectFormValues } from "pages/projects/CreateProject";
 import { FormikProps } from "formik/dist/types";
 import { getProjectKey } from "util/projectConfigFields";
+import { useTranslation } from "react-i18next";
 
 export interface NetworkRestrictionFormValues {
   restricted_network_access?: string;
@@ -33,39 +34,40 @@ interface Props {
 }
 
 const NetworkRestrictionForm: FC<Props> = ({ formik }) => {
+  const { t } = useTranslation();
   return (
     <ScrollableConfigurationTable
       rows={[
         getConfigurationRow({
           formik,
           name: "restricted_network_access",
-          label: "Available networks",
+          label: t("available-networks"),
           defaultValue: "",
-          children: <Textarea placeholder="Enter network names" />,
+          children: <Textarea placeholder={t("enter-network-names")} />,
         }),
 
         getConfigurationRow({
           formik,
           name: "restricted_network_subnets",
-          label: "Network subnets",
+          label: t("network-subnets"),
           defaultValue: "",
-          children: <Textarea placeholder="Enter network subnets" />,
+          children: <Textarea placeholder={t("enter-network-subnets")} />,
         }),
 
         getConfigurationRow({
           formik,
           name: "restricted_network_uplinks",
-          label: "Network uplinks",
+          label: t("network-uplinks"),
           defaultValue: "",
-          children: <Textarea placeholder="Enter network names" />,
+          children: <Textarea placeholder={t("enter-network-names")} />,
         }),
 
         getConfigurationRow({
           formik,
           name: "restricted_network_zones",
-          label: "Network zones",
+          label: t("network-zones"),
           defaultValue: "",
-          children: <Textarea placeholder="Enter network zones" />,
+          children: <Textarea placeholder={t("enter-network-zones")} />,
         }),
       ]}
     />

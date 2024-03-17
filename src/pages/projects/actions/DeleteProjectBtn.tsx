@@ -14,6 +14,7 @@ import {
 } from "@canonical/react-components";
 import classnames from "classnames";
 import { useToastNotification } from "context/toastNotificationProvider";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   project: LxdProject;
@@ -27,16 +28,18 @@ const DeleteProjectBtn: FC<Props> = ({ project }) => {
   const [isLoading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  const { t } = useTranslation();
+
   const isDefaultProject = project.name === "default";
   const isEmpty = isProjectEmpty(project);
   const getHoverText = () => {
     if (isDefaultProject) {
-      return "The default project cannot be deleted";
+      return t("the-default-project-cannot-be-deleted");
     }
     if (!isEmpty) {
-      return "Non-empty projects cannot be deleted";
+      return t("non-empty-projects-cannot-be-deleted");
     }
-    return "Delete project";
+    return t("delete-project");
   };
 
   const handleDelete = () => {
@@ -44,11 +47,11 @@ const DeleteProjectBtn: FC<Props> = ({ project }) => {
     deleteProject(project)
       .then(() => {
         navigate(`/ui/project/default/instances`);
-        toastNotify.success(`Project ${project.name} deleted.`);
+        toastNotify.success(t("projectDeleted", { name: project.name }));
       })
       .catch((e) => {
         setLoading(false);
-        notify.failure("Project deletion failed", e);
+        notify.failure(t("project-deletion-failed"), e);
       })
       .finally(() => {
         void queryClient.invalidateQueries({
@@ -67,14 +70,14 @@ const DeleteProjectBtn: FC<Props> = ({ project }) => {
       loading={isLoading}
       disabled={isDefaultProject || !isEmpty}
       confirmationModalProps={{
-        title: "Confirm delete",
-        confirmButtonLabel: "Delete",
+        title: t("confirm-delete"),
+        confirmButtonLabel: t("delete"),
         onConfirm: handleDelete,
         children: (
           <p>
-            This will permanently delete project{" "}
+            {t("this-will-permanently-delete-project")}{" "}
             <ItemName item={project} bold />.<br />
-            This action cannot be undone, and can result in data loss.
+            {t("this-action-cannot-be-undone-and-can-result-in-data-loss")}
           </p>
         ),
       }}
@@ -82,7 +85,7 @@ const DeleteProjectBtn: FC<Props> = ({ project }) => {
       showShiftClickHint
     >
       {isDeleteIcon && <Icon name="delete" />}
-      {!isDeleteIcon && <span>Delete project</span>}
+      {!isDeleteIcon && <span>{t("delete-project")}</span>}
     </ConfirmationButton>
   );
 };

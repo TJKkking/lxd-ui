@@ -41,6 +41,7 @@ import FormFooterLayout from "components/forms/FormFooterLayout";
 import { slugify } from "util/slugify";
 import { useToastNotification } from "context/toastNotificationProvider";
 import { useSupportedFeatures } from "context/useSupportedFeatures";
+import { useTranslation } from "react-i18next";
 
 export type ProjectFormValues = ProjectDetailsFormValues &
   ProjectResourceLimitsFormValues &
@@ -59,10 +60,14 @@ const CreateProject: FC = () => {
   const { hasProjectsNetworksZones, hasStorageBuckets } =
     useSupportedFeatures();
 
+  const { t } = useTranslation();
+
   const ProjectSchema = Yup.object().shape({
     name: Yup.string()
-      .test("deduplicate", "A project with this name already exists", (value) =>
-        checkDuplicateName(value, "", controllerState, "projects"),
+      .test(
+        "deduplicate",
+        t("a-project-with-this-name-already-exists"),
+        (value) => checkDuplicateName(value, "", controllerState, "projects"),
       )
       .required(),
   });
@@ -111,11 +116,11 @@ const CreateProject: FC = () => {
       )
         .then(() => {
           navigate(`/ui/project/${values.name}/instances`);
-          toastNotify.success(`Project ${values.name} created.`);
+          toastNotify.success(t("projectCreated", { name: values.name }));
         })
         .catch((e: Error) => {
           formik.setSubmitting(false);
-          notify.failure("Project creation failed", e);
+          notify.failure(t("project-creation-failed"), e);
         })
         .finally(() => {
           void queryClient.invalidateQueries({
@@ -126,7 +131,7 @@ const CreateProject: FC = () => {
   });
 
   return (
-    <BaseLayout title="Create a project" contentClassName="create-project">
+    <BaseLayout title={t("create-a-project")} contentClassName="create-project">
       <ProjectForm
         formik={formik}
         section={section}
@@ -135,7 +140,7 @@ const CreateProject: FC = () => {
       />
       <FormFooterLayout>
         <Button appearance="base" onClick={() => navigate(-1)}>
-          Cancel
+          t('cancel')
         </Button>
         <ActionButton
           appearance="positive"
@@ -143,7 +148,7 @@ const CreateProject: FC = () => {
           disabled={!formik.isValid || !formik.values.name}
           onClick={() => void formik.submitForm()}
         >
-          Create
+          {t("create")}
         </ActionButton>
       </FormFooterLayout>
     </BaseLayout>

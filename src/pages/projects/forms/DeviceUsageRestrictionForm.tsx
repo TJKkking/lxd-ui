@@ -7,6 +7,7 @@ import { FormikProps } from "formik/dist/types";
 import { optionAllowBlock, optionAllowBlockManaged } from "util/projectOptions";
 import { optionRenderer } from "util/formFields";
 import { getProjectKey } from "util/projectConfigFields";
+import { useTranslation } from "react-i18next";
 
 export interface DeviceUsageRestrictionFormValues {
   restricted_devices_disk?: string;
@@ -48,6 +49,7 @@ interface Props {
 }
 
 const DeviceUsageRestrictionForm: FC<Props> = ({ formik }) => {
+  const { t } = useTranslation();
   return (
     <ScrollableConfigurationTable
       rows={[
@@ -56,9 +58,9 @@ const DeviceUsageRestrictionForm: FC<Props> = ({ formik }) => {
           name: "restricted_devices_disk",
           label: (
             <>
-              Disk devices
+              {t("disk-devices")}
               <br />
-              (except the root one)
+              {t("except-the-root-one")}
             </>
           ),
           defaultValue: "",
@@ -70,9 +72,9 @@ const DeviceUsageRestrictionForm: FC<Props> = ({ formik }) => {
         getConfigurationRow({
           formik,
           name: "restricted_devices_disk_paths",
-          label: "Disk devices path",
+          label: t("disk-devices-path"),
           defaultValue: "",
-          children: <Input placeholder="Enter paths" type="text" />,
+          children: <Input placeholder={t("enter-paths")} type="text" />,
         }),
 
         getConfigurationRow({

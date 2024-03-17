@@ -6,6 +6,7 @@ import { ProjectFormValues } from "pages/projects/CreateProject";
 import { FormikProps } from "formik/dist/types";
 import DiskSizeSelector from "components/forms/DiskSizeSelector";
 import { getProjectKey } from "util/projectConfigFields";
+import { useTranslation } from "react-i18next";
 
 export interface ProjectResourceLimitsFormValues {
   limits_instances?: number;
@@ -37,37 +38,44 @@ interface Props {
 }
 
 const ProjectResourceLimitsForm: FC<Props> = ({ formik }) => {
+  const { t } = useTranslation();
   return (
     <ScrollableConfigurationTable
       rows={[
         getConfigurationRow({
           formik,
           name: "limits_instances",
-          label: "Max number of instances",
+          label: t("max-number-of-instances"),
           defaultValue: "",
-          children: <Input placeholder="Enter number" min={0} type="number" />,
+          children: (
+            <Input placeholder={t("enter-number")} min={0} type="number" />
+          ),
         }),
 
         getConfigurationRow({
           formik,
           name: "limits_containers",
-          label: "Max number of containers",
+          label: t("max-number-of-containers"),
           defaultValue: "",
-          children: <Input placeholder="Enter number" min={0} type="number" />,
+          children: (
+            <Input placeholder={t("enter-number")} min={0} type="number" />
+          ),
         }),
 
         getConfigurationRow({
           formik,
           name: "limits_virtual_machines",
-          label: "Max number of VMs",
+          label: t("max-number-of-vms"),
           defaultValue: "",
-          children: <Input placeholder="Enter number" min={0} type="number" />,
+          children: (
+            <Input placeholder={t("enter-number")} min={0} type="number" />
+          ),
         }),
 
         getConfigurationRow({
           formik,
           name: "limits_disk",
-          label: "Max disk space (used by all instances)",
+          label: t("max-disk-space-used-by-all-instances"),
           defaultValue: "",
           children: (
             <DiskSizeSelector
@@ -81,33 +89,41 @@ const ProjectResourceLimitsForm: FC<Props> = ({ formik }) => {
         getConfigurationRow({
           formik,
           name: "limits_networks",
-          label: "Max number of networks",
+          label: t("max-number-of-networks"),
           defaultValue: "",
-          children: <Input placeholder="Enter number" min={0} type="number" />,
+          children: (
+            <Input placeholder={t("enter-number")} min={0} type="number" />
+          ),
         }),
 
         getConfigurationRow({
           formik,
           name: "limits_cpu",
-          label: "Max sum of CPU",
+          label: t("max-sum-of-cpu"),
           defaultValue: "",
-          children: <Input placeholder="Enter number" min={0} type="number" />,
+          children: (
+            <Input placeholder={t("enter-number")} min={0} type="number" />
+          ),
         }),
 
         getConfigurationRow({
           formik,
           name: "limits_memory",
-          label: "Max sum of memory limits",
+          label: t("max-sum-of-memory-limits"),
           defaultValue: "",
-          children: <Input placeholder="Enter number" min={0} type="number" />,
+          children: (
+            <Input placeholder={t("enter-number")} min={0} type="number" />
+          ),
         }),
 
         getConfigurationRow({
           formik,
           name: "limits_processes",
-          label: "Max sum of processes",
+          label: t("max-sum-of-processes"),
           defaultValue: "-",
-          children: <Input placeholder="Enter number" min={0} type="number" />,
+          children: (
+            <Input placeholder={t("enter-number")} min={0} type="number" />
+          ),
         }),
       ]}
     />

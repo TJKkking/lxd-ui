@@ -1,6 +1,7 @@
 import { FC } from "react";
 import MenuItem from "components/forms/FormMenuItem";
 import { Button } from "@canonical/react-components";
+import { useTranslation } from "react-i18next";
 
 export const PROJECT_DETAILS = "Project details";
 export const RESOURCE_LIMITS = "Resource limits";
@@ -29,12 +30,14 @@ const ProjectFormMenu: FC<Props> = ({
     setActive,
   };
 
+  const { t } = useTranslation();
+
   return (
     <div className="p-side-navigation--accordion form-navigation">
-      <nav aria-label="Project form navigation">
+      <nav aria-label={t("project-form-navigation")}>
         <ul className="p-side-navigation__list">
-          <MenuItem label={PROJECT_DETAILS} {...menuItemProps} />
-          <MenuItem label={RESOURCE_LIMITS} {...menuItemProps} />
+          <MenuItem label={t("project-details")} {...menuItemProps} />
+          <MenuItem label={t("resource-limits")} {...menuItemProps} />
           <li className="p-side-navigation__item">
             <Button
               type="button"
@@ -43,16 +46,16 @@ const ProjectFormMenu: FC<Props> = ({
               onClick={toggleRestrictionsOpen}
               disabled={isRestrictionsDisabled}
             >
-              Restrictions
+              {t("restrictions")}
             </Button>
             <ul
               className="p-side-navigation__list"
               aria-expanded={isRestrictionsOpen ? "true" : "false"}
             >
-              <MenuItem label={CLUSTERS} {...menuItemProps} />
-              <MenuItem label={INSTANCES} {...menuItemProps} />
-              <MenuItem label={DEVICE_USAGE} {...menuItemProps} />
-              <MenuItem label={NETWORKS} {...menuItemProps} />
+              <MenuItem label={t("clusters")} {...menuItemProps} />
+              <MenuItem label={t("instances")} {...menuItemProps} />
+              <MenuItem label={t("device-usage")} {...menuItemProps} />
+              <MenuItem label={t("networks")} {...menuItemProps} />
             </ul>
           </li>
         </ul>

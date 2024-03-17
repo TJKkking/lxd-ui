@@ -11,6 +11,7 @@ import { fetchProjects } from "api/projects";
 import { useNavigate } from "react-router-dom";
 import ProjectSelectorList from "pages/projects/ProjectSelectorList";
 import { defaultFirst } from "util/helpers";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   activeProject: string;
@@ -19,6 +20,8 @@ interface Props {
 const ProjectSelector: FC<Props> = ({ activeProject }): JSX.Element => {
   const navigate = useNavigate();
   const searchRef = useRef<HTMLInputElement>(null);
+
+  const { t } = useTranslation();
 
   const { data: projects = [] } = useQuery({
     queryKey: [queryKeys.projects],
@@ -39,13 +42,13 @@ const ProjectSelector: FC<Props> = ({ activeProject }): JSX.Element => {
 
   return (
     <>
-      <div className="project-select-label">Project</div>
+      <div className="project-select-label">{t("project")}</div>
       <ContextualMenu
-        dropdownProps={{ "aria-label": "select project" }}
-        toggleClassName="toggle is-dark"
+        dropdownProps={{ "aria-label": t("select-project") }}
+        toggleClassName={t("toggle-is-dark")}
         toggleLabel={activeProject}
         hasToggleIcon
-        title={`Select project (${activeProject})`}
+        title={t("selectProject", { activeProject: activeProject })}
         className="project-select is-dark"
       >
         <div className="list is-dark" key="my-div">
@@ -56,7 +59,7 @@ const ProjectSelector: FC<Props> = ({ activeProject }): JSX.Element => {
               autoFocus={true}
               autocomplete="off"
               name="query"
-              placeholder="Search"
+              placeholder={t("search")}
               onChange={(val) => updateQuery(val)}
               ref={searchRef}
             />
@@ -69,7 +72,7 @@ const ProjectSelector: FC<Props> = ({ activeProject }): JSX.Element => {
             hasIcon
           >
             <Icon name="plus" light />
-            <span>Create project</span>
+            <span>{t("create-project")}</span>
           </Button>
         </div>
       </ContextualMenu>

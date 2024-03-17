@@ -3,12 +3,15 @@ import { useParams } from "react-router-dom";
 import EditProject from "pages/projects/EditProject";
 import Loader from "components/Loader";
 import { useProject } from "context/project";
+import { useTranslation } from "react-i18next";
 
 const ProjectConfiguration: FC = () => {
   const { project: projectName } = useParams<{ project: string }>();
 
+  const { t } = useTranslation();
+
   if (!projectName) {
-    return <>Missing project</>;
+    return <>{t("missing-project")}</>;
   }
 
   const { project, isLoading } = useProject();
@@ -20,7 +23,7 @@ const ProjectConfiguration: FC = () => {
   return project ? (
     <EditProject project={project} key={project.name} />
   ) : (
-    <>Loading project failed</>
+    <>{t("loading-project-failed")}</>
   );
 };
 

@@ -11,6 +11,7 @@ import HelpLink from "components/HelpLink";
 import { useEventQueue } from "context/eventQueue";
 import { useDocs } from "context/useDocs";
 import { useToastNotification } from "context/toastNotificationProvider";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   project: LxdProject;
@@ -23,16 +24,18 @@ const ProjectConfigurationHeader: FC<Props> = ({ project }) => {
   const toastNotify = useToastNotification();
   const controllerState = useState<AbortController | null>(null);
 
+  const { t } = useTranslation();
+
   const RenameSchema = Yup.object().shape({
     name: Yup.string()
       .test(
         "deduplicate",
-        "A project with this name already exists",
+        t("a-project-with-this-name-already-exists"),
         (value) =>
           project.name === value ||
           checkDuplicateName(value, "", controllerState, "projects"),
       )
-      .required("Project name is required"),
+      .required(t("project-name-is-required")),
   });
 
   const formik = useFormik<RenameHeaderValues>({
@@ -54,13 +57,16 @@ const ProjectConfigurationHeader: FC<Props> = ({ project }) => {
             () => {
               navigate(`/ui/project/${values.name}/configuration`);
               toastNotify.success(
-                `Project ${project.name} renamed to ${values.name}.`,
+                t("projectRenamed", {
+                  oldName: project.name,
+                  newName: values.name,
+                }),
               );
               void formik.setFieldValue("isRenaming", false);
             },
             (msg) =>
               toastNotify.failure(
-                `Renaming project ${project.name} failed`,
+                t("projectRenamingFailed", { name: project.name }),
                 new Error(msg),
               ),
             () => formik.setSubmitting(false),
@@ -68,7 +74,10 @@ const ProjectConfigurationHeader: FC<Props> = ({ project }) => {
         )
         .catch((e) => {
           formik.setSubmitting(false);
-          toastNotify.failure(`Renaming project ${project.name} failed`, e);
+          toastNotify.failure(
+            t("projectRenamingFailed", { name: project.name }),
+            e,
+          );
         });
     },
   });
@@ -80,14 +89,14 @@ const ProjectConfigurationHeader: FC<Props> = ({ project }) => {
         <HelpLink
           key="project-configuration"
           href={`${docBaseLink}/reference/projects/`}
-          title="Learn more about project configuration"
+          title={t("learn-more-about-project-configuration")}
         >
-          Project configuration
+          t('project-configuration')
         </HelpLink>,
       ]}
       renameDisabledReason={
         project.name === "default"
-          ? "Cannot rename the default project"
+          ? t("cannot-rename-the-default-project")
           : undefined
       }
       controls={<DeleteProjectBtn project={project} />}

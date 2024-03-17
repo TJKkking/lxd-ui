@@ -15,6 +15,7 @@ import { LxdProject } from "types/project";
 import AutoExpandingTextArea from "components/AutoExpandingTextArea";
 import ScrollableForm from "components/ScrollableForm";
 import { useSupportedFeatures } from "context/useSupportedFeatures";
+import { useTranslation } from "react-i18next";
 
 export interface ProjectDetailsFormValues {
   name: string;
@@ -78,6 +79,8 @@ const ProjectDetailsForm: FC<Props> = ({ formik, project, isEdit }) => {
   const { hasProjectsNetworksZones, hasStorageBuckets } =
     useSupportedFeatures();
 
+  const { t } = useTranslation();
+
   const figureFeatures = () => {
     if (
       formik.values.features_images === undefined &&
@@ -118,8 +121,8 @@ const ProjectDetailsForm: FC<Props> = ({ formik, project, isEdit }) => {
             id="name"
             name="name"
             type="text"
-            label="Project name"
-            placeholder="Enter name"
+            label={t("project-name")}
+            placeholder={t("enter-name")}
             onBlur={formik.handleBlur}
             onChange={formik.handleChange}
             value={formik.values.name}
@@ -127,15 +130,15 @@ const ProjectDetailsForm: FC<Props> = ({ formik, project, isEdit }) => {
             disabled={formik.values.name === "default" || isEdit}
             help={
               formik.values.name !== "default" &&
-              "Click the name in the header to rename the project"
+              t("click-the-name-in-the-header-to-rename-the-project")
             }
             required
           />
           <AutoExpandingTextArea
             id="description"
             name="description"
-            label="Description"
-            placeholder="Enter description"
+            label={t("description")}
+            placeholder={t("enter-description")}
             onBlur={formik.handleBlur}
             onChange={formik.handleChange}
             value={formik.values.description}
@@ -145,7 +148,7 @@ const ProjectDetailsForm: FC<Props> = ({ formik, project, isEdit }) => {
           <Select
             id="features"
             name="features"
-            label="Features"
+            label={t("features")}
             onChange={(e) => {
               setFeatures(e.target.value);
               void formik.setFieldValue("features_images", true);
@@ -162,7 +165,7 @@ const ProjectDetailsForm: FC<Props> = ({ formik, project, isEdit }) => {
                 value: "default",
               },
               {
-                label: "Customised",
+                label: t("customised"),
                 value: "customised",
               },
             ]}
@@ -175,11 +178,11 @@ const ProjectDetailsForm: FC<Props> = ({ formik, project, isEdit }) => {
           />
           {features === "customised" && (
             <>
-              Allow the following features:
+              {t("allow-the-following-features")}
               <CheckboxInput
                 id="features_images"
                 name="features_images"
-                label="Images"
+                label={t("images")}
                 onChange={() =>
                   void formik.setFieldValue(
                     "features_images",
@@ -194,10 +197,12 @@ const ProjectDetailsForm: FC<Props> = ({ formik, project, isEdit }) => {
                 name="features_profiles"
                 label={
                   <>
-                    Profiles
+                    {t("profiles")}
                     <Tooltip
                       className="checkbox-label-tooltip"
-                      message={`Allow profiles to enable custom${"\n"}restrictions on a project level`}
+                      message={t(
+                        "allow-profiles-to-enable-custom-n-restrictions-on-a-project-level",
+                      )}
                     >
                       <Icon name="info--dark" />
                     </Tooltip>
@@ -216,7 +221,7 @@ const ProjectDetailsForm: FC<Props> = ({ formik, project, isEdit }) => {
               <CheckboxInput
                 id="features_networks"
                 name="features_networks"
-                label="Networks"
+                label={t("networks")}
                 onChange={() =>
                   void formik.setFieldValue(
                     "features_networks",
@@ -230,7 +235,7 @@ const ProjectDetailsForm: FC<Props> = ({ formik, project, isEdit }) => {
                 <CheckboxInput
                   id="features_networks_zones"
                   name="features_networks_zones"
-                  label="Network zones"
+                  label={t("network-zones")}
                   onChange={() =>
                     void formik.setFieldValue(
                       "features_networks_zones",
@@ -249,7 +254,7 @@ const ProjectDetailsForm: FC<Props> = ({ formik, project, isEdit }) => {
                 <CheckboxInput
                   id="features_storage_buckets"
                   name="features_storage_buckets"
-                  label="Storage buckets"
+                  label={t("storage-buckets")}
                   onChange={() =>
                     void formik.setFieldValue(
                       "features_storage_buckets",
@@ -263,7 +268,7 @@ const ProjectDetailsForm: FC<Props> = ({ formik, project, isEdit }) => {
               <CheckboxInput
                 id="features_storage_volumes"
                 name="features_storage_volumes"
-                label="Storage volumes"
+                label={t("storage-volumes")}
                 onChange={() =>
                   void formik.setFieldValue(
                     "features_storage_volumes",
@@ -281,10 +286,12 @@ const ProjectDetailsForm: FC<Props> = ({ formik, project, isEdit }) => {
             name="custom_restrictions"
             label={
               <>
-                Allow custom restrictions on a project level
+                {t("allow-custom-restrictions-on-a-project-level")}
                 <Tooltip
                   className="checkbox-label-tooltip"
-                  message={`Custom restrictions are only available${"\n"}to projects with enabled profiles`}
+                  message={t(
+                    "custom-restrictions-are-only-available-n-to-projects-with-enabled-profiles",
+                  )}
                 >
                   <Icon name="info--dark" />
                 </Tooltip>

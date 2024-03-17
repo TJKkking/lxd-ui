@@ -32,6 +32,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { slugify } from "util/slugify";
 import { useToastNotification } from "context/toastNotificationProvider";
 import { useSupportedFeatures } from "context/useSupportedFeatures";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   project: LxdProject;
@@ -57,6 +58,8 @@ const EditProject: FC<Props> = ({ project }) => {
     name: Yup.string().required(),
   });
 
+  const { t } = useTranslation();
+
   const initialValues = getProjectEditValues(project);
 
   const formik: FormikProps<ProjectFormValues> = useFormik({
@@ -77,11 +80,11 @@ const EditProject: FC<Props> = ({ project }) => {
 
       updateProject(projectPayload)
         .then(() => {
-          toastNotify.success(`Project ${project.name} updated.`);
+          toastNotify.success(t("projectUpdated", { name: project.name }));
           void formik.setFieldValue("readOnly", true);
         })
         .catch((e: Error) => {
-          notify.failure("Project update failed", e);
+          notify.failure(t("project-update-failed"), e);
         })
         .finally(() => {
           formik.setSubmitting(false);
@@ -142,7 +145,7 @@ const EditProject: FC<Props> = ({ project }) => {
                 appearance="positive"
                 onClick={() => void formik.setFieldValue("readOnly", false)}
               >
-                Edit configuration
+                {t("edit-configuration")}
               </Button>
             </>
           ) : (
@@ -151,7 +154,7 @@ const EditProject: FC<Props> = ({ project }) => {
                 appearance="base"
                 onClick={() => formik.setValues(initialValues)}
               >
-                Cancel
+                {t("cancel")}
               </Button>
               <ActionButton
                 appearance="positive"
@@ -159,7 +162,7 @@ const EditProject: FC<Props> = ({ project }) => {
                 disabled={!formik.isValid || !formik.values.name}
                 onClick={() => void formik.submitForm()}
               >
-                Save changes
+                {t("save-changes")}
               </ActionButton>
             </>
           )}
