@@ -140,7 +140,7 @@ const CreateProject: FC = () => {
       />
       <FormFooterLayout>
         <Button appearance="base" onClick={() => navigate(-1)}>
-          t('cancel')
+          {t("cancel")}
         </Button>
         <ActionButton
           appearance="positive"
