@@ -4,6 +4,7 @@ import { FormikProps } from "formik/dist/types";
 import { CreateProfileFormValues } from "pages/profiles/CreateProfile";
 import AutoExpandingTextArea from "components/AutoExpandingTextArea";
 import ScrollableForm from "components/ScrollableForm";
+import { useTranslation } from "react-i18next";
 
 export interface ProfileDetailsFormValues {
   name: string;
@@ -27,6 +28,7 @@ interface Props {
 const ProfileDetailsForm: FC<Props> = ({ formik, isEdit }) => {
   const readOnly = formik.values.readOnly;
   const isDefaultProfile = formik.values.name === "default";
+  const { t } = useTranslation();
 
   return (
     <ScrollableForm>
@@ -36,12 +38,12 @@ const ProfileDetailsForm: FC<Props> = ({ formik, isEdit }) => {
             id="name"
             name="name"
             type="text"
-            label="Profile name"
-            placeholder="Enter name"
+            label={t("profile-name")}
+            placeholder={t("enter-name")}
             help={
               isEdit &&
               !isDefaultProfile &&
-              "Click the name in the header to rename the profile"
+              t("click-the-name-in-the-header-to-rename-the-profile")
             }
             onBlur={formik.handleBlur}
             onChange={formik.handleChange}
@@ -53,8 +55,8 @@ const ProfileDetailsForm: FC<Props> = ({ formik, isEdit }) => {
           <AutoExpandingTextArea
             id="description"
             name="description"
-            label="Description"
-            placeholder="Enter description"
+            label={t("description")}
+            placeholder={t("enter-description")}
             onBlur={formik.handleBlur}
             onChange={formik.handleChange}
             value={formik.values.description}

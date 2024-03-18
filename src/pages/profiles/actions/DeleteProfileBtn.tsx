@@ -13,6 +13,7 @@ import classnames from "classnames";
 import { useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "util/queryKeys";
 import { useToastNotification } from "context/toastNotificationProvider";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   profile: LxdProfile;
@@ -31,6 +32,7 @@ const DeleteProfileBtn: FC<Props> = ({
   const queryClient = useQueryClient();
   const [isLoading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleDelete = () => {
     setLoading(true);
@@ -40,23 +42,23 @@ const DeleteProfileBtn: FC<Props> = ({
           queryKey: [queryKeys.projects, project],
         });
         navigate(`/ui/project/${project}/profiles`);
-        toastNotify.success(`Profile ${profile.name} deleted.`);
+        toastNotify.success(t("profileDeleted", { name: profile.name }));
       })
       .catch((e) => {
         setLoading(false);
-        notify.failure("Profile deletion failed", e);
+        notify.failure(t("profile-deletion-failed"), e);
       });
   };
 
   const isDefaultProfile = profile.name === "default";
   const getHoverText = () => {
     if (!featuresProfiles) {
-      return "Modifications are only available in the default project";
+      return t("modifications-are-only-available-in-the-default-project");
     }
     if (isDefaultProfile) {
-      return "The default profile cannot be deleted";
+      return t("the-default-profile-cannot-be-deleted");
     }
-    return "Delete profile";
+    return t("delete-profile");
   };
 
   return (
@@ -69,14 +71,14 @@ const DeleteProfileBtn: FC<Props> = ({
       disabled={isDefaultProfile || !featuresProfiles}
       loading={isLoading}
       confirmationModalProps={{
-        title: "Confirm delete",
-        confirmButtonLabel: "Delete",
+        title: t("confirm-delete"),
+        confirmButtonLabel: t("delete"),
         onConfirm: handleDelete,
         children: (
           <p>
-            This will permanently delete profile{" "}
+            {t("this-will-permanently-delete-profile")}{" "}
             <ItemName item={profile} bold />.<br />
-            This action cannot be undone, and can result in data loss.
+            {t("this-action-cannot-be-undone-and-can-result-in-data-loss")}
           </p>
         ),
       }}
@@ -84,7 +86,7 @@ const DeleteProfileBtn: FC<Props> = ({
       showShiftClickHint
     >
       {isDeleteIcon && <Icon name="delete" />}
-      {!isDeleteIcon && <span>Delete</span>}
+      {!isDeleteIcon && <span>t('delete')</span>}
     </ConfirmationButton>
   );
 };

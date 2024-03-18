@@ -480,5 +480,15 @@
   "each-profile-overrides-the-settings-specified-in-previous-profiles": "Each profile overrides the settings specified in previous profiles",
   "move-profile-up": "move profile up",
   "move-profile-down": "move profile down",
-  "add-profile": "Add profile"
+  "add-profile": "Add profile",
+  "profile-deletion-failed": "Profile deletion failed",
+  "the-default-profile-cannot-be-deleted": "The default profile cannot be deleted",
+  "delete-profile": "Delete profile",
+  "modifications-are-only-available-in-the-default-project": "Modifications are only available in the default project",
+  "this-will-permanently-delete-profile": "This will permanently delete profile",
+  "profileDeleted": "Profile {{name}} deleted.",
+  "profile-name": "Profile name",
+  "click-the-name-in-the-header-to-rename-the-profile": "Click the name in the header to rename the profile",
+  "please-enter-a-profile-name-to-enable-this-section": "Please enter a profile name to enable this section",
+  "profile-form-navigation": "Profile form navigation"
 }

@@ -6,15 +6,25 @@ import useEventListener from "@use-it/event-listener";
 import { hasDiskError, hasNetworkError } from "util/instanceValidation";
 import { InstanceAndProfileFormikProps } from "components/forms/instanceAndProfileFormValues";
 import YamlConfirmation from "components/forms/YamlConfirmation";
+import { useTranslation } from "react-i18next";
 
-export const MAIN_CONFIGURATION = "Main configuration";
-export const DISK_DEVICES = "Disk devices";
-export const NETWORK_DEVICES = "Network devices";
-export const RESOURCE_LIMITS = "Resource limits";
-export const SECURITY_POLICIES = "Security policies";
-export const SNAPSHOTS = "Snapshots";
+// export const MAIN_CONFIGURATION = "Main configuration";
+// export const DISK_DEVICES = "Disk devices";
+// export const NETWORK_DEVICES = "Network devices";
+// export const RESOURCE_LIMITS = "Resource limits";
+// export const SECURITY_POLICIES = "Security policies";
+// export const SNAPSHOTS = "Snapshots";
+// export const CLOUD_INIT = "Cloud init";
+// export const YAML_CONFIGURATION = "YAML configuration";
+
+export const MAIN_CONFIGURATION = "主配置";
+export const DISK_DEVICES = "磁盘设备";
+export const NETWORK_DEVICES = "网络设备";
+export const RESOURCE_LIMITS = "资源限制";
+export const SECURITY_POLICIES = "安全策略";
+export const SNAPSHOTS = "快照";
 export const CLOUD_INIT = "Cloud init";
-export const YAML_CONFIGURATION = "YAML configuration";
+export const YAML_CONFIGURATION = "YAML 配置";
 
 interface Props {
   isConfigOpen: boolean;
@@ -35,6 +45,7 @@ const ProfileFormMenu: FC<Props> = ({
 }) => {
   const notify = useNotify();
   const [confirmModal, setConfirmModal] = useState<ReactNode | null>(null);
+  const { t } = useTranslation();
 
   const menuItemProps = {
     active,
@@ -60,7 +71,7 @@ const ProfileFormMenu: FC<Props> = ({
 
   const disableReason = hasName
     ? undefined
-    : "Please enter a profile name to enable this section";
+    : t("please-enter-a-profile-name-to-enable-this-section");
 
   const resize = () => {
     updateMaxHeight("form-navigation", "p-bottom-controls");
@@ -71,7 +82,7 @@ const ProfileFormMenu: FC<Props> = ({
   return (
     <div className="p-side-navigation--accordion form-navigation">
       {confirmModal}
-      <nav aria-label="Profile form navigation">
+      <nav aria-label={t("profile-form-navigation")}>
         <ul className="p-side-navigation__list">
           <MenuItem label={MAIN_CONFIGURATION} {...menuItemProps} />
           <li className="p-side-navigation__item">
@@ -83,7 +94,7 @@ const ProfileFormMenu: FC<Props> = ({
               disabled={Boolean(disableReason)}
               title={disableReason}
             >
-              Advanced
+              {t("advanced")}
             </Button>
             <ul
               className="p-side-navigation__list"
