@@ -13,8 +13,7 @@ import { useProject } from "context/project";
 import NotificationRow from "components/NotificationRow";
 import CustomLayout from "components/CustomLayout";
 import TabLinks from "components/TabLinks";
-
-const tabs: string[] = ["Overview", "Configuration"];
+import { useTranslation } from "react-i18next";
 
 const ProfileDetail: FC = () => {
   const notify = useNotify();
@@ -28,11 +27,15 @@ const ProfileDetail: FC = () => {
     activeTab?: string;
   }>();
 
+  const { t } = useTranslation();
+
+  const tabs: string[] = [t("overview"), t("configuration")];
+
   if (!name) {
-    return <>Missing name</>;
+    return <>{t("missing-name")}</>;
   }
   if (!projectName) {
-    return <>Missing project</>;
+    return <>{t("missing-project")}</>;
   }
 
   const { project, isLoading: isProjectLoading } = useProject();
@@ -47,7 +50,7 @@ const ProfileDetail: FC = () => {
   });
 
   if (error) {
-    notify.failure("Loading profile failed", error);
+    notify.failure(t("loading-profile-failed"), error);
   }
 
   const isLoading = isProfileLoading || isProjectLoading;
@@ -67,8 +70,8 @@ const ProfileDetail: FC = () => {
       contentClassName="detail-page"
     >
       <NotificationRow />
-      {isLoading && <Loader text="Loading profile details..." />}
-      {!isLoading && !profile && <>Loading profile failed</>}
+      {isLoading && <Loader text={t("loading-profile-details")} />}
+      {!isLoading && !profile && <>{t("loading-profile-failed")}</>}
       {!isLoading && profile && (
         <Row>
           <TabLinks

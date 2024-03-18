@@ -19,6 +19,7 @@ import { FormikProps } from "formik/dist/types";
 import { LxdProject } from "types/project";
 import NotificationRow from "components/NotificationRow";
 import { slugify } from "util/slugify";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   formik: FormikProps<ProjectFormValues>;
@@ -41,6 +42,8 @@ const ProjectForm: FC<Props> = ({
     setRestrictionsOpen((old) => !old);
   };
 
+  const { t } = useTranslation();
+
   return (
     <Form onSubmit={formik.handleSubmit} className="form">
       <ProjectFormMenu
@@ -54,26 +57,26 @@ const ProjectForm: FC<Props> = ({
         <NotificationRow />
         <Row className="form-contents" key={section}>
           <Col size={12}>
-            {section === slugify(PROJECT_DETAILS) && (
+            {section === slugify(t("project-details")) && (
               <ProjectDetailsForm
                 formik={formik}
                 project={project}
                 isEdit={isEdit}
               />
             )}
-            {section === slugify(RESOURCE_LIMITS) && (
+            {section === slugify(t("resource-limits")) && (
               <ProjectResourceLimitsForm formik={formik} />
             )}
-            {section === slugify(CLUSTERS) && (
+            {section === slugify(t("clusters")) && (
               <ClusterRestrictionForm formik={formik} />
             )}
-            {section === slugify(INSTANCES) && (
+            {section === slugify(t("instances")) && (
               <InstanceRestrictionForm formik={formik} />
             )}
-            {section === slugify(DEVICE_USAGE) && (
+            {section === slugify(t("device-usage")) && (
               <DeviceUsageRestrictionForm formik={formik} />
             )}
-            {section === slugify(NETWORKS) && (
+            {section === slugify(t("networks")) && (
               <NetworkRestrictionForm formik={formik} />
             )}
           </Col>

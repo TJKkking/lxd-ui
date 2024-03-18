@@ -12,6 +12,7 @@ import { slugify } from "util/slugify";
 import { getProfileInstances } from "util/usedBy";
 import ProfileNetworkList from "./ProfileNetworkList";
 import ProfileStorageList from "./ProfileStorageList";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   profile: LxdProfile;
@@ -21,8 +22,10 @@ interface Props {
 const ProfileDetailOverview: FC<Props> = ({ profile, featuresProfiles }) => {
   const { project } = useParams<{ project: string }>();
 
+  const { t } = useTranslation();
+
   if (!project) {
-    return <>Missing project</>;
+    return <>{t("missing-project")}</>;
   }
 
   const updateContentHeight = () => {
@@ -46,29 +49,29 @@ const ProfileDetailOverview: FC<Props> = ({ profile, featuresProfiles }) => {
   return (
     <div className="profile-overview-tab">
       {!featuresProfiles && (
-        <Notification severity="caution" title="Inherited profile">
-          Modifications are only available in the{" "}
+        <Notification severity="caution" title={t("inherited-profile")}>
+          {t("modifications-are-only-available-in-the")}{" "}
           <Link to={`/ui/project/default/profile/${profile.name}`}>
-            default project
+            {t("default-project")}
           </Link>
           .
         </Notification>
       )}
       <Row className="section">
         <Col size={3}>
-          <h2 className="p-heading--5">General</h2>
+          <h2 className="p-heading--5">{t("general")}</h2>
         </Col>
         <Col size={7}>
           <table>
             <tbody>
               <tr>
-                <th className="p-muted-heading">Name</th>
+                <th className="p-muted-heading">{t("name")}</th>
                 <td>
                   <ItemName item={profile} />
                 </td>
               </tr>
               <tr>
-                <th className="p-muted-heading">Description</th>
+                <th className="p-muted-heading">{t("description")}</th>
                 <td>{profile.description ? profile.description : "-"}</td>
               </tr>
             </tbody>
@@ -77,19 +80,19 @@ const ProfileDetailOverview: FC<Props> = ({ profile, featuresProfiles }) => {
       </Row>
       <Row className="section">
         <Col size={3}>
-          <h2 className="p-heading--5">Devices</h2>
+          <h2 className="p-heading--5">{t("devices")}</h2>
         </Col>
         <Col size={7}>
           <table>
             <tbody>
               <tr className="list-wrapper">
-                <th className="p-muted-heading">Networks</th>
+                <th className="p-muted-heading">{t("networks")}</th>
                 <td>
                   <ProfileNetworkList profile={profile} />
                 </td>
               </tr>
               <tr className="list-wrapper">
-                <th className="p-muted-heading">Storage</th>
+                <th className="p-muted-heading">{t("storage")}</th>
                 <td>
                   <ProfileStorageList profile={profile} />
                 </td>
@@ -100,7 +103,7 @@ const ProfileDetailOverview: FC<Props> = ({ profile, featuresProfiles }) => {
       </Row>
       <Row className="section">
         <Col size={3}>
-          <h2 className="p-heading--5">Limits</h2>
+          <h2 className="p-heading--5">{t("limits")}</h2>
         </Col>
         <Col size={7}>
           <table>
@@ -110,7 +113,7 @@ const ProfileDetailOverview: FC<Props> = ({ profile, featuresProfiles }) => {
                 <td>{profile.config["limits.cpu"] || "-"}</td>
               </tr>
               <tr>
-                <th className="p-muted-heading">Memory</th>
+                <th className="p-muted-heading">{t("memory")}</th>
                 <td>{profile.config["limits.memory"] || "-"}</td>
               </tr>
             </tbody>
@@ -123,7 +126,7 @@ const ProfileDetailOverview: FC<Props> = ({ profile, featuresProfiles }) => {
         })}
       >
         <Col size={3}>
-          <h2 className="p-heading--5">Cloud init</h2>
+          <h2 className="p-heading--5">{t("cloud-init")}</h2>
         </Col>
         <Col size={7} className="view-config">
           <Link
@@ -131,7 +134,7 @@ const ProfileDetailOverview: FC<Props> = ({ profile, featuresProfiles }) => {
               profile.name
             }/configuration/${slugify(CLOUD_INIT)}`}
           >
-            View configuration
+            {t("view-configuration")}
           </Link>
         </Col>
       </Row>

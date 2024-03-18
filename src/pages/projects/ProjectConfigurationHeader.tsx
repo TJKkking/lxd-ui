@@ -91,7 +91,7 @@ const ProjectConfigurationHeader: FC<Props> = ({ project }) => {
           href={`${docBaseLink}/reference/projects/`}
           title={t("learn-more-about-project-configuration")}
         >
-          t('project-configuration')
+          {t("project-configuration")}
         </HelpLink>,
       ]}
       renameDisabledReason={

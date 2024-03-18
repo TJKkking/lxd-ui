@@ -59,6 +59,7 @@ import { hasDiskError, hasNetworkError } from "util/instanceValidation";
 import FormFooterLayout from "components/forms/FormFooterLayout";
 import { useToastNotification } from "context/toastNotificationProvider";
 import { useDocs } from "context/useDocs";
+import { useTranslation } from "react-i18next";
 
 export type CreateProfileFormValues = ProfileDetailsFormValues &
   FormDeviceValues &
@@ -78,15 +79,19 @@ const CreateProfile: FC = () => {
   const controllerState = useState<AbortController | null>(null);
   const [section, setSection] = useState(MAIN_CONFIGURATION);
   const [isConfigOpen, setConfigOpen] = useState(false);
+  const { t } = useTranslation();
 
   if (!project) {
-    return <>Missing project</>;
+    return <>{t("missing-project")}</>;
   }
 
   const ProfileSchema = Yup.object().shape({
     name: Yup.string()
-      .test("deduplicate", "A profile with this name already exists", (value) =>
-        checkDuplicateName(value, project, controllerState, "profiles"),
+      .test(
+        "deduplicate",
+        t("a-profile-with-this-name-already-exists"),
+        (value) =>
+          checkDuplicateName(value, project, controllerState, "profiles"),
       )
       .required(),
   });
@@ -113,11 +118,11 @@ const CreateProfile: FC = () => {
       createProfile(JSON.stringify(profilePayload), project)
         .then(() => {
           navigate(`/ui/project/${project}/profiles`);
-          toastNotify.success(`Profile ${values.name} created.`);
+          toastNotify.success(t("profileCreated", { name: values.name }));
         })
         .catch((e: Error) => {
           formik.setSubmitting(false);
-          notify.failure("Profile creation failed", e);
+          notify.failure(t("profile-creation-failed"), e);
         })
         .finally(() => {
           void queryClient.invalidateQueries({
@@ -160,7 +165,7 @@ const CreateProfile: FC = () => {
   }
 
   return (
-    <BaseLayout title="Create a profile" contentClassName="create-profile">
+    <BaseLayout title={t("create-a-profile")} contentClassName="create-profile">
       <Form onSubmit={formik.handleSubmit} className="form">
         <ProfileFormMenu
           active={section}
@@ -203,15 +208,18 @@ const CreateProfile: FC = () => {
                 yaml={getYaml()}
                 setYaml={(yaml) => void formik.setFieldValue("yaml", yaml)}
               >
-                <Notification severity="information" title="YAML Configuration">
-                  This is the YAML representation of the profile.
+                <Notification
+                  severity="information"
+                  title={t("yaml-configuration")}
+                >
+                  {t("this-is-the-yaml-representation-of-the-profile")}
                   <br />
                   <a
                     href={`${docBaseLink}/profiles`}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    Learn more about profiles
+                    {t("learn-more-about-profiles")}
                   </a>
                 </Notification>
               </YamlForm>
@@ -224,7 +232,7 @@ const CreateProfile: FC = () => {
           appearance="base"
           onClick={() => navigate(`/ui/project/${project}/profiles`)}
         >
-          Cancel
+          {t("cancel")}
         </Button>
         <ActionButton
           appearance="positive"
@@ -237,7 +245,7 @@ const CreateProfile: FC = () => {
           }
           onClick={() => void formik.submitForm()}
         >
-          Create
+          {t("create")}
         </ActionButton>
       </FormFooterLayout>
     </BaseLayout>

@@ -12,6 +12,7 @@ import ProfileNetworkList from "./ProfileNetworkList";
 import ProfileStorageList from "./ProfileStorageList";
 import { useProject } from "context/project";
 import { useNotify } from "@canonical/react-components";
+import { useTranslation } from "react-i18next";
 
 const ProfileDetailPanel: FC = () => {
   const notify = useNotify();
@@ -21,6 +22,8 @@ const ProfileDetailPanel: FC = () => {
   const projectName = panelParams.project;
 
   const { project, isLoading: isProjectLoading } = useProject();
+
+  const { t } = useTranslation();
 
   const {
     data: profile,
@@ -32,7 +35,7 @@ const ProfileDetailPanel: FC = () => {
   });
 
   if (error) {
-    notify.failure("Loading profile failed", error);
+    notify.failure(t("loading-profile-failed"), error);
   }
 
   const isLoading = isProfileLoading || isProjectLoading;
@@ -48,7 +51,7 @@ const ProfileDetailPanel: FC = () => {
 
   return (
     <DetailPanel
-      title="Profile summary"
+      title={t("profile-summary")}
       hasLoadingError={!profile}
       className="profile-detail-panel"
       isLoading={isLoading}
@@ -57,7 +60,7 @@ const ProfileDetailPanel: FC = () => {
         <table className="u-table-layout--auto u-no-margin--bottom">
           <tbody>
             <tr>
-              <th className="u-text--muted">Name</th>
+              <th className="u-text--muted">{t("name")}</th>
               <td>
                 <ProfileLink
                   profile={{ name: profile.name, project: projectName }}
@@ -65,26 +68,28 @@ const ProfileDetailPanel: FC = () => {
               </td>
             </tr>
             <tr>
-              <th className="u-text--muted">Description</th>
+              <th className="u-text--muted">{t("description")}</th>
               <td>{profile.description ? profile.description : "-"}</td>
             </tr>
             <tr>
-              <th className="u-text--muted last-of-section">Defined in</th>
-              <td>{featuresProfiles ? "Current" : "Default"} project</td>
+              <th className="u-text--muted last-of-section">
+                {t("defined-in")}
+              </th>
+              <td>{featuresProfiles ? t("current") : "Default"} project</td>
             </tr>
             <tr className="u-no-border">
               <th colSpan={2}>
-                <h3 className="p-muted-heading p-heading--5">Devices</h3>
+                <h3 className="p-muted-heading p-heading--5">{t("devices")}</h3>
               </th>
             </tr>
             <tr className="u-no-border list-wrapper">
-              <th className="u-text--muted">Networks</th>
+              <th className="u-text--muted">{t("networks")}</th>
               <td>
                 <ProfileNetworkList profile={profile} />
               </td>
             </tr>
             <tr className="u-no-border list-wrapper">
-              <th className="u-text--muted last-of-section">Storage</th>
+              <th className="u-text--muted last-of-section">{t("storage")}</th>
               <td>
                 <ProfileStorageList profile={profile} />
               </td>
@@ -104,7 +109,7 @@ const ProfileDetailPanel: FC = () => {
               />
             ) : (
               <tr>
-                <td colSpan={2}>No items found.</td>
+                <td colSpan={2}>{t("no-items-found")}</td>
               </tr>
             )}
           </tbody>

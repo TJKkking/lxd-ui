@@ -11,6 +11,7 @@ import { queryKeys } from "util/queryKeys";
 import { fetchProfiles } from "api/profiles";
 import Loader from "components/Loader";
 import { defaultFirst } from "util/helpers";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   project: string;
@@ -38,12 +39,14 @@ const ProfileSelector: FC<Props> = ({
     queryFn: () => fetchProfiles(project),
   });
 
+  const { t } = useTranslation();
+
   if (isLoading) {
-    return <Loader text="Loading profiles..." />;
+    return <Loader text={t("loading-profiles")} />;
   }
 
   if (error) {
-    notify.failure("Loading profiles failed", error);
+    notify.failure(t("loading-profiles-failed"), error);
   }
 
   profiles.sort(defaultFirst);
@@ -61,17 +64,19 @@ const ProfileSelector: FC<Props> = ({
 
   return (
     <>
-      <Label forId="profile-0">Profiles</Label>
+      <Label forId="profile-0">{t("profiles")}</Label>
       {selected.map((value, index) => (
         <div className="profile-select" key={value}>
           <div>
             <Select
               id={`profile-${index}`}
-              aria-label="Select a profile"
+              aria-label={t("select-a-profile")}
               help={
                 index > 0 &&
                 index === selected.length - 1 &&
-                "Each profile overrides the settings specified in previous profiles"
+                t(
+                  "each-profile-overrides-the-settings-specified-in-previous-profiles",
+                )
               }
               onChange={(e) => {
                 selected[index] = e.target.value;
@@ -106,8 +111,8 @@ const ProfileSelector: FC<Props> = ({
                   setSelected(newSelection);
                 }}
                 type="button"
-                aria-label="move profile up"
-                title="move profile up"
+                aria-label={t("move-profile-up")}
+                title={t("move-profile-up")}
                 disabled={index === 0}
               >
                 <Icon name="chevron-up" />
@@ -122,8 +127,8 @@ const ProfileSelector: FC<Props> = ({
                   setSelected(newSelection);
                 }}
                 type="button"
-                aria-label="move profile down"
-                title="move profile down"
+                aria-label={t("move-profile-down")}
+                title={t("move-profile-down")}
                 disabled={index === selected.length - 1}
               >
                 <Icon name="chevron-down" />
@@ -137,7 +142,7 @@ const ProfileSelector: FC<Props> = ({
                   }
                   type="button"
                 >
-                  Delete
+                  {t("delete")}
                 </Button>
               )}
             </div>
@@ -150,7 +155,7 @@ const ProfileSelector: FC<Props> = ({
           onClick={addProfile}
           type="button"
         >
-          Add profile
+          {t("add-profile")}
         </Button>
       )}
     </>

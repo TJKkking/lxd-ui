@@ -61,6 +61,7 @@ import { hasDiskError, hasNetworkError } from "util/instanceValidation";
 import FormFooterLayout from "components/forms/FormFooterLayout";
 import { useToastNotification } from "context/toastNotificationProvider";
 import { useDocs } from "context/useDocs";
+import { useTranslation } from "react-i18next";
 
 export type EditProfileFormValues = ProfileDetailsFormValues &
   FormDeviceValues &
@@ -86,9 +87,10 @@ const EditProfile: FC<Props> = ({ profile, featuresProfiles }) => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [isConfigOpen, setConfigOpen] = useState(true);
+  const { t } = useTranslation();
 
   if (!project) {
-    return <>Missing project</>;
+    return <>{t("missing-project")}</>;
   }
 
   const updateFormHeight = () => {
@@ -98,7 +100,7 @@ const EditProfile: FC<Props> = ({ profile, featuresProfiles }) => {
   useEventListener("resize", updateFormHeight);
 
   const ProfileSchema = Yup.object().shape({
-    name: Yup.string().required("Name is required"),
+    name: Yup.string().required(t("name-is-required")),
   });
 
   const formik = useFormik<EditProfileFormValues>({
@@ -114,11 +116,11 @@ const EditProfile: FC<Props> = ({ profile, featuresProfiles }) => {
 
       updateProfile(profilePayload, project)
         .then(() => {
-          toastNotify.success(`Profile ${profile.name} updated.`);
+          toastNotify.success(t("profileUpdated", { name: profile.name }));
           void formik.setValues(getProfileEditValues(profilePayload));
         })
         .catch((e: Error) => {
-          notify.failure("Profile update failed", e);
+          notify.failure(t("profile-update-failed"), e);
         })
         .finally(() => {
           formik.setSubmitting(false);
@@ -172,12 +174,12 @@ const EditProfile: FC<Props> = ({ profile, featuresProfiles }) => {
   return (
     <div className="edit-profile">
       {!featuresProfiles && (
-        <Notification severity="caution" title="Inherited profile">
-          Modifications are only available in the{" "}
+        <Notification severity="caution" title={t("inherited-profile")}>
+          {t("modifications-are-only-available-in-the")}{" "}
           <Link
             to={`/ui/project/default/profile/${profile.name}/configuration`}
           >
-            default project
+            {t("default-project")}
           </Link>
           .
         </Notification>
@@ -228,15 +230,18 @@ const EditProfile: FC<Props> = ({ profile, featuresProfiles }) => {
                 setYaml={(yaml) => void formik.setFieldValue("yaml", yaml)}
                 readOnly={readOnly}
               >
-                <Notification severity="information" title="YAML Configuration">
-                  This is the YAML representation of the profile.
+                <Notification
+                  severity="information"
+                  title={t("yaml-configuration")}
+                >
+                  {t("this-is-the-yaml-representation-of-the-profile")}
                   <br />
                   <a
                     href={`${docBaseLink}/profiles`}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    Learn more about profiles
+                    {t("learn-more-about-profiles")}
                   </a>
                 </Notification>
               </YamlForm>
@@ -251,7 +256,7 @@ const EditProfile: FC<Props> = ({ profile, featuresProfiles }) => {
             disabled={!featuresProfiles}
             onClick={() => void formik.setFieldValue("readOnly", false)}
           >
-            Edit profile
+            {t("edit-profile")}
           </Button>
         ) : (
           <>
@@ -259,7 +264,7 @@ const EditProfile: FC<Props> = ({ profile, featuresProfiles }) => {
               appearance="base"
               onClick={() => formik.setValues(getProfileEditValues(profile))}
             >
-              Cancel
+              {t("cancel")}
             </Button>
             <ActionButton
               appearance="positive"
@@ -271,7 +276,7 @@ const EditProfile: FC<Props> = ({ profile, featuresProfiles }) => {
               }
               onClick={() => void formik.submitForm()}
             >
-              Save changes
+              {t("save-changes")}
             </ActionButton>
           </>
         )}

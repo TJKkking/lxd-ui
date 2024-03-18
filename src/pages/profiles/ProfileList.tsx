@@ -27,6 +27,7 @@ import HelpLink from "components/HelpLink";
 import { useDocs } from "context/useDocs";
 import useSortTableData from "util/useSortTableData";
 import PageHeader from "components/PageHeader";
+import { useTranslation } from "react-i18next";
 
 const ProfileList: FC = () => {
   const docBaseLink = useDocs();
@@ -35,9 +36,10 @@ const ProfileList: FC = () => {
   const panelParams = usePanelParams();
   const { project: projectName } = useParams<{ project: string }>();
   const [query, setQuery] = useState<string>("");
+  const { t } = useTranslation();
 
   if (!projectName) {
-    return <>Missing project</>;
+    return <>{t("missing-project")}</>;
   }
   const isDefaultProject = projectName === "default";
 
@@ -53,7 +55,7 @@ const ProfileList: FC = () => {
   });
 
   if (error) {
-    notify.failure("Loading profiles failed", error);
+    notify.failure(t("loading-profiles-failed"), error);
   }
 
   const isLoading = isProfilesLoading || isProjectLoading;
@@ -91,11 +93,11 @@ const ProfileList: FC = () => {
   });
 
   const headers = [
-    { content: "Name", sortKey: "name" },
-    { content: "Description", sortKey: "description" },
+    { content: t("name"), sortKey: "name" },
+    { content: t("description"), sortKey: t("description") },
     {
-      content: "Used by",
-      sortKey: "used_by",
+      content: t("used-by"),
+      sortKey: t("used-by"),
     },
   ];
 
@@ -114,27 +116,30 @@ const ProfileList: FC = () => {
       columns: [
         {
           content: (
-            <div className="u-truncate" title={`Profile ${profile.name}`}>
+            <div
+              className="u-truncate"
+              title={t("profileName", { name: profile.name })}
+            >
               <ProfileLink
                 profile={{ name: profile.name, project: projectName }}
               />
             </div>
           ),
           role: "rowheader",
-          "aria-label": "Name",
+          "aria-label": t("name"),
           onClick: openSummary,
         },
         {
           content: (
             <div
               className="profile-description"
-              title={`Description ${profile.description}`}
+              title={t("description") + `${profile.description}`}
             >
               {profile.description}
             </div>
           ),
           role: "rowheader",
-          "aria-label": "Description",
+          "aria-label": t("description"),
           onClick: openSummary,
           className: "clickable-cell",
         },
@@ -150,7 +155,7 @@ const ProfileList: FC = () => {
             </>
           ),
           role: "rowheader",
-          "aria-label": "Used by",
+          "aria-label": t("used-by"),
           onClick: openSummary,
           className: "clickable-cell",
         },
@@ -175,9 +180,9 @@ const ProfileList: FC = () => {
             <PageHeader.Title>
               <HelpLink
                 href={`${docBaseLink}/profiles/`}
-                title="Learn how to use profiles"
+                title={t("learn-how-to-use-profiles")}
               >
-                Profiles
+                {t("profiles")}
               </HelpLink>
             </PageHeader.Title>
             <PageHeader.Search>
@@ -188,9 +193,9 @@ const ProfileList: FC = () => {
                 onChange={(value) => {
                   setQuery(value);
                 }}
-                placeholder="Search"
+                placeholder={t("search")}
                 value={query}
-                aria-label="Search"
+                aria-label={t("search")}
               />
             </PageHeader.Search>
           </PageHeader.Left>
@@ -203,7 +208,7 @@ const ProfileList: FC = () => {
                   navigate(`/ui/project/${projectName}/profiles/create`)
                 }
               >
-                Create profile
+                {t("create-profile")}
               </Button>
             </PageHeader.BaseActions>
           )}
@@ -214,10 +219,14 @@ const ProfileList: FC = () => {
       <Row className="no-grid-gap">
         <Col size={12}>
           {!isLoading && !featuresProfiles && (
-            <Notification severity="caution" title="Profiles disabled">
-              The feature has been disabled on a project level. All the
-              available profiles are inherited from the{" "}
-              <Link to="/ui/project/default/profiles">default project</Link>.
+            <Notification severity="caution" title={t("profiles-disabled")}>
+              {t(
+                "the-feature-has-been-disabled-on-a-project-level-all-the-available-profiles-are-inherited-from-the",
+              )}{" "}
+              <Link to="/ui/project/default/profiles">
+                {t("default-project")}
+              </Link>
+              .
             </Notification>
           )}
           <ScrollableTable
@@ -230,7 +239,7 @@ const ProfileList: FC = () => {
               data={sortedRows}
               itemName="profile"
               className="u-no-margin--top"
-              aria-label="Table pagination control"
+              aria-label={t("table-pagination-control")}
             >
               <MainTable
                 id="profile-table"
@@ -238,9 +247,9 @@ const ProfileList: FC = () => {
                 sortable
                 emptyStateMsg={
                   isLoading ? (
-                    <Loader text="Loading profiles..." />
+                    <Loader text={t("loading-profiles")} />
                   ) : (
-                    <>No profile found matching this search</>
+                    <>{t("no-profile-found-matching-this-search")}</>
                   )
                 }
                 onUpdateSort={updateSort}

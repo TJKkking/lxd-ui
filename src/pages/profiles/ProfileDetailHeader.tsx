@@ -9,6 +9,7 @@ import * as Yup from "yup";
 import { checkDuplicateName } from "util/helpers";
 import { useNotify } from "@canonical/react-components";
 import { useToastNotification } from "context/toastNotificationProvider";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   name: string;
@@ -28,16 +29,18 @@ const ProfileDetailHeader: FC<Props> = ({
   const toastNotify = useToastNotification();
   const controllerState = useState<AbortController | null>(null);
 
+  const { t } = useTranslation();
+
   const RenameSchema = Yup.object().shape({
     name: Yup.string()
       .test(
         "deduplicate",
-        "A profile with this name already exists",
+        t("a-profile-with-this-name-already-exists"),
         (value) =>
           profile?.name === value ||
           checkDuplicateName(value, project, controllerState, "profiles"),
       )
-      .required("Profile name is required"),
+      .required(t("profile-name-is-required")),
   });
 
   const formik = useFormik<RenameHeaderValues>({
@@ -55,11 +58,13 @@ const ProfileDetailHeader: FC<Props> = ({
       renameProfile(name, values.name, project)
         .then(() => {
           navigate(`/ui/project/${project}/profile/${values.name}`);
-          toastNotify.success(`Profile ${name} renamed to ${values.name}.`);
+          toastNotify.success(
+            t("profileRenamed", { oldName: name, newName: values.name }),
+          );
           void formik.setFieldValue("isRenaming", false);
         })
         .catch((e) => {
-          notify.failure("Renaming failed", e);
+          notify.failure(t("renaming-failed"), e);
         })
         .finally(() => formik.setSubmitting(false));
     },
@@ -70,12 +75,12 @@ const ProfileDetailHeader: FC<Props> = ({
       name={name}
       parentItems={[
         <Link to={`/ui/project/${project}/profiles`} key={1}>
-          Profiles
+          {t("profiles")}
         </Link>,
       ]}
       renameDisabledReason={
         profile && profile.name === "default"
-          ? "Cannot rename the default profile"
+          ? t("cannot-rename-the-default-profile")
           : undefined
       }
       controls={
