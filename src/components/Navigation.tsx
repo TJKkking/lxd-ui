@@ -261,7 +261,7 @@ const Navigation: FC = () => {
                   <li className="p-side-navigation__item">
                     <a
                       className="p-side-navigation__link"
-                      href="https://discourse.ubuntu.com/c/lxd/126"
+                      href="https://github.com/TJKkking/lxd-ui/discussions/new/choose"
                       target="_blank"
                       rel="noopener noreferrer"
                       title="Discussion"
@@ -276,7 +276,7 @@ const Navigation: FC = () => {
                   <li className="p-side-navigation__item">
                     <a
                       className="p-side-navigation__link"
-                      href="https://github.com/canonical/lxd-ui/issues/new"
+                      href="https://github.com/TJKkking/lxd-ui/issues/new"
                       target="_blank"
                       rel="noopener noreferrer"
                       title="Report a bug"
