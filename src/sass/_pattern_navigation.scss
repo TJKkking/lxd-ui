@@ -5,7 +5,7 @@
 
   .p-panel__logo-image {
     height: 36px;
-    margin-top: -3px;
+    margin-top: 8px;
     max-width: inherit;
   }
 
@@ -24,11 +24,11 @@
 
   @include extra-large {
     .p-panel__logo-image {
-      height: 40px;
+      height: 30px;
     }
 
     .logo-text {
-      left: 52px;
+      left: 60px;
     }
   }
 }
